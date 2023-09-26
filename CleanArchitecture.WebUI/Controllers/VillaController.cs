@@ -12,5 +12,13 @@ namespace CleanArchitecture.WebUI.Controllers
         {
             return View();
         }
+        public IActionResult Update(int villaId)
+        {
+            return View();
+        }
+        public IActionResult Delete(int villaId)
+        {
+            return View();
+        }
     }
 }
