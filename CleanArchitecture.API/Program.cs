@@ -1,3 +1,4 @@
+using CleanArchitecture.API.Middlewares;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.Infrastructure.Data;
@@ -27,6 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

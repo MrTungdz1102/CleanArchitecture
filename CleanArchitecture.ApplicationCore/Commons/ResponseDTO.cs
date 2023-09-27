@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.ApplicationCore.DTOs
+namespace CleanArchitecture.ApplicationCore.Commons
 {
     public class ResponseDTO
     {
