@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CleanArchitecture.ApplicationCore.Commons;
+using CleanArchitecture.ApplicationCore.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +10,10 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
 {
     public interface IVillaService
     {
-        Task GetAllVilla();
-      //  Task GetVilla(int );
+        Task<ResponseDTO> GetAllVilla();
+        Task<ResponseDTO> GetVilla(int villaId);
+        Task<ResponseDTO> CreateVilla(Villa villa);
+        Task<ResponseDTO> UpdateVilla(Villa villa);
+        Task<ResponseDTO> DeleteVilla(int villaId);
     }
 }
