@@ -9,7 +9,7 @@ namespace CleanArchitecture.ApplicationCore.Commons
     public class QueryParameter
     {
         private int _pageSize = 5;
-        public int StartIndex { get; set; }
+    //    public int StartIndex { get; set; }
         public int PageNumber { get; set; }
         public int PageSize
         {
