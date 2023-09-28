@@ -9,10 +9,10 @@ namespace CleanArchitecture.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VillaController : ControllerBase
+    public class VillaAPIController : ControllerBase
     {
         private readonly IVillaService _villaService;
-        public VillaController(IVillaService villaService)
+        public VillaAPIController(IVillaService villaService)
         {
             _villaService = villaService;
         }

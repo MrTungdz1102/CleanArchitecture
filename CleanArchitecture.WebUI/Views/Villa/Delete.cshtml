@@ -1,4 +1,4 @@
-﻿
+﻿@model CleanArchitecture.WebUI.Models.Villa
 @{
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="card-body border p-4">
-       @*  <form method="post" class="row">
+         <form method="post" class="row">
             <input asp-for="Id" hidden />
             <div class="col-10">
                 <div class="p-3">
@@ -31,8 +31,8 @@
                         <label asp-for="Price" class="ms-2"></label>
                     </div>
                     <div class="form-floating py-1 col-12">
-                        <input asp-for="Sqft" disabled class="form-control border shadow" />
-                        <label asp-for="Sqft" class="ms-2"></label>
+                        <input asp-for="SquareFeet" disabled class="form-control border shadow" />
+                        <label asp-for="SquareFeet" class="ms-2"></label>
                     </div>
                     <div class="form-floating py-1 col-12">
                         <input asp-for="Occupancy" disabled class="form-control border shadow" />
@@ -57,10 +57,10 @@
                 </div>
             </div>
             <div class="col-2">
-                <img src="@Model.ImageUrl" width="100%"
+           @*   <img src="@Model.ImageUrl" width="100%"
                      style="border-radius:5px; border:1px solid #bbb9b9" />
-            </div>
-        </form> *@
+                </div>*@
+        </form> 
     </div>
 </div>
 

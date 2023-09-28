@@ -1,4 +1,12 @@
+using CleanArchitecture.WebUI.Services.Implementations;
+using CleanArchitecture.WebUI.Services.Interfaces;
+using CleanArchitecture.WebUI.Utilities;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpClient();
+Constants.APIUrlBase = builder.Configuration["ServiceUrls:ApiUrl"];
+builder.Services.AddScoped<IBaseService, BaseService>();
+builder.Services.AddScoped<IVillaService, VillaService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

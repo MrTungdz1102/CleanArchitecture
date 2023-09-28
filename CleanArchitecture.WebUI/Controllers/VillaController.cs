@@ -1,24 +1,110 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CleanArchitecture.WebUI.Models;
+using CleanArchitecture.WebUI.Models.DTOs;
+using CleanArchitecture.WebUI.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
     public class VillaController : Controller
     {
-        public IActionResult Index()
+        private readonly IVillaService _villaService;
+        public VillaController(IVillaService villaService)
         {
-            return View();
+            _villaService = villaService;
+        }
+        public async Task<IActionResult> Index()
+        {
+            List<Villa> villaList = new List<Villa>();
+            ResponseDTO? response = await _villaService.GetAllVilla();
+            if (response != null && response.IsSuccess) {
+                villaList = JsonConvert.DeserializeObject<List<Villa>>(Convert.ToString(response.Result));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(villaList);
         }
         public IActionResult Create()
         {
             return View();
         }
-        public IActionResult Update(int villaId)
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Villa villa)
         {
-            return View();
+            ResponseDTO? response = await _villaService.CreateVilla(villa);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Villa created successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(villa);
         }
-        public IActionResult Delete(int villaId)
+
+        public async Task<IActionResult> Update(int villaId)
         {
-            return View();
+            Villa? villa = null;
+            ResponseDTO? response = await _villaService.GetVillaById(villaId);
+            if (response != null && response.IsSuccess)
+            {
+                villa = JsonConvert.DeserializeObject<Villa>(Convert.ToString(response.Result));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(villa);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(Villa villa)
+        {
+            ResponseDTO? response = await _villaService.UpdateVilla(villa);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Villa updated successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(villa);
+        }
+        public async Task<IActionResult> Delete(int villaId)
+        {
+            Villa? villa = null;
+            ResponseDTO? response = await _villaService.GetVillaById(villaId);
+            if (response != null && response.IsSuccess)
+            {
+                villa = JsonConvert.DeserializeObject<Villa>(Convert.ToString(response.Result));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(villa);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Villa villa)
+        {
+            ResponseDTO? response = await _villaService.DeleteVilla(villa.Id);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Villa deleted successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(villa);
         }
     }
 }
