@@ -18,7 +18,8 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             {
                 Url = Constants.APIUrlBase + "/api/VillaAPI/CreateVilla",
                 Data = villa,
-                ApiType = Constants.ApiType.POST
+                ApiType = Constants.ApiType.POST,
+                ContentType = Constants.ContentType.MultipartFormData
             });
         }
 
@@ -55,7 +56,8 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             {
                 Url = Constants.APIUrlBase + "/api/VillaAPI/UpdateVilla",
                 ApiType = Constants.ApiType.PUT,
-                Data = villa
+                Data = villa,
+                ContentType = Constants.ContentType.MultipartFormData
             });
         }
     }

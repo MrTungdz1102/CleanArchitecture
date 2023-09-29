@@ -29,10 +29,33 @@ namespace CleanArchitecture.WebUI.Services.Implementations
                     message.Headers.Add("Accept", "application/json");
                 }
                 message.RequestUri = new Uri(requestDTO.Url);
-                if (requestDTO.Data != null)
+                if (requestDTO.ContentType == ContentType.MultipartFormData)
+                {
+                    var content = new MultipartFormDataContent();
+                    foreach (var item in requestDTO.Data.GetType().GetProperties())
+                    {
+                        var value = item.GetValue(requestDTO.Data);
+                        // chi upload file neu file co kieu iformfile
+                        if (value is FormFile)
+                        {
+                            var file = (FormFile)value;
+                            if (file is not null)
+                            {
+                                content.Add(new StreamContent(file.OpenReadStream()), item.Name, file.FileName);
+                            }
+                        }
+                        else
+                        {
+                            content.Add(new StringContent(value == null ? "" : value.ToString()), item.Name);
+                        }
+                    }
+                    message.Content = content;
+                }
+                else if (requestDTO.Data != null)
                 {
                     message.Content = new StringContent(JsonConvert.SerializeObject(requestDTO.Data), Encoding.UTF8, "application/json");
                 }
+
                 HttpResponseMessage? responseMessage = null;
                 switch (requestDTO.ApiType)
                 {

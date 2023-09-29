@@ -17,7 +17,7 @@ namespace CleanArchitecture.API.Controllers
             _villaService = villaService;
         }
         [HttpPost("CreateVilla")]
-        public async Task<ActionResult<ResponseDTO>> CreateVilla(Villa villa)
+        public async Task<ActionResult<ResponseDTO>> CreateVilla([FromForm] Villa villa)
         {
             return Ok(await _villaService.CreateVilla(villa));
         }
@@ -35,7 +35,7 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPut("UpdateVilla")]
-        public async Task<ActionResult<ResponseDTO>> UpdateVilla(Villa villa)
+        public async Task<ActionResult<ResponseDTO>> UpdateVilla([FromForm] Villa villa)
         {
             return Ok(await _villaService.UpdateVilla(villa));
         }

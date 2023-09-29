@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CleanArchitecture.ApplicationCore.Entities
 {
@@ -16,6 +18,8 @@ namespace CleanArchitecture.ApplicationCore.Entities
         [Range(1, 10)]
         public int Occupancy { get; set; }
         public string? ImageUrl { get; set; }
+        [NotMapped]
+        public IFormFile? Image { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
     }

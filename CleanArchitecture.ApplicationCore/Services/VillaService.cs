@@ -2,6 +2,8 @@
 using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +15,35 @@ namespace CleanArchitecture.ApplicationCore.Services
     public class VillaService : IVillaService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private ResponseDTO _response;
-        public VillaService(IUnitOfWork unitOfWork)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public VillaService(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
+            _webHostEnvironment = webHostEnvironment;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<ResponseDTO> CreateVilla(Villa villa)
         {
             try
             {
+                if (villa.Image != null)
+                {
+                    string fileName = Guid.NewGuid() + Path.GetExtension(villa.Image.FileName);
+                    string filePath = _webHostEnvironment.WebRootPath + @"/Images/" + fileName;
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await villa.Image.CopyToAsync(fileStream);
+                    }
+                    var urlFilePath = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}{_httpContextAccessor.HttpContext.Request.PathBase}/Images/{fileName}";
+                    villa.ImageUrl = urlFilePath;
+                }
+                else
+                {
+                    villa.ImageUrl = "https://placehold.co/600x400";
+                }
                 _response.Result = await _unitOfWork.villaRepo.AddAsync(villa);
             }
             catch(Exception ex)
@@ -45,6 +66,14 @@ namespace CleanArchitecture.ApplicationCore.Services
                 }
                 else
                 {
+                    if (!string.IsNullOrEmpty(deleteVila.ImageUrl))
+                    {
+                        FileInfo fileInfo = new FileInfo(deleteVila.ImageUrl);
+                        if (fileInfo.Exists)
+                        {
+                            fileInfo.Delete();
+                        }
+                    }
                     await _unitOfWork.villaRepo.DeleteAsync(deleteVila);
                 }
             }
@@ -88,8 +117,28 @@ namespace CleanArchitecture.ApplicationCore.Services
         {
             try
             {
-                // _mapper.Map(productDTO, product);
-                await _unitOfWork.villaRepo.UpdateAsync(villa);
+                if (villa.Image is not null)
+                {
+                    //if (!string.IsNullOrEmpty(villa.ImageUrl))
+                    //{
+                        FileInfo fileInfo = new FileInfo(villa.ImageUrl);
+                        if (fileInfo.Exists)
+                        {
+                            fileInfo.Delete();
+                        }
+                 //   }
+                    string fileName = Guid.NewGuid() + Path.GetExtension(villa.Image.FileName);
+                    string filePath = _webHostEnvironment.WebRootPath + @"/Images/" + fileName;
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await villa.Image.CopyToAsync(fileStream);
+                    }
+                    // var urlFilePath = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}/Images/{fileName}";
+                    var urlFilePath = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}{_httpContextAccessor.HttpContext.Request.PathBase}/Images/{fileName}";
+                    villa.ImageUrl = urlFilePath;
+                }
+                    // _mapper.Map(productDTO, product);
+                    await _unitOfWork.villaRepo.UpdateAsync(villa);
             }
             catch (Exception ex)
             {

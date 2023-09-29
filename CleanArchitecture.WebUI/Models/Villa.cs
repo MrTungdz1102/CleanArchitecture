@@ -15,6 +15,7 @@ namespace CleanArchitecture.WebUI.Models
         public int SquareFeet { get; set; }
         [Range(1, 10)]
         public int Occupancy { get; set; }
+        public IFormFile? Image { get; set; }
         public string? ImageUrl { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
