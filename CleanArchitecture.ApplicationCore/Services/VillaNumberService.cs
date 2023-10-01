@@ -21,11 +21,27 @@ namespace CleanArchitecture.ApplicationCore.Services
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
         }
+
+        public async Task<bool> CheckVillaNumberExits(int villaNumberId)
+        {
+            var specification = new VillaNumberSpecification(villaNumberId);
+            return await _unitOfWork.villaNumberRepo.AnyAsync(specification);
+        }
+
         public async Task<ResponseDTO> CreateVillaNumber(VillaNumber villaNumber)
         {
             try
             {
-                _response.Result = await _unitOfWork.villaNumberRepo.AddAsync(villaNumber);
+                bool roomNumberExists  = await CheckVillaNumberExits(villaNumber.Villa_Number);
+                if (!roomNumberExists)
+                {
+                    _response.Result = await _unitOfWork.villaNumberRepo.AddAsync(villaNumber);
+                }
+                else
+                {
+                    _response.Message = "Room was exist";
+                    _response.IsSuccess = false;
+                }
             }catch(Exception ex)
             {
                 _response.Message = ex.Message;

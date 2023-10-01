@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.WebUI.Models;
+using CleanArchitecture.WebUI.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

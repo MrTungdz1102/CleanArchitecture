@@ -7,6 +7,7 @@ builder.Services.AddHttpClient();
 Constants.APIUrlBase = builder.Configuration["ServiceUrls:ApiUrl"];
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IVillaService, VillaService>();
+builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

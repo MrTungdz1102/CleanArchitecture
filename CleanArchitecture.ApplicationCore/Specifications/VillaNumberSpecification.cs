@@ -13,7 +13,12 @@ namespace CleanArchitecture.ApplicationCore.Specifications
     {
         public VillaNumberSpecification(QueryParameter queryParameters)
         {
-            Query.Include(x => x.Villa).Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize);
+            Query.Include(x => x.Villa).Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).OrderBy(x => x.VillaId);
+        }
+
+        public VillaNumberSpecification(int villaNumberId)
+        {
+            Query.Where(x => x.Villa_Number == villaNumberId);
         }
     }
 }
