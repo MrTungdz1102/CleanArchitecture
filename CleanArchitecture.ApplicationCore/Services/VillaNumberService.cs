@@ -69,8 +69,16 @@ namespace CleanArchitecture.ApplicationCore.Services
         {
             try
             {
+                var totalSize = await _unitOfWork.villaNumberRepo.CountAsync();
                 var specification = new VillaNumberSpecification(queryParameter);                
-                _response.Result = await _unitOfWork.villaNumberRepo.ListAsync(specification);
+                List<VillaNumber> villas = await _unitOfWork.villaNumberRepo.ListAsync(specification);
+                _response.Result = new PageResult<VillaNumber>
+                {
+                    Items = villas,
+                    TotalCount = totalSize,
+                    PageNumber = queryParameter.PageNumber,
+                    RecordNumber = queryParameter.PageSize
+                };
             }
             catch (Exception ex)
             {

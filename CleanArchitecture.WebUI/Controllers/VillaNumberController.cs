@@ -2,9 +2,11 @@
 using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Models.ViewModel;
 using CleanArchitecture.WebUI.Services.Interfaces;
+using CleanArchitecture.WebUI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using X.PagedList;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
@@ -17,18 +19,27 @@ namespace CleanArchitecture.WebUI.Controllers
             _villaNumberService = villaNumberService;
             _villaService = villaService;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            ResponseDTO? response = await _villaNumberService.GetAllVillaNumber();
+            QueryParameter query = new QueryParameter
+            {
+                PageSize = 7,
+                PageNumber = (page == null || page < 0) ? 1 : page.Value
+            };
+            ViewBag.PageNumber = page;
+            ResponseDTO? response = await _villaNumberService.GetAllVillaNumber(query);
             List<VillaNumber> villaNumberList = null;
+            PageResult<VillaNumber> pageResult = new PageResult<VillaNumber>();
             if (response != null && response.IsSuccess)
             {
-                villaNumberList = JsonConvert.DeserializeObject<List<VillaNumber>>(Convert.ToString(response.Result));
+                pageResult = JsonConvert.DeserializeObject<PageResult<VillaNumber>>(Convert.ToString(response.Result));
+                villaNumberList = pageResult.Items;
+                ViewBag.TotalCount = (int)Math.Ceiling((double)pageResult.TotalCount/query.PageSize);               
             }
             else
             {
                 TempData["error"] = response?.Message;
-            }
+            }   
             return View(villaNumberList);
         }
         public async Task<IActionResult> Create()

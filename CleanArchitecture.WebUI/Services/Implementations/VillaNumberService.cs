@@ -31,12 +31,13 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
-        public async Task<ResponseDTO?> GetAllVillaNumber()
+        public async Task<ResponseDTO?> GetAllVillaNumber(QueryParameter queryParameter)
         {
             return await _baseService.SendAsync(new RequestDTO
             {
-                Url = Constants.APIUrlBase + "/api/VillaNumberAPI/GetAllVillaNumber",
-                ApiType = Constants.ApiType.GET
+                Url = Constants.APIUrlBase + "/api/VillaNumberAPI/GetAllVillaNumber?PageNumber=" + queryParameter.PageNumber +"&PageSize=" + queryParameter.PageSize,
+                ApiType = Constants.ApiType.GET,
+ 
             });
         }
 
