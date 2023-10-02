@@ -56,8 +56,16 @@ namespace CleanArchitecture.ApplicationCore.Services
         {
             try
             {
+                var totalSize = await _unitOfWork.amenityRepo.CountAsync();
                 var specification = new AmenitySpecification(query);
-                _response.Result = await _unitOfWork.amenityRepo.ListAsync(specification);
+                List<Amenity> amenities = await _unitOfWork.amenityRepo.ListAsync(specification);
+                _response.Result = new PageResult<Amenity>
+                {
+                    Items = amenities,
+                    TotalCount = totalSize,
+                    PageNumber = query.PageNumber,
+                    RecordNumber = query.PageSize
+                };
             }
             catch (Exception ex)
             {

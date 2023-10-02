@@ -23,6 +23,7 @@ namespace CleanArchitecture.WebUI.Controllers
             else
             {
                 TempData["error"] = response?.Message;
+                return RedirectToAction("Index", "Home");
             }
             return View(villaList);
         }

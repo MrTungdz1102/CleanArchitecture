@@ -8,7 +8,7 @@ Constants.APIUrlBase = builder.Configuration["ServiceUrls:ApiUrl"];
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IVillaService, VillaService>();
 builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
-
+builder.Services.AddScoped<IAmenityService, AmenityService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();

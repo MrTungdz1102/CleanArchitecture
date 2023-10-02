@@ -32,7 +32,7 @@
                 </tr>
             </thead>
             <tbody>
-               @*  @foreach (var obj in Model)
+                 @foreach (var obj in Model)
                 {
                     <tr>
                         <td>@obj.Id</td>
@@ -51,9 +51,25 @@
                             </div>
                         </td>
                     </tr>
-                } *@
+                } 
             </tbody>
         </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                @if (ViewBag.PageNumber > 1)
+                {
+                    <li class="page-item"><a class="page-link" href="/Amenity/Index?page=@(ViewBag.PageNumber - 1)">Previous</a></li>
+                }
+                @for (int i = 1; i <= ViewBag.TotalCount; i++)
+                {
+                    <li class="page-item"><a class="page-link" href="/Amenity/Index?page=@i">@i</a></li>
+                }
+                @if (ViewBag.PageNumber < ViewBag.TotalCount)
+                {
+                    <li class="page-item"><a class="page-link" href="/Amenity/Index?page=@(ViewBag.PageNumber + 1)">Next</a></li>
+                }
+            </ul>
+        </nav>
     </div>
 </div>
 
