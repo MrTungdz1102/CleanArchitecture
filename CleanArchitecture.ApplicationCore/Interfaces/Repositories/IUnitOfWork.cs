@@ -11,5 +11,6 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Repositories
     {
         IRepository<Villa> villaRepo { get; }
         IRepository<VillaNumber> villaNumberRepo { get; }
+        IRepository<Amenity> amenityRepo { get; }
     }
 }
