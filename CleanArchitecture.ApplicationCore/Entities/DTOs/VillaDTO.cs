@@ -29,5 +29,6 @@ namespace CleanArchitecture.ApplicationCore.Entities.DTOs
         public DateTime? DateUpdated { get; set; }
 
         public virtual ICollection<Amenity> VillaAmenity { get; set; }
+        public bool IsAvailable { get; set; } = true;
     }
 }

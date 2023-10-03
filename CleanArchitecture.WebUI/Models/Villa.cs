@@ -23,5 +23,6 @@ namespace CleanArchitecture.WebUI.Models
 
         [ValidateNever]
         public IEnumerable<Amenity>? VillaAmenity { get; set; }
+        public bool IsAvailable { get; set; }
     }
 }

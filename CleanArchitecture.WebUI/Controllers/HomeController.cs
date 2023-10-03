@@ -41,6 +41,17 @@ namespace CleanArchitecture.WebUI.Controllers
             return View(homeVM);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> GetVillaByDate(int nights, DateOnly checkInDate)
+        {
+            HomeVM homeVM = new HomeVM()
+            {
+                CheckInDate = checkInDate,
+                Nights = nights
+            };
+            return PartialView("_VillaListPartial", homeVM);
+        }
+
         public IActionResult Privacy()
         {
             return View();

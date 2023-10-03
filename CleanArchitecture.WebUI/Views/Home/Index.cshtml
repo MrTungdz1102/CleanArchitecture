@@ -28,7 +28,7 @@
         </button>
     </div>
     <form method="post"
-          asp-action="GetVillasByDate">
+          asp-action="GetVillaByDate">
         <div class="row p-0 mx-0 py-4">
 
             <div class="col-12 col-md-5  offset-md-1 pl-2  pr-2 pr-md-0">
@@ -76,7 +76,7 @@
             $.ajax({
                 type: "POST",
                 data: objData,
-                url: "@Url.Action("GetVillasByDate","Home")",
+                url: "@Url.Action("GetVillaByDate","Home")",
                 success: function (data) {
                     $("#VillasList").empty();
                     $("#VillasList").html(data);
