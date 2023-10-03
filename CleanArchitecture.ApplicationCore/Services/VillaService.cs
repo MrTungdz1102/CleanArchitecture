@@ -1,7 +1,10 @@
-﻿using CleanArchitecture.ApplicationCore.Commons;
+﻿using AutoMapper;
+using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
+using CleanArchitecture.ApplicationCore.Entities.DTOs;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
+using CleanArchitecture.ApplicationCore.Specifications;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -18,12 +21,14 @@ namespace CleanArchitecture.ApplicationCore.Services
         private readonly IWebHostEnvironment _webHostEnvironment;
         private ResponseDTO _response;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public VillaService(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
+        private readonly IMapper _mapper;
+        public VillaService(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _webHostEnvironment = webHostEnvironment;
             _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
         }
         public async Task<ResponseDTO> CreateVilla(Villa villa)
         {
@@ -119,14 +124,14 @@ namespace CleanArchitecture.ApplicationCore.Services
             {
                 if (villa.Image is not null)
                 {
-                    //if (!string.IsNullOrEmpty(villa.ImageUrl))
-                    //{
+                    if (!string.IsNullOrEmpty(villa.ImageUrl))
+                    {
                         FileInfo fileInfo = new FileInfo(villa.ImageUrl);
                         if (fileInfo.Exists)
                         {
                             fileInfo.Delete();
                         }
-                 //   }
+                    }
                     string fileName = Guid.NewGuid() + Path.GetExtension(villa.Image.FileName);
                     string filePath = _webHostEnvironment.WebRootPath + @"/Images/" + fileName;
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -139,6 +144,27 @@ namespace CleanArchitecture.ApplicationCore.Services
                 }
                     // _mapper.Map(productDTO, product);
                     await _unitOfWork.villaRepo.UpdateAsync(villa);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        public async Task<ResponseDTO> GetAllDetailVilla()
+        {
+            try
+            {
+                List<Villa> villas = await _unitOfWork.villaRepo.ListAsync();
+                List<VillaDTO> villaDTO = _mapper.Map<List<VillaDTO>>(villas);
+                foreach(var villa in villaDTO)
+                {
+                    var specification = new AmenitySpecification(villa.Id);
+                    villa.VillaAmenity = await _unitOfWork.amenityRepo.ListAsync(specification);
+                }
+                _response.Result = villaDTO;
             }
             catch (Exception ex)
             {

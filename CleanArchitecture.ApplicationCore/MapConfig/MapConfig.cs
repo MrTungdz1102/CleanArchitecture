@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchitecture.ApplicationCore.Entities;
+using CleanArchitecture.ApplicationCore.Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace CleanArchitecture.ApplicationCore.MapConfig
     {
         public MapConfig()
         {
-           
+            CreateMap<Villa, VillaDTO>().ReverseMap();
         }
     }
 }

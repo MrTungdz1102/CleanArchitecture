@@ -1,6 +1,9 @@
 ﻿using CleanArchitecture.WebUI.Models;
+using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Models.ViewModel;
+using CleanArchitecture.WebUI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace CleanArchitecture.WebUI.Controllers
@@ -8,15 +11,34 @@ namespace CleanArchitecture.WebUI.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IVillaService _villaService;
+        private readonly IAmenityService _amenityService;
+        public HomeController(ILogger<HomeController> logger, IVillaService villaService, IAmenityService amenityService)
         {
             _logger = logger;
+            _villaService = villaService;
+            _amenityService = amenityService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            ResponseDTO? response = await _villaService.GetAllDetailVilla();
+            List<Villa> villas = new List<Villa>();
+            if(response.Result != null && response.IsSuccess)
+            {
+                villas = JsonConvert.DeserializeObject<List<Villa>>(Convert.ToString(response.Result));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            HomeVM homeVM = new HomeVM
+            {
+                VillaList = villas, 
+                Nights = 1,
+                CheckInDate = DateOnly.FromDateTime(DateTime.Now)
+            };
+            return View(homeVM);
         }
 
         public IActionResult Privacy()

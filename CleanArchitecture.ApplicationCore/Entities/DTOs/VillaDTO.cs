@@ -1,9 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CleanArchitecture.WebUI.Models
+namespace CleanArchitecture.ApplicationCore.Entities.DTOs
 {
-    public class Villa
+    public class VillaDTO
     {
         public int Id { get; set; }
 
@@ -16,12 +22,12 @@ namespace CleanArchitecture.WebUI.Models
         public int SquareFeet { get; set; }
         [Range(1, 10)]
         public int Occupancy { get; set; }
-        public IFormFile? Image { get; set; }
         public string? ImageUrl { get; set; }
+        [NotMapped]
+        public IFormFile? Image { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
 
-        [ValidateNever]
-        public IEnumerable<Amenity>? VillaAmenity { get; set; }
+        public virtual ICollection<Amenity> VillaAmenity { get; set; }
     }
 }

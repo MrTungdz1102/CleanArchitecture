@@ -15,5 +15,6 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
         Task<ResponseDTO> CreateVilla(Villa villa);
         Task<ResponseDTO> UpdateVilla(Villa villa);
         Task<ResponseDTO> DeleteVilla(int villaId);
+        Task<ResponseDTO> GetAllDetailVilla();
     }
 }

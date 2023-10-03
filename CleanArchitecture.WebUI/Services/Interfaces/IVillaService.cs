@@ -10,5 +10,6 @@ namespace CleanArchitecture.WebUI.Services.Interfaces
         Task<ResponseDTO?> CreateVilla(Villa villa);
         Task<ResponseDTO?> UpdateVilla(Villa villa);
         Task<ResponseDTO?> DeleteVilla(int id);
+        Task<ResponseDTO?> GetAllDetailVilla();
     }
 }

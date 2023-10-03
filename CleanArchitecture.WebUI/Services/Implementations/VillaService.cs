@@ -32,6 +32,15 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
+        public async Task<ResponseDTO?> GetAllDetailVilla()
+        {
+            return await _baseService.SendAsync(new RequestDTO
+            {
+                Url = Constants.APIUrlBase + "/api/VillaAPI/GetAllDetailVilla",
+                ApiType = Constants.ApiType.GET
+            });
+        }
+
         public async Task<ResponseDTO?> GetAllVilla()
         {
             return await _baseService.SendAsync(new RequestDTO

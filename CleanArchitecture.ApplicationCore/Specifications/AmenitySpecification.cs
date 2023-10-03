@@ -15,5 +15,9 @@ namespace CleanArchitecture.ApplicationCore.Specifications
         {
             Query.Include(x => x.Villa).Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize).OrderBy(x => x.VillaId);
         }
+        public AmenitySpecification(int? villaId)
+        {
+            Query.Where(x => x.VillaId == villaId);
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace CleanArchitecture.ApplicationCore.Specifications
     {
         public VillaSpecification()
         {
-           
+            
         }
     }
 }

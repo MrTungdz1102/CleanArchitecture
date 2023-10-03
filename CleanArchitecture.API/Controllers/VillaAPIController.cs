@@ -45,5 +45,11 @@ namespace CleanArchitecture.API.Controllers
         {
             return Ok(await _villaService.DeleteVilla(villaId));
         }
+
+        [HttpGet("GetAllDetailVilla")]
+        public async Task<ActionResult<ResponseDTO>> GetAllDetailVilla()
+        {
+            return Ok(await _villaService.GetAllDetailVilla());
+        }
     }
 }
