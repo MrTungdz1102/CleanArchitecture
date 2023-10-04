@@ -1,12 +1,16 @@
 using CleanArchitecture.API.Middlewares;
+using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.ApplicationCore.MapConfig;
 using CleanArchitecture.ApplicationCore.Services;
+using CleanArchitecture.ApplicationCore.Services.Identity;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -22,6 +27,9 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IVillaService, VillaService>();
 builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
 builder.Services.AddScoped<IAmenityService, AmenityService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddAutoMapper(typeof(MapConfig));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
