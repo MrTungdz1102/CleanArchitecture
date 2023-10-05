@@ -166,6 +166,10 @@ namespace CleanArchitecture.ApplicationCore.Services
                 {
                     var specification = new AmenitySpecification(villa.Id);
                     villa.VillaAmenity = await _unitOfWork.amenityRepo.ListAsync(specification);
+                    if(villa.Id %2 == 0)
+                    {
+                        villa.IsAvailable = false;
+                    }
                 }
                 _response.Result = villaDTO;
             }

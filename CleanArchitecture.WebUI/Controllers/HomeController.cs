@@ -44,8 +44,20 @@ namespace CleanArchitecture.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> GetVillaByDate(int nights, DateOnly checkInDate)
         {
+            Thread.Sleep(1000);
+            ResponseDTO? response = await _villaService.GetAllDetailVilla();
+            List<Villa> villas = new List<Villa>();
+            if (response.Result != null && response.IsSuccess)
+            {
+                villas = JsonConvert.DeserializeObject<List<Villa>>(Convert.ToString(response.Result));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
             HomeVM homeVM = new HomeVM()
             {
+                VillaList = villas,
                 CheckInDate = checkInDate,
                 Nights = nights
             };
