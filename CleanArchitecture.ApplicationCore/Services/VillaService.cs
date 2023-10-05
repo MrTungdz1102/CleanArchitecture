@@ -44,10 +44,12 @@ namespace CleanArchitecture.ApplicationCore.Services
                     }
                     var urlFilePath = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}{_httpContextAccessor.HttpContext.Request.PathBase}/Images/{fileName}";
                     villa.ImageUrl = urlFilePath;
+                    villa.ImageLocalPath = filePath;
                 }
                 else
                 {
                     villa.ImageUrl = "https://placehold.co/600x400";
+                    villa.ImageLocalPath = null;
                 }
                 _response.Result = await _unitOfWork.villaRepo.AddAsync(villa);
             }
@@ -71,9 +73,9 @@ namespace CleanArchitecture.ApplicationCore.Services
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(deleteVila.ImageUrl))
+                    if (!string.IsNullOrEmpty(deleteVila.ImageLocalPath))
                     {
-                        FileInfo fileInfo = new FileInfo(deleteVila.ImageUrl);
+                        FileInfo fileInfo = new FileInfo(deleteVila.ImageLocalPath);
                         if (fileInfo.Exists)
                         {
                             fileInfo.Delete();
@@ -124,9 +126,9 @@ namespace CleanArchitecture.ApplicationCore.Services
             {
                 if (villa.Image is not null)
                 {
-                    if (!string.IsNullOrEmpty(villa.ImageUrl))
+                    if (!string.IsNullOrEmpty(villa.ImageLocalPath))
                     {
-                        FileInfo fileInfo = new FileInfo(villa.ImageUrl);
+                        FileInfo fileInfo = new FileInfo(villa.ImageLocalPath);
                         if (fileInfo.Exists)
                         {
                             fileInfo.Delete();
@@ -141,6 +143,7 @@ namespace CleanArchitecture.ApplicationCore.Services
                     // var urlFilePath = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}/Images/{fileName}";
                     var urlFilePath = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}{_httpContextAccessor.HttpContext.Request.PathBase}/Images/{fileName}";
                     villa.ImageUrl = urlFilePath;
+                    villa.ImageLocalPath = filePath;
                 }
                     // _mapper.Map(productDTO, product);
                     await _unitOfWork.villaRepo.UpdateAsync(villa);
