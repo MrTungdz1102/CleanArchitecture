@@ -18,6 +18,7 @@ namespace CleanArchitecture.WebUI.Models
         public int Occupancy { get; set; }
         public IFormFile? Image { get; set; }
         public string? ImageUrl { get; set; }
+        public string? ImageLocalPath { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
 
