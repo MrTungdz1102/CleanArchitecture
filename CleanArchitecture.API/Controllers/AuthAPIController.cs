@@ -16,13 +16,13 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<ResponseDTO>> Login(LoginRequestDTO loginRequest)
+        public async Task<ActionResult<ResponseDTO>> Login([FromBody] LoginRequestDTO loginRequest)
         {
             return Ok(await _authService.Login(loginRequest));
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<ResponseDTO>> Register(RegisterRequestDTO registerRequest)
+        public async Task<ActionResult<ResponseDTO>> Register([FromBody] RegisterRequestDTO registerRequest)
         {
             return Ok(await _authService.Register(registerRequest));
         }

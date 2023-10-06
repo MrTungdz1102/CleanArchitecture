@@ -29,13 +29,13 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("CreateAmenity")]
-        public async Task<ActionResult<ResponseDTO>> CreateAmenity(Amenity amenity)
+        public async Task<ActionResult<ResponseDTO>> CreateAmenity([FromBody] Amenity amenity)
         {
             return Ok(await _amenityService.CreateAmenity(amenity));
         }
 
         [HttpPut("UpdateAmenity")]
-        public async Task<ActionResult<ResponseDTO>> UpdateAmenity(Amenity amenity)
+        public async Task<ActionResult<ResponseDTO>> UpdateAmenity([FromBody] Amenity amenity)
         {
             return Ok(await _amenityService.UpdateAmenity(amenity));
         }

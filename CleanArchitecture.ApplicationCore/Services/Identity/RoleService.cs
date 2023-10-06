@@ -19,16 +19,19 @@ namespace CleanArchitecture.ApplicationCore.Services.Identity
             _roleManager = roleManager;
 
         }
-        public async Task<bool> AssignRole(string email, string roleName)
+        public async Task<bool> AssignRole(string email, string[] roleName)
         {
             AppUser? user = await _userManager.FindByEmailAsync(email);
             if (user != null)
             {
-                if (!await _roleManager.RoleExistsAsync(roleName))
+                foreach(var role in roleName)
                 {
-                    await _roleManager.CreateAsync(new IdentityRole(roleName));
-                }
-                await _userManager.AddToRoleAsync(user, roleName);
+                    if (!await _roleManager.RoleExistsAsync(role))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(role));
+                    }
+                }              
+                await _userManager.AddToRolesAsync(user, roleName);
                 return true;
             }
             return false;

@@ -8,6 +8,6 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Commons
 {
     public interface IRoleService
     {
-        Task<bool> AssignRole(string email, string roleName);
+        Task<bool> AssignRole(string email, string[] roleName);
     }
 }
