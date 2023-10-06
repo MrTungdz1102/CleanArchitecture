@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Entities.DTOs;
 using System;
@@ -14,6 +15,7 @@ namespace CleanArchitecture.ApplicationCore.MapConfig
         public MapConfig()
         {
             CreateMap<Villa, VillaDTO>().ReverseMap();
+            CreateMap<AppUser, RegisterRequestDTO>().ReverseMap();
         }
     }
 }
