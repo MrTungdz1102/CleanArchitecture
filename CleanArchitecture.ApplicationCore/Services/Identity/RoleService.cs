@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.ApplicationCore.Entities;
+﻿using CleanArchitecture.ApplicationCore.Commons;
+using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -13,25 +14,48 @@ namespace CleanArchitecture.ApplicationCore.Services.Identity
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private ResponseDTO _response;
         public RoleService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _response = new ResponseDTO();
 
         }
-        public async Task<bool> AssignRole(string email, string roleName)
+        public async Task<bool> AssignRole(string email, string[] roleName)
         {
             AppUser? user = await _userManager.FindByEmailAsync(email);
             if (user != null)
             {
-                if (!await _roleManager.RoleExistsAsync(roleName))
+                foreach(var role in roleName)
                 {
-                    await _roleManager.CreateAsync(new IdentityRole(roleName));
-                }
-                await _userManager.AddToRoleAsync(user, roleName);
+                    if (!await _roleManager.RoleExistsAsync(role))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(role));
+                    }
+                   if(role is not null)
+                    {
+                        await _userManager.AddToRoleAsync(user, role);
+                    }
+                }              
+                
                 return true;
             }
             return false;
+        }
+
+        public ResponseDTO GetAllRole()
+        {
+            try
+            {
+                _response.Result = _roleManager.Roles.Select(x => x.Name).ToList();
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
         }
     }
 }

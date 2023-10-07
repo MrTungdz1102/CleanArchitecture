@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CleanArchitecture.ApplicationCore.Commons;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Commons
 {
     public interface IRoleService
     {
-        Task<bool> AssignRole(string email, string roleName);
+        Task<bool> AssignRole(string email, string[] roleName);
+        ResponseDTO GetAllRole();
     }
 }

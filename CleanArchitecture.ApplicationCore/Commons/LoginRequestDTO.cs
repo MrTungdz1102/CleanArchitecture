@@ -13,7 +13,8 @@ namespace CleanArchitecture.ApplicationCore.Commons
         [EmailAddress]
         public string UserName { get; set; }
         [Required]
-        [StringLength(15, ErrorMessage = "Password must be between {2} and {1} characters", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        //   [StringLength(15, ErrorMessage = "Password must be between {2} and {1} characters", MinimumLength = 6)]
         public string Password { get; set; }
     }
 }

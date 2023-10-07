@@ -74,14 +74,15 @@ namespace CleanArchitecture.ApplicationCore.Services
                 IdentityResult result = await _userManager.CreateAsync(_user, registerRequest.Password);
                 if (result.Succeeded)
                 {
-                    if (string.IsNullOrEmpty(registerRequest.Role))
+                    if (registerRequest.Roles is null || registerRequest.Roles.Length == 0)
                     {
-                        await _roleService.AssignRole(registerRequest.Email, "USER");
+                        await _roleService.AssignRole(registerRequest.Email, new string[] {"USER", "CUSTOMER"});
                     }
                     else
                     {
-                        await _roleService.AssignRole(registerRequest.Email, registerRequest.Role);
+                        await _roleService.AssignRole(registerRequest.Email, registerRequest.Roles);
                     }
+                    
                 }
                 else
                 {
