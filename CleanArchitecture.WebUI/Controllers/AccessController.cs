@@ -1,19 +1,21 @@
 ﻿using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Models.ViewModel;
 using CleanArchitecture.WebUI.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
+using System.Data;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
     public class AccessController : Controller
     {
         private readonly IAuthService _authService;
-        public AccessController(IAuthService authService)
+        private readonly IRoleService _roleService;
+        public AccessController(IAuthService authService, IRoleService roleService)
         {
             _authService = authService;
+            _roleService = roleService;
         }
         public IActionResult Login(string? returnUrl = null)
         {
@@ -28,7 +30,7 @@ namespace CleanArchitecture.WebUI.Controllers
         public async Task<IActionResult> Login(LoginVM loginVM)
         {
             ResponseDTO? response = await _authService.Login(loginVM);
-            if(response != null && response.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Hello " + loginVM.Email;
                 if (string.IsNullOrEmpty(loginVM.RedirectUrl))
@@ -46,25 +48,36 @@ namespace CleanArchitecture.WebUI.Controllers
             }
             return View(loginVM);
         }
-        public IActionResult Register(string? returnUrl = null)
+        public async Task<IActionResult> Register(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
+
+            ResponseDTO? response = await _roleService.GetAllRole();
+            List<string>? roleList;
+            List<SelectListItem>? roleItems = new List<SelectListItem>();
+            if (response != null && response.IsSuccess)
+            {
+                roleList = JsonConvert.DeserializeObject<List<string>>(Convert.ToString(response.Result));
+                roleItems = roleList.Select(r => new SelectListItem { Value = r, Text = r }).ToList();
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+
             RegisterVM registerVM = new()
             {
-                //RoleList = _roleManager.Roles.Select(x => new SelectListItem
-                //{
-                //    Text = x.Name,
-                //    Value = x.Name
-                //}),
-                RedirectUrl = returnUrl
+                RedirectUrl = returnUrl,
+                RoleList = roleItems
             };
+
             return View(registerVM);
         }
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
             ResponseDTO? response = await _authService.Register(registerVM);
-            if(response != null && response.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Register Success " + registerVM.Email;
                 if (string.IsNullOrEmpty(registerVM.RedirectUrl))
@@ -75,12 +88,25 @@ namespace CleanArchitecture.WebUI.Controllers
                 {
                     return LocalRedirect(registerVM.RedirectUrl);
                 }
-               
+
             }
             else
             {
                 TempData["error"] = response?.Message;
-            }
+                response = await _roleService.GetAllRole();
+                List<string>? roleList;
+                List<SelectListItem>? roleItems = new List<SelectListItem>();
+                if (response != null && response.IsSuccess)
+                {
+                    roleList = JsonConvert.DeserializeObject<List<string>>(Convert.ToString(response.Result));
+                    roleItems = roleList.Select(r => new SelectListItem { Value = r, Text = r }).ToList();
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
+                registerVM.RoleList = roleItems;
+            }            
             return View(registerVM);
         }
         public IActionResult AccessDenied()

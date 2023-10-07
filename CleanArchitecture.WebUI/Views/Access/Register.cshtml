@@ -44,10 +44,30 @@
                         </div>
 
                         <div class="form-floating mb-3 col-md-6">
-                            <select asp-for="Roles" asp-items="@Model.RoleList" class="form-select">
-                                <option disabled selected>-Select Role-</option>
-                            </select>
+                            @for (var i = 0; i < Model.RoleList.Count(); i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            @{
+                                                var isChecked = false;
+                                                if (Model.Roles != null)
+                                                {
+                                                    isChecked = Array.Exists(Model.Roles, r => r == Model.RoleList.ElementAt(i).Value);
+                                                }
+                                            }
+                                            <input class="form-check-input" name="Roles" type="checkbox" value="@Model.RoleList.ElementAt(i).Value" id="role-@i" @(isChecked ? "checked" : "")>
+                                            <label class="form-check-label" for="role-@i">@Model.RoleList.ElementAt(i).Text</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         </div>
+                       @*  <div class="form-floating mb-3 col-md-6">
+                            <input asp-for="Roles" class="form-control" value="" />
+                        <label asp-for="Roles" class="ms-2 text-muted">Others Role</label>
+                            <span asp-validation-for="Roles" class="text-danger" />
+                        </div> *@
                         <div class="col-12">
                             <button type="submit" class="w-100 btn btn-lg btn-outline-success">Register</button>
                         </div>
