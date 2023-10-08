@@ -1,9 +1,11 @@
 using CleanArchitecture.WebUI.Services.Implementations;
 using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
 Constants.APIUrlBase = builder.Configuration["ServiceUrls:ApiUrl"];
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IVillaService, VillaService>();
@@ -11,6 +13,13 @@ builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
 builder.Services.AddScoped<IAmenityService, AmenityService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+{
+    option.ExpireTimeSpan = TimeSpan.FromHours(10);
+    option.LoginPath = "/Access/Login";
+    option.AccessDeniedPath = "/Access/AccessDenied";
+});
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
@@ -28,7 +37,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
