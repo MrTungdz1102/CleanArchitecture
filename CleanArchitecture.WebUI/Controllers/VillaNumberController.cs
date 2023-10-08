@@ -26,10 +26,10 @@ namespace CleanArchitecture.WebUI.Controllers
                 PageSize = 7,
                 PageNumber = (page == null || page < 0) ? 1 : page.Value
             };
-            ViewBag.PageNumber = page;
+            ViewBag.PageNumber = page ?? 0;
             ResponseDTO? response = await _villaNumberService.GetAllVillaNumber(query);
             List<VillaNumber> villaNumberList = null;
-            PageResult<VillaNumber> pageResult = new PageResult<VillaNumber>();
+            PageResult<VillaNumber>? pageResult = new PageResult<VillaNumber>();
             if (response != null && response.IsSuccess)
             {
                 pageResult = JsonConvert.DeserializeObject<PageResult<VillaNumber>>(Convert.ToString(response.Result));
@@ -144,7 +144,7 @@ namespace CleanArchitecture.WebUI.Controllers
                 }
                 else
                 {
-                    TempData["error"] = (response?.Message ?? "") + " " + (response1?.Message ?? "");
+                    TempData["error"] = response1?.Message;
                 }
                 villaNumberVM.VillaList = listVilla.Select(x => new SelectListItem
                 {
