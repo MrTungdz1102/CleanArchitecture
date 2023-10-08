@@ -15,5 +15,6 @@
             MultipartFormData,
         }
         public static string APIUrlBase { get; set; }
+        public const string TokenCookie = "JWTToken";
     }
 }

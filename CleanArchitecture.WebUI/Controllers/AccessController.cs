@@ -1,10 +1,15 @@
 ﻿using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Models.ViewModel;
 using CleanArchitecture.WebUI.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using NuGet.Protocol.Plugins;
 using System.Data;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
@@ -12,10 +17,13 @@ namespace CleanArchitecture.WebUI.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IRoleService _roleService;
-        public AccessController(IAuthService authService, IRoleService roleService)
+        private readonly ITokenProvider _token;
+        public AccessController(IAuthService authService, IRoleService roleService, ITokenProvider token)
         {
             _authService = authService;
             _roleService = roleService;
+            _token = token;
+
         }
         public IActionResult Login(string? returnUrl = null)
         {
@@ -33,6 +41,8 @@ namespace CleanArchitecture.WebUI.Controllers
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Hello " + loginVM.Email;
+                await SignInUser(response.Result.ToString());
+                _token.SetToken(response.Result.ToString());
                 if (string.IsNullOrEmpty(loginVM.RedirectUrl))
                 {
                     return RedirectToAction("Index", "Home");
@@ -112,6 +122,27 @@ namespace CleanArchitecture.WebUI.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            _token.ClearToken();
+            return RedirectToAction("Index", "Home");
+        }
+        private async Task SignInUser(string token)
+        {
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken jwt = handler.ReadJwtToken(token);
+            ClaimsIdentity identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Email).Value));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub).Value));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Name).Value));
+
+            identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Name).Value));
+            identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(x => x.Type == "role").Value));
+
+            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
     }
 }

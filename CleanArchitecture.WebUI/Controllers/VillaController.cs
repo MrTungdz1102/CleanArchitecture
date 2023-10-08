@@ -1,11 +1,13 @@
 ﻿using CleanArchitecture.WebUI.Models;
 using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
+    [Authorize]
     public class VillaController : Controller
     {
         private readonly IVillaService _villaService;

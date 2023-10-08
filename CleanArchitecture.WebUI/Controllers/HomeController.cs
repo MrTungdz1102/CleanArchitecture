@@ -2,6 +2,7 @@
 using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Models.ViewModel;
 using CleanArchitecture.WebUI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -19,7 +20,7 @@ namespace CleanArchitecture.WebUI.Controllers
             _villaService = villaService;
             _amenityService = amenityService;
         }
-
+      //  [Authorize]
         public async Task<IActionResult> Index()
         {
             ResponseDTO? response = await _villaService.GetAllDetailVilla();

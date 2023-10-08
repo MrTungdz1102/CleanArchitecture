@@ -9,7 +9,7 @@ namespace CleanArchitecture.ApplicationCore.Commons
 {
     public class LoginResponseDTO
     {
-        public AppUser appUser { get; set; }
+      //  public AppUser appUser { get; set; }
         public string Token { get; set; }
     }
 }

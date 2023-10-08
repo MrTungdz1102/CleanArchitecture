@@ -37,14 +37,17 @@ namespace CleanArchitecture.ApplicationCore.Services.Identity
             {
                 new Claim(JwtRegisteredClaimNames.Email, appUser.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, appUser.Id),
-                new Claim(JwtRegisteredClaimNames.Name, appUser.UserName)
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Name, appUser.UserName),
+                //new Claim(JwtRegisteredClaimNames.Aud, _configuration["JWTSettings:Audience"]),
+                //new Claim(JwtRegisteredClaimNames.Iss, _configuration["JWTSettings:Issuer"])
             };
             var roles = await _userManager.GetRolesAsync(appUser);
             claimList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Audience = _configuration["JWTSettings:Issuer"],
-                Issuer = _configuration["JWTSettings:Audience"],
+                Audience = _configuration["JWTSettings:Audience"],
+                Issuer = _configuration["JWTSettings:Issuer"],
                 // Claims = claims khi sử dụng JwtSecurityToken thay vì SecurityTokenDescriptor
                 Subject = new ClaimsIdentity(claimList),
                 Expires = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JwtSettings:DurationInMinutes"])),

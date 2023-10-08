@@ -10,11 +10,13 @@ namespace CleanArchitecture.WebUI.Services.Implementations
     public class BaseService : IBaseService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public BaseService(IHttpClientFactory httpClientFactory)
+        private readonly ITokenProvider _token;
+        public BaseService(IHttpClientFactory httpClientFactory, ITokenProvider token)
         {
             _httpClientFactory = httpClientFactory;
+            _token = token;
         }
-        public async Task<ResponseDTO?> SendAsync(RequestDTO requestDTO)
+        public async Task<ResponseDTO?> SendAsync(RequestDTO requestDTO, bool withBearer = true)
         {
             try
             {
@@ -27,6 +29,11 @@ namespace CleanArchitecture.WebUI.Services.Implementations
                 else
                 {
                     message.Headers.Add("Accept", "application/json");
+                }
+                if (withBearer)
+                {
+                    var token = _token.GetToken();
+                    message.Headers.Add("Authorization", $"Bearer {token}");
                 }
                 message.RequestUri = new Uri(requestDTO.Url);
                 if (requestDTO.ContentType == ContentType.MultipartFormData)

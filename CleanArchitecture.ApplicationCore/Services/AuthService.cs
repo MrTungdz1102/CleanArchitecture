@@ -39,22 +39,25 @@ namespace CleanArchitecture.ApplicationCore.Services
             try
             {
                 bool checkPass = false;
-                LoginResponseDTO loginResponse;
-                _user = await _userManager.FindByEmailAsync(loginRequest.UserName);
+                _user = await _userManager.FindByEmailAsync(loginRequest.Email);
                 if (_user != null)
                 {
                     checkPass = await _userManager.CheckPasswordAsync(_user, loginRequest.Password);
                 }
                 if (_user == null || checkPass == false)
                 {
-                    loginResponse = new LoginResponseDTO() { appUser = null, Token = "" };
+                    //  loginResponse = new LoginResponseDTO() { appUser = null, Token = "" };
+                    _response.IsSuccess = false;
+                    _response.Message = "Username or password is incorrect";
+                    return _response;
                 }
                 else
                 {
                     var token = await _tokenGenerator.GenerateToken(_user);
-                    loginResponse = new LoginResponseDTO { appUser = _user, Token = token };
+                  //  LoginResponseDTO loginResponse = new LoginResponseDTO { appUser = _user, Token = token };
+                    _response.Result = token;
+                    return _response;
                 }
-                _response.Result = loginResponse;
             }
             catch(Exception ex)
             {
