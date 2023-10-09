@@ -110,7 +110,11 @@ namespace CleanArchitecture.ApplicationCore.Services
         {
             try
             {
-                _response.Result = await _unitOfWork.villaRepo.GetByIdAsync(villaId);
+                Villa? villa = await _unitOfWork.villaRepo.GetByIdAsync(villaId);
+                VillaDTO villaDTO = _mapper.Map<VillaDTO>(villa);
+                var specification = new AmenitySpecification(villaId);
+                villaDTO.VillaAmenity = await _unitOfWork.amenityRepo.ListAsync(specification);
+                _response.Result = villaDTO;
             }
             catch (Exception ex)
             {

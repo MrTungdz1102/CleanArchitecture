@@ -10,7 +10,7 @@ namespace CleanArchitecture.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+ //   [Authorize]
     public class VillaAPIController : ControllerBase
     {
         private readonly IVillaService _villaService;

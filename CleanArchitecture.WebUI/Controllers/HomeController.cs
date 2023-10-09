@@ -43,7 +43,7 @@ namespace CleanArchitecture.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetVillaByDate(int nights, DateOnly checkInDate)
+        public async Task<IActionResult> GetVillaByDate(int nights, DateTime checkInDate)
         {
             Thread.Sleep(1000);
             ResponseDTO? response = await _villaService.GetAllDetailVilla();
@@ -59,7 +59,7 @@ namespace CleanArchitecture.WebUI.Controllers
             HomeVM homeVM = new HomeVM()
             {
                 VillaList = villas,
-                CheckInDate = checkInDate,
+                CheckInDate = DateOnly.FromDateTime(checkInDate),
                 Nights = nights
             };
             return PartialView("_VillaListPartial", homeVM);
