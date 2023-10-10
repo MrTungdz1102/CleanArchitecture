@@ -54,8 +54,8 @@ namespace CleanArchitecture.ApplicationCore.Services
                 else
                 {
                     var token = await _tokenGenerator.GenerateToken(_user);
-                  //  LoginResponseDTO loginResponse = new LoginResponseDTO { appUser = _user, Token = token };
-                    _response.Result = token;
+                    LoginResponseDTO loginResponse = new LoginResponseDTO { appUser = _user, Token = token };
+                    _response.Result = loginResponse;
                     return _response;
                 }
             }

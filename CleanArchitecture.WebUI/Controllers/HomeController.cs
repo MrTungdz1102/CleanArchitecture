@@ -36,16 +36,16 @@ namespace CleanArchitecture.WebUI.Controllers
             HomeVM homeVM = new HomeVM
             {
                 VillaList = villas, 
-                Nights = 1,
-                CheckInDate = DateOnly.FromDateTime(DateTime.Now)
+                Nights = 1
             };
+            homeVM.CheckInDate = DateOnly.FromDateTime(DateTime.Now);
             return View(homeVM);
         }
 
         [HttpPost]
         public async Task<IActionResult> GetVillaByDate(int nights, DateOnly checkInDate)
         {
-            Thread.Sleep(1000);
+            Thread.Sleep(250);
             ResponseDTO? response = await _villaService.GetAllDetailVilla();
             List<Villa> villas = new List<Villa>();
             if (response.Result != null && response.IsSuccess)

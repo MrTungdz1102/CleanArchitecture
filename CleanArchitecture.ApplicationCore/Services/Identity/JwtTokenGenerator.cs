@@ -38,7 +38,7 @@ namespace CleanArchitecture.ApplicationCore.Services.Identity
                 new Claim(JwtRegisteredClaimNames.Email, appUser.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, appUser.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Name, appUser.UserName),
+                new Claim(JwtRegisteredClaimNames.Name, appUser.Name),
                 //new Claim(JwtRegisteredClaimNames.Aud, _configuration["JWTSettings:Audience"]),
                 //new Claim(JwtRegisteredClaimNames.Iss, _configuration["JWTSettings:Issuer"])
             };
