@@ -1,10 +1,12 @@
 ﻿using CleanArchitecture.ApplicationCore.Entities;
+using CleanArchitecture.Infrastructure.Converter;
 using CleanArchitecture.Infrastructure.Data.DataConfigurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +30,13 @@ namespace CleanArchitecture.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new VillaConfiguration());
             modelBuilder.ApplyConfiguration(new VillaNumberConfiguration());
             modelBuilder.ApplyConfiguration(new AmenityConfiguration());
+        }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder builder)
+        {
+            builder.Properties<DateOnly>().HaveConversion<Converter.DateOnlyConverter>().HaveColumnType("date");
+            builder.Properties<DateOnly?>().HaveConversion<NullableDateOnlyConverter>().HaveColumnType("date");
+            base.ConfigureConventions(builder);
         }
     }
 }

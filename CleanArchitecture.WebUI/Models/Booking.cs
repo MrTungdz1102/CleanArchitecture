@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CleanArchitecture.WebUI.Models.ViewModel;
 
 namespace CleanArchitecture.WebUI.Models
 {
@@ -13,10 +14,10 @@ namespace CleanArchitecture.WebUI.Models
         public int Id { get; set; }
 
         public string UserId { get; set; }
-        public AppUser AppUser { get; set; }
+        public AppUser? AppUser { get; set; }
 
         public int VillaId { get; set; }
-        public Villa Villa { get; set; }
+        public Villa? Villa { get; set; }
 
         public string Name { get; set; }
         public string Email { get; set; }

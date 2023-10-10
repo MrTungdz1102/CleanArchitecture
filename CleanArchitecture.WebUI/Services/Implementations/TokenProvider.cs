@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
+using System.Security.Claims;
 
 namespace CleanArchitecture.WebUI.Services.Implementations
 {

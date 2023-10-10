@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,13 +12,13 @@ namespace CleanArchitecture.ApplicationCore.Entities
     {
         public int Id { get; set; }
 
-        [ForeignKey("UserId")]
         public string UserId { get; set; }
-        public AppUser AppUser { get; set; }
+        [ForeignKey("UserId")]
+        public AppUser? AppUser { get; set; }
 
-        [ForeignKey("VillaId")]
         public int VillaId { get; set; }
-        public Villa Villa { get; set; }
+        [ForeignKey("VillaId")]
+        public Villa? Villa { get; set; }
 
         public string Name { get; set; }
         public string Email { get; set; }
