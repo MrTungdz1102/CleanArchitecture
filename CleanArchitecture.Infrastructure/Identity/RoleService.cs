@@ -1,5 +1,4 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
-using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -8,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.ApplicationCore.Services.Identity
+namespace CleanArchitecture.Infrastructure.Identity
 {
     public class RoleService : IRoleService
     {
@@ -27,18 +26,18 @@ namespace CleanArchitecture.ApplicationCore.Services.Identity
             AppUser? user = await _userManager.FindByEmailAsync(email);
             if (user != null)
             {
-                foreach(var role in roleName)
+                foreach (var role in roleName)
                 {
                     if (!await _roleManager.RoleExistsAsync(role))
                     {
                         await _roleManager.CreateAsync(new IdentityRole(role));
                     }
-                   if(role is not null)
+                    if (role is not null)
                     {
                         await _userManager.AddToRoleAsync(user, role);
                     }
-                }              
-                
+                }
+
                 return true;
             }
             return false;

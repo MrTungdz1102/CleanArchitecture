@@ -9,7 +9,7 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Commons
 {
     public interface IJwtTokenGenerator
     {
-        Task<string> GenerateToken(AppUser appUser);
+        Task<string> GenerateToken(string userName);
         Task<string> CreateRefreshToken();
       //  Task<ResponseDTO> VerifyRefreshToken();
     }

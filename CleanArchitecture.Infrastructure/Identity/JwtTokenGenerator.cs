@@ -1,5 +1,4 @@
-﻿using CleanArchitecture.ApplicationCore.Entities;
-using CleanArchitecture.ApplicationCore.Interfaces.Commons;
+﻿using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -11,7 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.ApplicationCore.Services.Identity
+namespace CleanArchitecture.Infrastructure.Identity
 {
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
@@ -28,21 +27,21 @@ namespace CleanArchitecture.ApplicationCore.Services.Identity
             throw new NotImplementedException();
         }
 
-        public async Task<string> GenerateToken(AppUser appUser)
+        public async Task<string> GenerateToken(string userName)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityKey = Encoding.UTF8.GetBytes(_configuration["JWTSettings:Key"]);
             var credentials = new SigningCredentials(new SymmetricSecurityKey(securityKey), SecurityAlgorithms.HmacSha256Signature);
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null) throw new UserNotFoundException(userName);
             var claimList = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Email, appUser.Email),
-                new Claim(JwtRegisteredClaimNames.Sub, appUser.Id),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Name, appUser.Name),
-                //new Claim(JwtRegisteredClaimNames.Aud, _configuration["JWTSettings:Audience"]),
-                //new Claim(JwtRegisteredClaimNames.Iss, _configuration["JWTSettings:Issuer"])
+                new Claim(JwtRegisteredClaimNames.Name, user.Name)
             };
-            var roles = await _userManager.GetRolesAsync(appUser);
+            var roles = await _userManager.GetRolesAsync(user);
             claimList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             var tokenDescriptor = new SecurityTokenDescriptor
             {

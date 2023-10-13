@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.Infrastructure.Converter;
 using CleanArchitecture.Infrastructure.Data.DataConfigurations;
+using CleanArchitecture.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,7 @@ namespace CleanArchitecture.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new VillaConfiguration());
             modelBuilder.ApplyConfiguration(new VillaNumberConfiguration());
             modelBuilder.ApplyConfiguration(new AmenityConfiguration());
+            modelBuilder.ApplyConfiguration(new BookingConfiguration());
         }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder builder)
