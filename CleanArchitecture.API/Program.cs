@@ -1,11 +1,9 @@
 using CleanArchitecture.API.Middlewares;
-using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.ApplicationCore.MapConfig;
 using CleanArchitecture.ApplicationCore.Services;
-using CleanArchitecture.ApplicationCore.Services.Identity;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Logging;
 using CleanArchitecture.Infrastructure.Repositories;
@@ -17,7 +15,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 using Serilog;
-
+using CleanArchitecture.Infrastructure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

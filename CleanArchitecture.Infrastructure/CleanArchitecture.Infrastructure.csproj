@@ -19,4 +19,8 @@
     <ProjectReference Include="..\CleanArchitecture.ApplicationCore\CleanArchitecture.ApplicationCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Payment\" />
+  </ItemGroup>
+
 </Project>

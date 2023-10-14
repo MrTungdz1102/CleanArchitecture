@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.ApplicationCore.Commons
+namespace CleanArchitecture.Infrastructure.Identity.DTOs
 {
     public class LoginResponseDTO
     {
-        public AppUser appUser { get; set; }
+        public AppUser AppUser { get; set; }
         public string Token { get; set; }
     }
 }

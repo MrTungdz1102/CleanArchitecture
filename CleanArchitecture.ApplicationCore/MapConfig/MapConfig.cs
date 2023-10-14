@@ -15,7 +15,7 @@ namespace CleanArchitecture.ApplicationCore.MapConfig
         public MapConfig()
         {
             CreateMap<Villa, VillaDTO>().ReverseMap();
-            CreateMap<AppUser, RegisterRequestDTO>().ReverseMap();
+          //  CreateMap<AppUser, RegisterRequestDTO>().ReverseMap();
         }
     }
 }

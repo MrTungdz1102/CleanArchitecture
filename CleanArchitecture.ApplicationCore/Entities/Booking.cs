@@ -13,8 +13,6 @@ namespace CleanArchitecture.ApplicationCore.Entities
         public int Id { get; set; }
 
         public string UserId { get; set; }
-        [ForeignKey("UserId")]
-        public AppUser? AppUser { get; set; }
 
         public int VillaId { get; set; }
         [ForeignKey("VillaId")]
