@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.WebUI.Models;
 using CleanArchitecture.WebUI.Models.DTOs;
+using CleanArchitecture.WebUI.Models.ViewModel;
 using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -14,11 +15,12 @@ namespace CleanArchitecture.WebUI.Controllers
     {
         private readonly IVillaService _villaService;
         private readonly IBookingService _bookingService;
-        public BookingController(IVillaService villaService, IBookingService bookingService)
+        private readonly IPaymentService _paymentService;
+        public BookingController(IVillaService villaService, IBookingService bookingService, IPaymentService paymentService)
         {
             _villaService = villaService;
             _bookingService = bookingService;
-
+            _paymentService = paymentService;
         }
         public async Task<IActionResult> FinalizeBooking(int villaId, DateOnly checkInDate, int nights)
         {
@@ -28,7 +30,7 @@ namespace CleanArchitecture.WebUI.Controllers
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             ResponseDTO response = await _villaService.GetVillaById(villaId);
             Villa villa = new Villa();
-            if(response.Result != null && response.IsSuccess)
+            if (response.Result != null && response.IsSuccess)
             {
                 villa = JsonConvert.DeserializeObject<Villa>(response.Result.ToString());
             }
@@ -72,8 +74,23 @@ namespace CleanArchitecture.WebUI.Controllers
             ResponseDTO? response1 = await _bookingService.CreateBooking(booking);
             if (response1.Result != null && response1.IsSuccess)
             {
-                TempData["success"] = "Booking Successfully!";
-                return RedirectToAction(nameof(BookingConfirmation), new { bookingId = booking.Id });
+                Booking bookingResult = JsonConvert.DeserializeObject<Booking>(response1.Result.ToString());
+                var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+                StripePaymentRequest stripePayment = new StripePaymentRequest
+                {
+                    ApprovedUrl = domain + "Booking/BookingConfirmation?bookingId=" + bookingResult.Id,
+                    CancelUrl = domain + $"Booking/FinalizeBooking?villaId={booking.VillaId}&checkInDate={booking.CheckInDate}&nights={booking.Nights}",
+                    Price = booking.TotalCost,
+                    Name = villa.Name
+                };
+                response = await _paymentService.CreateCheckout(stripePayment);
+                if (response != null && response.IsSuccess)
+                {
+                    PaymentResponse paymentResponse = JsonConvert.DeserializeObject<PaymentResponse>(response.Result.ToString());
+                    response = await _bookingService.UpdateBookingPayment(bookingResult.Id, paymentResponse.StripeSessionId, "0");
+                    Response.Headers.Add("Location", paymentResponse.StripeSessionUrl);
+                    return new StatusCodeResult(303);
+                }
             }
             else
             {
@@ -82,8 +99,25 @@ namespace CleanArchitecture.WebUI.Controllers
             return RedirectToAction(nameof(FinalizeBooking));
         }
 
-        public IActionResult BookingConfirmation(int bookingId)
+        public async Task<IActionResult> BookingConfirmation(int bookingId)
         {
+            ResponseDTO? response = await _bookingService.GetBooking(bookingId);
+            Booking? booking = new Booking();
+            if (response.IsSuccess && response.Result != null)
+            {
+                booking = JsonConvert.DeserializeObject<Booking>(response.Result.ToString());
+                response = await _paymentService.ValidatePayment(booking.StripeSessionId);
+                if (response.IsSuccess && response.Result != null)
+                {
+                    PaymentResponse paymentResponse = JsonConvert.DeserializeObject<PaymentResponse>(response.Result.ToString());
+                    await _bookingService.UpdateBookingStatus(bookingId, Constants.StatusApproved);
+                    await _bookingService.UpdateBookingPayment(bookingId, paymentResponse.StripeSessionId, paymentResponse.PaymentIntentId);
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
+            }
             return View(bookingId);
         }
     }
