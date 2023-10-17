@@ -41,17 +41,30 @@ namespace CleanArchitecture.WebUI.Controllers
             ResponseDTO? response = await _authService.Login(loginVM);
             if (response != null && response.IsSuccess)
             {
-                TempData["success"] = "Hello " + loginVM.Email;
+                //   TempData["success"] = "Hello " + loginVM.Email;
+                await Console.Out.WriteLineAsync(loginVM.Email);
                 AppUserVM appUserVM = JsonConvert.DeserializeObject<AppUserVM>(response.Result.ToString());
                 await SignInUser(appUserVM.Token, appUserVM.AppUser);
                 _token.SetToken(appUserVM.Token);
-                if (string.IsNullOrEmpty(loginVM.RedirectUrl))
+                //var roles = HttpContext.User.FindAll(ClaimTypes.Role);
+                //if (roles.Any(x => x.Value == Utilities.Constants.Role_Admin))
+                //{
+                //    return RedirectToAction("Index", "Dashboard");
+                //}
+                if (HttpContext.User.IsInRole(Utilities.Constants.Role_Admin))
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Dashboard");
                 }
                 else
                 {
-                    return LocalRedirect(loginVM.RedirectUrl);
+                    if (string.IsNullOrEmpty(loginVM.RedirectUrl))
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        return LocalRedirect(loginVM.RedirectUrl);
+                    }
                 }
             }
             else

@@ -30,3 +30,6 @@ body {
     white-space: nowrap;
     line-height: 60px;
 }
+.dataTables_filter {
+    margin-bottom: 20px;
+}
