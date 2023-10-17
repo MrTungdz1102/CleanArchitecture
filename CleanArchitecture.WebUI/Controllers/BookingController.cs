@@ -22,6 +22,16 @@ namespace CleanArchitecture.WebUI.Controllers
             _bookingService = bookingService;
             _paymentService = paymentService;
         }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult BookingDetails()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> FinalizeBooking(int villaId, DateOnly checkInDate, int nights)
         {
             var phoneNumber = HttpContext.User.FindFirstValue(ClaimTypes.MobilePhone);

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CleanArchitecture.WebUI.Models.ViewModel;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace CleanArchitecture.WebUI.Models
 {
@@ -41,5 +42,7 @@ namespace CleanArchitecture.WebUI.Models
         public DateTime ActualCheckOutDate { get; set; }
 
         public int VillaNumber { get; set; }
+        [ValidateNever]
+        public ICollection<VillaNumber>? VillaNumbers { get; set; }
     }
 }

@@ -23,5 +23,8 @@
         public const string StatusCompleted = "Completed";
         public const string StatusCancelled = "Cancelled";
         public const string StatusRefunded = "Refunded";
+
+        public const string Role_Customer = "Customer";
+        public const string Role_Admin = "Admin";
     }
 }
