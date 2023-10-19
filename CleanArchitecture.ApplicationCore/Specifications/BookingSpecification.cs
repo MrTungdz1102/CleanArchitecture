@@ -14,5 +14,13 @@ namespace CleanArchitecture.ApplicationCore.Specifications
         {
             Query.Where(x => x.Id == bookingId);
         }
+        public BookingSpecification(string? userId, string? status)
+        {
+            Query.Where(x => (userId == null || x.UserId == userId) && (status == null || x.Status == status) && (!string.IsNullOrEmpty(userId) || !string.IsNullOrEmpty(status)));
+        }
+        public BookingSpecification(string? status)
+        {
+            Query.Where(x =>(status == null || x.Status == status) );
+        }
     }
 }

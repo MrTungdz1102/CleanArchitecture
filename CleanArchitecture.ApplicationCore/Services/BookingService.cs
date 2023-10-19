@@ -34,11 +34,27 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetAllBooking()
+        public async Task<ResponseDTO> GetAllBooking(string? statusFilter)
         {
             try
             {
-                _response.Result = await _unitOfWork.bookingRepo.ListAsync();
+                var specification = new BookingSpecification(statusFilter);
+                _response.Result = await _unitOfWork.bookingRepo.ListAsync(specification);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        public async Task<ResponseDTO> GetAllBookingUser(string userId, string? statusFilter)
+        {
+            try
+            {
+                var specification = new BookingSpecification(userId, statusFilter);
+                _response.Result = await _unitOfWork.bookingRepo.ListAsync(specification);
             }
             catch (Exception ex)
             {

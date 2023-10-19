@@ -3,16 +3,15 @@ var dataTable;
 
 $(document).ready(function () {
     const urlParams = new URLSearchParams(window.location.search);
-    const status = urlParams.get('status');
+    var status = urlParams.get('status');
     loadDataTable(status);
-
 });
 
 
 function loadDataTable(status) {
     dataTable = $('#tblBookings').DataTable({
         "ajax": {
-            url: '/booking/getall?status=' + status
+            url: '/booking/getall' + (status === null ? '' : ('?status=' + status))
         },
         "columns": [
             { data: 'id', "width": "5%" },

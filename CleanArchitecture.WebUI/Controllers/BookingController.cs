@@ -130,5 +130,44 @@ namespace CleanArchitecture.WebUI.Controllers
             }
             return View(bookingId);
         }
+
+        #region api call
+        public async Task<IActionResult> GetAll(string? status = null)
+        {
+            string? userId = null;
+            if (string.IsNullOrEmpty(status))
+            {
+                status = "";
+            }
+            if (!User.IsInRole(Constants.Role_Admin))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                ResponseDTO? response = await _bookingService.GetAllBookingUser(userId, status);
+                if (response.Result is not null && response.IsSuccess)
+                {
+                    List<Booking> result = JsonConvert.DeserializeObject<List<Booking>>(response.Result.ToString());
+                    return Json(new { data = result });
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
+            }
+            else
+            {
+                ResponseDTO? response = await _bookingService.GetAllBooking(status);
+                if (response.Result is not null && response.IsSuccess)
+                {
+                    List<Booking> result = JsonConvert.DeserializeObject<List<Booking>>(response.Result.ToString());
+                    return Json(new { data = result });
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        #endregion
     }
 }
