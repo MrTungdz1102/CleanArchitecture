@@ -23,11 +23,46 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
-        public async Task<ResponseDTO?> GetAllBooking()
+        public async Task<ResponseDTO?> GetAllBookingUser(string? userId, string? status)
         {
+            string apiUrl = Constants.APIUrlBase + "/api/BookingAPI/GetAllBookingUser";
+
+            if (!string.IsNullOrEmpty(userId) || !string.IsNullOrEmpty(status))
+            {
+                apiUrl += "?";
+
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    apiUrl += $"userId={userId}";
+
+                    if (!string.IsNullOrEmpty(status))
+                    {
+                        apiUrl += $"&status={status}";
+                    }
+                }
+                else if (!string.IsNullOrEmpty(status))
+                {
+                    apiUrl += $"status={status}";
+                }
+            }
             return await _baseService.SendAsync(new RequestDTO
             {
-                Url = Constants.APIUrlBase + "/api/BookingAPI/GetAllBooking",
+                Url = apiUrl,
+                ApiType = Constants.ApiType.GET
+            });
+        }
+
+        public async Task<ResponseDTO?> GetAllBooking(string? status)
+        {
+            string apiUrl = Constants.APIUrlBase + "/api/BookingAPI/GetAllBooking";
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                apiUrl += $"?status={status}";
+            }
+            return await _baseService.SendAsync(new RequestDTO
+            {
+                Url = apiUrl,
                 ApiType = Constants.ApiType.GET
             });
         }

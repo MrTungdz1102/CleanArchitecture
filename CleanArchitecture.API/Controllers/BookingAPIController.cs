@@ -2,8 +2,10 @@
 using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.ApplicationCore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata;
 
 namespace CleanArchitecture.API.Controllers
 {
@@ -30,10 +32,17 @@ namespace CleanArchitecture.API.Controllers
             return Ok(await _bookingService.UpdatePayment(bookingId, sessionId, paymentIntentId));
         }
 
-        [HttpGet("GetAllBooking")]
-        public async Task<ActionResult<ResponseDTO>> GetAllBooking()
+        [HttpGet("GetAllBookingUser")]
+        public async Task<ActionResult<ResponseDTO>> GetAllBooking(string userId, string? status)
         {
-            return Ok(await _bookingService.GetAllBooking());
+            return Ok(await _bookingService.GetAllBookingUser(userId, status));
+        }
+
+        [HttpGet("GetAllBooking")]
+        [Authorize(Roles ="ADMIN, MANAGER")]
+        public async Task<ActionResult<ResponseDTO>> GetAllBooking(string? status)
+        {
+            return Ok(await _bookingService.GetAllBooking(status));
         }
 
         [HttpGet("GetBooking/{bookingId:int}")]
