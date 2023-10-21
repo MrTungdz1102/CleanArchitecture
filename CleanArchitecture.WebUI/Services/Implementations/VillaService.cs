@@ -32,11 +32,11 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
-        public async Task<ResponseDTO?> GetAllDetailVilla()
+        public async Task<ResponseDTO?> GetAllDetailVilla(int nights, DateOnly checkInDate)
         {
             return await _baseService.SendAsync(new RequestDTO
             {
-                Url = Constants.APIUrlBase + "/api/VillaAPI/GetAllDetailVilla",
+                Url = Constants.APIUrlBase + $"/api/VillaAPI/GetAllDetailVilla?nights={nights}&checkInDate={checkInDate}",
                 ApiType = Constants.ApiType.GET
             });
         }
@@ -55,6 +55,15 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             return await _baseService.SendAsync(new RequestDTO
             {
                 Url = Constants.APIUrlBase + "/api/VillaAPI/GetVilla/" + id,
+                ApiType = Constants.ApiType.GET
+            });
+        }
+
+        public async Task<ResponseDTO?> IsVillaAvailableByDate(int villaId, int nights, DateOnly checkInDate)
+        {
+            return await _baseService.SendAsync(new RequestDTO
+            {
+                Url = Constants.APIUrlBase + $"/api/VillaAPI/IsVillaAvailableByDate?villaId={villaId}&nights={nights}&checkInDate={checkInDate}",
                 ApiType = Constants.ApiType.GET
             });
         }

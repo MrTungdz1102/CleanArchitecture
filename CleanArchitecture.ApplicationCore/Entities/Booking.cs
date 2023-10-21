@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -40,5 +40,7 @@ namespace CleanArchitecture.ApplicationCore.Entities
         public DateTime ActualCheckOutDate { get; set; }
 
         public int VillaNumber { get; set; }
+        [NotMapped]
+        public ICollection<VillaNumber>? VillaNumbers { get; set; }
     }
 }

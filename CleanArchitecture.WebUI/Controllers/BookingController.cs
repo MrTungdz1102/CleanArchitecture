@@ -16,20 +16,78 @@ namespace CleanArchitecture.WebUI.Controllers
         private readonly IVillaService _villaService;
         private readonly IBookingService _bookingService;
         private readonly IPaymentService _paymentService;
-        public BookingController(IVillaService villaService, IBookingService bookingService, IPaymentService paymentService)
+        private readonly IVillaNumberService _villaNumberService;
+        public BookingController(IVillaService villaService, IBookingService bookingService, IPaymentService paymentService, IVillaNumberService villaNumberService)
         {
             _villaService = villaService;
             _bookingService = bookingService;
             _paymentService = paymentService;
+            _villaNumberService = villaNumberService;
         }
 
         public IActionResult Index()
         {
             return View();
         }
-        public IActionResult BookingDetails()
+
+        public async Task<IActionResult> CheckIn(Booking booking)
         {
-            return View();
+            ResponseDTO? response = await _bookingService.UpdateBookingStatus(booking.Id, Constants.StatusCheckedIn, booking.VillaNumber);
+            if(response is not null && response.IsSuccess)
+            {
+                TempData["success"] = "Booking Updated Successfully.";
+                return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        public async Task<IActionResult> CheckOut(Booking booking)
+        {
+            ResponseDTO? response = await _bookingService.UpdateBookingStatus(booking.Id, Constants.StatusCompleted, booking.VillaNumber);
+            if (response is not null && response.IsSuccess)
+            {
+                TempData["success"] = "Booking Updated Successfully.";
+                return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        public async Task<IActionResult> CancelBooking(Booking booking)
+        {
+            ResponseDTO? response = await _bookingService.UpdateBookingStatus(booking.Id, Constants.StatusCancelled, 0);
+            if (response is not null && response.IsSuccess)
+            {
+                TempData["success"] = "Booking Canceled Successfully.";
+                return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        public async Task<IActionResult> BookingDetails(int bookingId)
+        {
+            ResponseDTO? response = await _bookingService.GetBooking(bookingId);
+            Booking booking = new Booking();
+            if(response is not null && response.IsSuccess)
+            {
+                booking = JsonConvert.DeserializeObject<Booking>(response.Result.ToString());
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(booking);
         }
 
         public async Task<IActionResult> FinalizeBooking(int villaId, DateOnly checkInDate, int nights)
@@ -78,6 +136,21 @@ namespace CleanArchitecture.WebUI.Controllers
                 TempData["error"] = response?.Message;
                 return RedirectToAction("Index", "Home");
             }
+            response = await _villaService.IsVillaAvailableByDate(villa.Id, booking.Nights, booking.CheckInDate);
+            if (!response.IsSuccess)
+            {
+                {
+                    TempData["error"] = "Room has been sold out!";
+                    //no rooms available
+                    return RedirectToAction(nameof(FinalizeBooking), new
+                    {
+                        villaId = booking.VillaId,
+                        checkInDate = booking.CheckInDate,
+                        nights = booking.Nights
+                    });
+                }
+            }
+            
             booking.TotalCost = villa.Price * booking.Nights;
             booking.Status = Constants.StatusPending;
             booking.BookingDate = DateTime.Now;
@@ -120,7 +193,7 @@ namespace CleanArchitecture.WebUI.Controllers
                 if (response.IsSuccess && response.Result != null)
                 {
                     PaymentResponse paymentResponse = JsonConvert.DeserializeObject<PaymentResponse>(response.Result.ToString());
-                    await _bookingService.UpdateBookingStatus(bookingId, Constants.StatusApproved);
+                    await _bookingService.UpdateBookingStatus(bookingId, Constants.StatusApproved, 0);
                     await _bookingService.UpdateBookingPayment(bookingId, paymentResponse.StripeSessionId, paymentResponse.PaymentIntentId);
                 }
                 else
@@ -130,5 +203,44 @@ namespace CleanArchitecture.WebUI.Controllers
             }
             return View(bookingId);
         }
+
+        #region api call
+        public async Task<IActionResult> GetAll(string? status = null)
+        {
+            string? userId = null;
+            if (string.IsNullOrEmpty(status))
+            {
+                status = "";
+            }
+            if (!User.IsInRole(Constants.Role_Admin))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                ResponseDTO? response = await _bookingService.GetAllBookingUser(userId, status);
+                if (response.Result is not null && response.IsSuccess)
+                {
+                    List<Booking> result = JsonConvert.DeserializeObject<List<Booking>>(response.Result.ToString());
+                    return Json(new { data = result });
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
+            }
+            else
+            {
+                ResponseDTO? response = await _bookingService.GetAllBooking(status);
+                if (response.Result is not null && response.IsSuccess)
+                {
+                    List<Booking> result = JsonConvert.DeserializeObject<List<Booking>>(response.Result.ToString());
+                    return Json(new { data = result });
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        #endregion
     }
 }

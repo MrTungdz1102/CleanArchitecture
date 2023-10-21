@@ -16,6 +16,7 @@ using System.Text;
 using Serilog;
 using CleanArchitecture.Infrastructure.Identity;
 using CleanArchitecture.Infrastructure.Payment;
+using CleanArchitecture.ApplicationCore.Commons;
 
 var builder = WebApplication.CreateBuilder(args);
 

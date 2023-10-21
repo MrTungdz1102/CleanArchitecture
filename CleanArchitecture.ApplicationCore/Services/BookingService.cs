@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
+using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.ApplicationCore.Specifications;
@@ -15,10 +16,12 @@ namespace CleanArchitecture.ApplicationCore.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
-        public BookingService(IUnitOfWork unitOfWork)
+        private readonly IVillaNumberService _villaNumberService;
+        public BookingService(IUnitOfWork unitOfWork, IVillaNumberService villaNumberService)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
+            _villaNumberService = villaNumberService;
         }
         public async Task<ResponseDTO> CreateBooking(Booking booking)
         {
@@ -34,11 +37,27 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetAllBooking()
+        public async Task<ResponseDTO> GetAllBooking(string? statusFilter)
         {
             try
             {
-                _response.Result = await _unitOfWork.bookingRepo.ListAsync();
+                var specification = new BookingSpecification(statusFilter);
+                _response.Result = await _unitOfWork.bookingRepo.ListAsync(specification);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        public async Task<ResponseDTO> GetAllBookingUser(string userId, string? statusFilter)
+        {
+            try
+            {
+                var specification = new BookingSpecification(userId, statusFilter);
+                _response.Result = await _unitOfWork.bookingRepo.ListAsync(specification);
             }
             catch (Exception ex)
             {
@@ -52,7 +71,15 @@ namespace CleanArchitecture.ApplicationCore.Services
         {
             try
             {
-                _response.Result = await _unitOfWork.bookingRepo.GetByIdAsync(bookingId);
+                var specification = new BookingSpecification(bookingId);
+                Booking? booking = await _unitOfWork.bookingRepo.FirstOrDefaultAsync(specification);
+                if(booking.VillaNumber == 0 && booking.Status == PaymentStatus.StatusApproved)
+                {
+                    var availableVillaNumber = await _villaNumberService.AssignAvailableVillaNumberByVilla(booking.VillaId);
+                    var specificationVillaNumber = new VillaNumberSpecification(booking.VillaId, availableVillaNumber);
+                    booking.VillaNumbers = await _unitOfWork.villaNumberRepo.ListAsync(specificationVillaNumber);
+                }
+                _response.Result = booking;
             }
             catch (Exception ex)
             {
@@ -95,7 +122,7 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> UpdateStatus(int bookingId, string status)
+        public async Task<ResponseDTO> UpdateStatus(int bookingId, string status, int villaNumber = 0)
         {
             try
             {
@@ -105,7 +132,7 @@ namespace CleanArchitecture.ApplicationCore.Services
                     booking.Status = status;
                     if (status == PaymentStatus.StatusCheckedIn)
                     {
-                        booking.VillaNumber = 0;
+                        booking.VillaNumber = villaNumber;
                         booking.ActualCheckInDate = DateTime.Now;
                     }
                     if (status == PaymentStatus.StatusCompleted)
