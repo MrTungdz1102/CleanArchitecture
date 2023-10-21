@@ -15,6 +15,7 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
         Task<ResponseDTO> GetAllBookingUser(string userId, string? statusFilter);
         Task<ResponseDTO> GetAllBooking(string? statusFilter);
         Task<ResponseDTO> UpdatePayment(int bookingId, string sessionId, string paymentIntentId);
-        Task<ResponseDTO> UpdateStatus(int bookingId, string status);
+        Task<ResponseDTO> UpdateStatus(int bookingId, string status, int villaNumber = 0);
+
     }
 }

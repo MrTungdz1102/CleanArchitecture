@@ -2,6 +2,7 @@
 using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Entities.DTOs;
+using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.ApplicationCore.Specifications;
@@ -22,13 +23,15 @@ namespace CleanArchitecture.ApplicationCore.Services
         private ResponseDTO _response;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
-        public VillaService(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor, IMapper mapper)
+        private readonly IVillaNumberService _villaNumberService;
+        public VillaService(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor, IMapper mapper, IVillaNumberService villaNumberService)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _webHostEnvironment = webHostEnvironment;
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
+            _villaNumberService = villaNumberService;
         }
         public async Task<ResponseDTO> CreateVilla(Villa villa)
         {
@@ -160,7 +163,7 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetAllDetailVilla()
+        public async Task<ResponseDTO> GetAllDetailVilla(int nights, DateOnly checkInDate)
         {
             try
             {
@@ -170,12 +173,32 @@ namespace CleanArchitecture.ApplicationCore.Services
                 {
                     var specification = new AmenitySpecification(villa.Id);
                     villa.VillaAmenity = await _unitOfWork.amenityRepo.ListAsync(specification);
-                    if(villa.Id %2 == 0)
-                    {
-                        villa.IsAvailable = false;
-                    }
+                    var villaNumberList = await _unitOfWork.villaNumberRepo.ListAsync();
+                    var bookingSpecification = new BookingSpecification();
+                    var bookedVilla = await _unitOfWork.bookingRepo.ListAsync(bookingSpecification);
+                    int roomAvailable = _villaNumberService.CountVillaRoomAvailable(villa.Id, villaNumberList, checkInDate, nights, bookedVilla);
+                    villa.IsAvailable = roomAvailable > 0 ? true : false;
                 }
                 _response.Result = villaDTO;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        public async Task<ResponseDTO> IsVillaAvailableByDate(int villaId, int nights, DateOnly checkInDate)
+        {
+            try
+            {
+                var villaNumbersList = await _unitOfWork.villaNumberRepo.ListAsync();
+                 var bookingSpecification = new BookingSpecification();
+                var bookedVillas = await _unitOfWork.bookingRepo.ListAsync(bookingSpecification);
+                int roomAvailable = _villaNumberService.CountVillaRoomAvailable
+                    (villaId, villaNumbersList, checkInDate, nights, bookedVillas);
+                _response.IsSuccess = roomAvailable > 0 ? true : false;                
             }
             catch (Exception ex)
             {
