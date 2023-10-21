@@ -16,5 +16,9 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
         Task<ResponseDTO> UpdateVillaNumber(VillaNumber villaNumber);
         Task<ResponseDTO> DeleteVillaNumber(int villaNumberId);
         Task<bool> CheckVillaNumberExits(int villaNumberId);
+        Task<IEnumerable<VillaNumber>> GetAllVillaNumberInVilla(int villaId);
+        int CountVillaRoomAvailable(int villaId, List<VillaNumber> villaNumberList, DateOnly checkInDate, int nights, List<Booking> bookings);
+        Task<List<int>> AssignAvailableVillaNumberByVilla(int villaId);
+        Task<IEnumerable<int>> GetCheckedInVillaNumbers(int villaId);
     }
 }

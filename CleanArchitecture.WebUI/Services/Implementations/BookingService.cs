@@ -85,11 +85,11 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
-        public async Task<ResponseDTO?> UpdateBookingStatus(int bookingId, string status)
+        public async Task<ResponseDTO?> UpdateBookingStatus(int bookingId, string status, int villaNumber)
         {
             return await _baseService.SendAsync(new RequestDTO
             {
-                Url = Constants.APIUrlBase + $"/api/BookingAPI/UpdateBookingStatus/{bookingId}?status={status}",
+                Url = Constants.APIUrlBase + $"/api/BookingAPI/UpdateBookingStatus/{bookingId}?status={status}&villaNumber={villaNumber}",
                 ApiType = Constants.ApiType.PUT
             });
         }

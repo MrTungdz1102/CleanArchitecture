@@ -22,6 +22,60 @@ namespace CleanArchitecture.ApplicationCore.Services
             _response = new ResponseDTO();
         }
 
+        public async Task<IEnumerable<int>> GetCheckedInVillaNumbers(int villaId)
+        {
+            var specification = new BookingSpecification(villaId, PaymentStatus.StatusCheckedIn);
+            IEnumerable<Booking> bookings = await _unitOfWork.bookingRepo.ListAsync(specification);
+            return bookings.Select(x => x.VillaNumber);
+        }
+
+        public async Task<List<int>> AssignAvailableVillaNumberByVilla(int villaId)
+        {
+            List<int> availableVillaNumbers = new List<int>();
+            var villaNumbers = await GetAllVillaNumberInVilla(villaId);
+            var checkedInVilla = await GetCheckedInVillaNumbers(villaId);
+            foreach (var villaNumber in villaNumbers)
+            {
+                if (!checkedInVilla.Contains(villaNumber.Villa_Number))
+                {
+                    availableVillaNumbers.Add(villaNumber.Villa_Number);
+                }
+            }
+            return availableVillaNumbers;
+        }
+
+        public int CountVillaRoomAvailable(int villaId, List<VillaNumber> villaNumberList, DateOnly checkInDate, int nights, List<Booking> bookings)
+        {
+            List<int> bookingInDate = new List<int>();
+            int finalAvailableRoomForAllNights = int.MaxValue;
+            var roomsInVilla = villaNumberList.Where(x => x.VillaId == villaId).Count();
+            for (int i = 0; i < nights; i++)
+            {
+                var villasBooked = bookings.Where(u => u.CheckInDate <= checkInDate.AddDays(i)
+              && u.CheckOutDate > checkInDate.AddDays(i) && u.VillaId == villaId);
+                foreach (var booking in villasBooked)
+                {
+                    if (!bookingInDate.Contains(booking.Id))
+                    {
+                        bookingInDate.Add(booking.Id);
+                    }
+                }
+                var totalAvailableRooms = roomsInVilla - bookingInDate.Count;
+                if (totalAvailableRooms == 0)
+                {
+                    return 0;
+                }
+                else
+                {
+                    if (finalAvailableRoomForAllNights > totalAvailableRooms)
+                    {
+                        finalAvailableRoomForAllNights = totalAvailableRooms;
+                    }
+                }
+            }
+            return finalAvailableRoomForAllNights;
+        }
+
         public async Task<bool> CheckVillaNumberExits(int villaNumberId)
         {
             var specification = new VillaNumberSpecification(villaNumberId);
@@ -86,6 +140,12 @@ namespace CleanArchitecture.ApplicationCore.Services
                 _response.IsSuccess = false;
             }
             return _response;
+        }
+
+        public async Task<IEnumerable<VillaNumber>> GetAllVillaNumberInVilla(int villaId)
+        {
+            var specification = new VillaNumberSpecification(villaId);
+            return await _unitOfWork.villaNumberRepo.ListAsync(specification);
         }
 
         public async Task<ResponseDTO> GetVillaNumber(int villaNumberId)

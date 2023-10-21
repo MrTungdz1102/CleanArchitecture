@@ -23,7 +23,9 @@ namespace CleanArchitecture.WebUI.Controllers
       //  [Authorize]
         public async Task<IActionResult> Index()
         {
-            ResponseDTO? response = await _villaService.GetAllDetailVilla();
+            int nights = 1;
+            DateOnly date = DateOnly.FromDateTime(DateTime.Now);
+            ResponseDTO? response = await _villaService.GetAllDetailVilla(nights, date);
             List<Villa> villas = new List<Villa>();
             if(response.Result != null && response.IsSuccess)
             {
@@ -46,7 +48,7 @@ namespace CleanArchitecture.WebUI.Controllers
         public async Task<IActionResult> GetVillaByDate(int nights, DateOnly checkInDate)
         {
             Thread.Sleep(250);
-            ResponseDTO? response = await _villaService.GetAllDetailVilla();
+            ResponseDTO? response = await _villaService.GetAllDetailVilla(nights, checkInDate);
             List<Villa> villas = new List<Villa>();
             if (response.Result != null && response.IsSuccess)
             {

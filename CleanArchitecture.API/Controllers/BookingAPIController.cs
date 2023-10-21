@@ -51,9 +51,9 @@ namespace CleanArchitecture.API.Controllers
             return Ok(await _bookingService.GetBooking(bookingId));
         }
         [HttpPut("UpdateBookingStatus/{bookingId:int}")]
-        public async Task<ActionResult<ResponseDTO>> UpdateBookingStatus([FromRoute] int bookingId, string status)
+        public async Task<ActionResult<ResponseDTO>> UpdateBookingStatus([FromRoute] int bookingId, string status, int villaNumber)
         {
-            return Ok(await _bookingService.UpdateStatus(bookingId, status));
+            return Ok(await _bookingService.UpdateStatus(bookingId, status, villaNumber));
         }
     }
 }

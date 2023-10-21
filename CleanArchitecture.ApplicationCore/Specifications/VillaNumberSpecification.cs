@@ -16,9 +16,20 @@ namespace CleanArchitecture.ApplicationCore.Specifications
             Query.Include(x => x.Villa).Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).OrderBy(x => x.VillaId);
         }
 
-        public VillaNumberSpecification(int? villaNumberId)
+        public VillaNumberSpecification(int? villaNumberId = null)
         {
-            Query.Where(x => x.Villa_Number == villaNumberId);
+            if (villaNumberId.HasValue)
+            {
+                Query.Where(x => x.Villa_Number == villaNumberId);
+            }
+        }
+        public VillaNumberSpecification(int villaId)
+        {
+            Query.Where(x => x.VillaId == villaId);
+        }
+        public VillaNumberSpecification(int villaId, List<int> availableVillaNumber)
+        {
+            Query.Where(x => x.VillaId == villaId && availableVillaNumber.Any(u => u == x.Villa_Number));
         }
     }
 }
