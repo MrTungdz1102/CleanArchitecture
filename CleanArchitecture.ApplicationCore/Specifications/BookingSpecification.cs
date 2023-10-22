@@ -5,6 +5,7 @@ using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,10 +28,6 @@ namespace CleanArchitecture.ApplicationCore.Specifications
         public BookingSpecification(string? status)
         {
             Query.Where(x =>(status == null || x.Status == status) );
-        }
-        public BookingSpecification()
-        {
-            Query.Where(x => x.Status == PaymentStatus.StatusApproved || x.Status == PaymentStatus.StatusCheckedIn);
         }
     }
 }

@@ -174,7 +174,7 @@ namespace CleanArchitecture.ApplicationCore.Services
                     var specification = new AmenitySpecification(villa.Id);
                     villa.VillaAmenity = await _unitOfWork.amenityRepo.ListAsync(specification);
                     var villaNumberList = await _unitOfWork.villaNumberRepo.ListAsync();
-                    var bookingSpecification = new BookingSpecification();
+                    var bookingSpecification = new BookingFilterSpecification(PaymentStatus.StatusApproved, PaymentStatus.StatusCheckedIn);
                     var bookedVilla = await _unitOfWork.bookingRepo.ListAsync(bookingSpecification);
                     int roomAvailable = _villaNumberService.CountVillaRoomAvailable(villa.Id, villaNumberList, checkInDate, nights, bookedVilla);
                     villa.IsAvailable = roomAvailable > 0 ? true : false;
@@ -194,7 +194,7 @@ namespace CleanArchitecture.ApplicationCore.Services
             try
             {
                 var villaNumbersList = await _unitOfWork.villaNumberRepo.ListAsync();
-                 var bookingSpecification = new BookingSpecification();
+                 var bookingSpecification = new BookingFilterSpecification(PaymentStatus.StatusApproved, PaymentStatus.StatusCheckedIn);
                 var bookedVillas = await _unitOfWork.bookingRepo.ListAsync(bookingSpecification);
                 int roomAvailable = _villaNumberService.CountVillaRoomAvailable
                     (villaId, villaNumbersList, checkInDate, nights, bookedVillas);
