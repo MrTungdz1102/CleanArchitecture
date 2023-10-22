@@ -2,6 +2,7 @@ using CleanArchitecture.WebUI.Services.Implementations;
 using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Syncfusion.Licensing;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
@@ -27,6 +28,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 var app = builder.Build();
+
+SyncfusionLicenseProvider.RegisterLicense(builder.Configuration["Syncfusion:Key"]);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
