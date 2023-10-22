@@ -6,6 +6,11 @@ using CleanArchitecture.WebUI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Syncfusion.DocIO;
+using Syncfusion.DocIO.DLS;
+using Syncfusion.DocIORenderer;
+using Syncfusion.Drawing;
+using Syncfusion.Pdf;
 using System.Security.Claims;
 
 namespace CleanArchitecture.WebUI.Controllers
@@ -17,12 +22,14 @@ namespace CleanArchitecture.WebUI.Controllers
         private readonly IBookingService _bookingService;
         private readonly IPaymentService _paymentService;
         private readonly IVillaNumberService _villaNumberService;
-        public BookingController(IVillaService villaService, IBookingService bookingService, IPaymentService paymentService, IVillaNumberService villaNumberService)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public BookingController(IVillaService villaService, IBookingService bookingService, IPaymentService paymentService, IVillaNumberService villaNumberService, IWebHostEnvironment webHostEnvironment)
         {
             _villaService = villaService;
             _bookingService = bookingService;
             _paymentService = paymentService;
             _villaNumberService = villaNumberService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -202,6 +209,139 @@ namespace CleanArchitecture.WebUI.Controllers
                 }
             }
             return View(bookingId);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GenerateInvoice(int id, string downloadType)
+        {
+            string basePath = _webHostEnvironment.WebRootPath;
+            WordDocument document = new WordDocument();
+            string dataPath = basePath + "/exports/BookingDetails.docx";
+            // load template file
+            using FileStream fileStream = new FileStream(dataPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            document.Open(fileStream, formatType: Syncfusion.DocIO.FormatType.Automatic);
+            // update data for template
+            ResponseDTO? response = await _bookingService.GetBooking(id);
+            Booking? booking = new Booking();
+            if (response.IsSuccess && response.Result != null)
+            {
+                booking = JsonConvert.DeserializeObject<Booking>(response.Result.ToString());
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+                return RedirectToAction(nameof(Index));
+            }
+            TextSelection textSelection = document.Find("xx_customer_name", false, true);
+            WTextRange textRange = textSelection.GetAsOneRange();
+            textRange.Text = booking.Name;
+            textSelection = document.Find("xx_customer_phone", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = booking.Phone;
+
+            textSelection = document.Find("xx_customer_email", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = booking.Email;
+
+            textSelection = document.Find("XX_BOOKING_NUMBER", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = "BOOKING ID - " + booking.Id;
+            textSelection = document.Find("XX_BOOKING_DATE", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = "BOOKING DATE - " + booking.BookingDate.ToShortDateString();
+
+
+            textSelection = document.Find("xx_payment_date", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = booking.PaymentDate.ToShortDateString();
+            textSelection = document.Find("xx_checkin_date", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = booking.CheckInDate.ToShortDateString();
+            textSelection = document.Find("xx_checkout_date", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = booking.CheckOutDate.ToShortDateString(); ;
+            textSelection = document.Find("xx_booking_total", false, true);
+            textRange = textSelection.GetAsOneRange();
+            textRange.Text = booking.TotalCost.ToString("c");
+
+            WTable table = new(document);
+
+            table.TableFormat.Borders.LineWidth = 1f;
+            table.TableFormat.Borders.Color = Color.Black;
+            table.TableFormat.Paddings.Top = 7f;
+            table.TableFormat.Paddings.Bottom = 7f;
+            table.TableFormat.Borders.Horizontal.LineWidth = 1f;
+
+            int rows = booking.VillaNumber > 0 ? 3 : 2;
+            table.ResetCells(rows, 4);
+
+            WTableRow row0 = table.Rows[0];
+
+            row0.Cells[0].AddParagraph().AppendText("NIGHTS");
+            row0.Cells[0].Width = 80;
+            row0.Cells[1].AddParagraph().AppendText("VILLA");
+            row0.Cells[1].Width = 220;
+            row0.Cells[2].AddParagraph().AppendText("PRICE PER NIGHT");
+            row0.Cells[3].AddParagraph().AppendText("TOTAL");
+            row0.Cells[3].Width = 80;
+
+            WTableRow row1 = table.Rows[1];
+
+            row1.Cells[0].AddParagraph().AppendText(booking.Nights.ToString());
+            row1.Cells[0].Width = 80;
+            row1.Cells[1].AddParagraph().AppendText(booking.Villa.Name);
+            row1.Cells[1].Width = 220;
+            row1.Cells[2].AddParagraph().AppendText((booking.TotalCost / booking.Nights).ToString("c"));
+            row1.Cells[3].AddParagraph().AppendText(booking.TotalCost.ToString("c"));
+            row1.Cells[3].Width = 80;
+
+            if (booking.VillaNumber > 0)
+            {
+                WTableRow row2 = table.Rows[2];
+
+                row2.Cells[0].Width = 80;
+                row2.Cells[1].AddParagraph().AppendText("Villa Number - " + booking.VillaNumber.ToString());
+                row2.Cells[1].Width = 220;
+                row2.Cells[3].Width = 80;
+            }
+
+            WTableStyle tableStyle = document.AddTableStyle("CustomStyle") as WTableStyle;
+            tableStyle.TableProperties.RowStripe = 1;
+            tableStyle.TableProperties.ColumnStripe = 2;
+            tableStyle.TableProperties.Paddings.Top = 2;
+            tableStyle.TableProperties.Paddings.Bottom = 1;
+            tableStyle.TableProperties.Paddings.Left = 5.4f;
+            tableStyle.TableProperties.Paddings.Right = 5.4f;
+
+            ConditionalFormattingStyle firstRowStyle = tableStyle.ConditionalFormattingStyles.Add(ConditionalFormattingType.FirstRow);
+            firstRowStyle.CharacterFormat.Bold = true;
+            firstRowStyle.CharacterFormat.TextColor = Color.FromArgb(255, 255, 255, 255);
+            firstRowStyle.CellProperties.BackColor = Color.Black;
+
+            table.ApplyStyle("CustomStyle");
+
+            TextBodyPart bodyPart = new(document);
+            bodyPart.BodyItems.Add(table);
+
+            document.Replace("<ADDTABLEHERE>", bodyPart, false, false);
+            using DocIORenderer renderer = new();
+            MemoryStream stream = new();
+            if (downloadType == "word")
+            {
+
+                document.Save(stream, FormatType.Docx);
+                stream.Position = 0;
+
+                return File(stream, "application/docx", "BookingDetails.docx");
+            }
+            else
+            {
+                PdfDocument pdfDocument = renderer.ConvertToPDF(document);
+                pdfDocument.Save(stream);
+                stream.Position = 0;
+
+                return File(stream, "application/pdf", "BookingDetails.pdf");
+            }
         }
 
         #region api call
