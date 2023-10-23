@@ -19,12 +19,13 @@ namespace CleanArchitecture.WebUI.Controllers
         private readonly IAuthService _authService;
         private readonly IRoleService _roleService;
         private readonly ITokenProvider _token;
-        public AccessController(IAuthService authService, IRoleService roleService, ITokenProvider token)
+        private readonly IEmailService _emailService;
+        public AccessController(IAuthService authService, IRoleService roleService, ITokenProvider token, IEmailService emailService)
         {
             _authService = authService;
             _roleService = roleService;
             _token = token;
-
+            _emailService = emailService;
         }
         public IActionResult Login(string? returnUrl = null)
         {
@@ -105,6 +106,16 @@ namespace CleanArchitecture.WebUI.Controllers
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Register Success " + registerVM.Email;
+                EmailVM email = new EmailVM { Email = registerVM.Email, Subject = "Register By Tung Dao", Message = "<p>New Account Created Successfull</p>" };
+                response = await _emailService.SendEmailAsync(email);
+                if (response != null && response.IsSuccess)
+                {
+                    TempData["success"] = "Send Email Success ";
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
                 if (string.IsNullOrEmpty(registerVM.RedirectUrl))
                 {
                     return RedirectToAction("Index", "Home");
@@ -113,7 +124,7 @@ namespace CleanArchitecture.WebUI.Controllers
                 {
                     return LocalRedirect(registerVM.RedirectUrl);
                 }
-
+                
             }
             else
             {
