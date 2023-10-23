@@ -17,6 +17,7 @@ using Serilog;
 using CleanArchitecture.Infrastructure.Identity;
 using CleanArchitecture.Infrastructure.Payment;
 using CleanArchitecture.ApplicationCore.Commons;
+using CleanArchitecture.Infrastructure.Emails;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddAutoMapper(typeof(MapConfig));
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
 builder.Services.AddControllers();
