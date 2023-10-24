@@ -23,9 +23,17 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             return hasToken is true ? token : null;
         }
 
-        public void SetToken(string token)
+        public void SetToken(string token, string refreshToken, string refreshTokenExpires)
         {
+            CookieOptions cookieOptions = new CookieOptions()
+            {
+                HttpOnly = true,
+                Secure = true,
+                Expires = DateTime.Parse(refreshTokenExpires)
+            };
             _accessor.HttpContext?.Response.Cookies.Append(Constants.TokenCookie, token);
+            _accessor.HttpContext?.Response.Cookies.Append(Constants.RefreshToken, refreshToken, cookieOptions);
+         //   _accessor.HttpContext?.Response.Cookies.Append(Constants.RefreshTokenExpires, refreshTokenExpires);
         }
     }
 }

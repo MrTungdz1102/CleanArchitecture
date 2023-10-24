@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
-using CleanArchitecture.Infrastructure.Identity.DTOs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace CleanArchitecture.Infrastructure.Identity
 {
@@ -15,14 +17,15 @@ namespace CleanArchitecture.Infrastructure.Identity
         private readonly IJwtTokenGenerator _tokenGenerator;
         private readonly IRoleService _roleService;
         private readonly IAppLogger<AppUser> _logger;
-
-        public AuthService(UserManager<AppUser> userManager, IJwtTokenGenerator tokenGenerator, IRoleService roleService, IAppLogger<AppUser> logger)
+        private readonly IConfiguration _configuration;
+        public AuthService(UserManager<AppUser> userManager, IJwtTokenGenerator tokenGenerator, IRoleService roleService, IAppLogger<AppUser> logger, IConfiguration configuration)
         {
             _userManager = userManager;
             _response = new ResponseDTO();
             _tokenGenerator = tokenGenerator;
             _roleService = roleService;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public async Task<ResponseDTO> Login(LoginRequestDTO loginRequest)
@@ -48,8 +51,13 @@ namespace CleanArchitecture.Infrastructure.Identity
                     var token = await _tokenGenerator.GenerateToken(loginRequest.Email);
                     LoginResponseDTO loginResponse = new LoginResponseDTO
                     {
-                        AppUser = _user,
-                        Token = token
+                        Id = _user.Id,
+                        Name = _user.Name,
+                        Email = _user.Email,
+                        PhoneNumber = _user.PhoneNumber,
+                        Token = token,
+                        RefreshToken = await _tokenGenerator.CreateRefreshToken(_user.Email),
+                        RefreshTokenExpire = DateTime.Now.AddDays(int.Parse(_configuration["RefreshToken:ExpiresDay"]))
                     };
                     _response.Result = loginResponse;
                     return _response;
@@ -93,6 +101,37 @@ namespace CleanArchitecture.Infrastructure.Identity
                     _response.IsSuccess = false;
                     _response.Message = string.Join(" ", result.Errors.Select(error => $"{error.Code}: {error.Description}"));
                 }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        public async Task<ResponseDTO> VerifyRefreshToken(LoginResponseDTO loginResponseDTO)
+        {
+            try
+            {
+                string refreshToken = await _tokenGenerator.VerifyRefreshToken(loginResponseDTO);
+                if(!string.IsNullOrEmpty(refreshToken))
+                {
+                    var token = await _tokenGenerator.GenerateToken(loginResponseDTO.Email);
+                    LoginResponseDTO loginResponse = new LoginResponseDTO
+                    {
+                        Token = token,
+                        RefreshToken = await _tokenGenerator.CreateRefreshToken(loginResponseDTO.Email),
+                        RefreshTokenExpire = DateTime.Now.AddMinutes(int.Parse(_configuration["RefreshToken:ExpiresDay"]))
+                    };
+                    _response.Result = loginResponse;
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "An error occur when verify token";
+                    _logger.LogWarning("An error occur when verify token");
+                }  
             }
             catch (Exception ex)
             {

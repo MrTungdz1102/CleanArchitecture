@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.ApplicationCore.Entities;
+﻿using CleanArchitecture.ApplicationCore.Commons;
+using CleanArchitecture.ApplicationCore.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Commons
     public interface IJwtTokenGenerator
     {
         Task<string> GenerateToken(string userName);
-        Task<string> CreateRefreshToken();
-      //  Task<ResponseDTO> VerifyRefreshToken();
+        Task<string> CreateRefreshToken(string userName);
+        Task<string> VerifyRefreshToken(LoginResponseDTO loginResponseDTO);
     }
 }

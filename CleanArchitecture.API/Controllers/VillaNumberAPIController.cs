@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,18 +30,21 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("CreateVillaNumber")]
+        [Authorize]
         public async Task<ActionResult<ResponseDTO>> CreateVillaNumber([FromBody] VillaNumber villaNumber)
         {
             return Ok(await _service.CreateVillaNumber(villaNumber));
         }
 
         [HttpPut("UpdateVillaNumber")]
+        [Authorize]
         public async Task<ActionResult<ResponseDTO>> UpdateVillaNumber(VillaNumber villaNumber)
         {
             return Ok(await _service.UpdateVillaNumber(villaNumber));
         }
 
         [HttpDelete("DeleteVillaNumber/{villaNumberId:int}")]
+        [Authorize]
         public async Task<ActionResult<ResponseDTO>> DeleteVillaNumber([FromRoute] int villaNumberId)
         {
             return Ok(await _service.DeleteVillaNumber(villaNumberId));

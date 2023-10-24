@@ -10,7 +10,7 @@ namespace CleanArchitecture.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
- //   [Authorize]
+    
     public class VillaAPIController : ControllerBase
     {
         private readonly IVillaService _villaService;
@@ -22,6 +22,7 @@ namespace CleanArchitecture.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize]
         public async Task<ActionResult<ResponseDTO>> CreateVilla([FromForm] Villa villa)
         {
             return Ok(await _villaService.CreateVilla(villa));
@@ -41,12 +42,14 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPut("UpdateVilla")]
+        [Authorize]
         public async Task<ActionResult<ResponseDTO>> UpdateVilla([FromForm] Villa villa)
         {
             return Ok(await _villaService.UpdateVilla(villa));
         }
 
         [HttpDelete("DeleteVilla/{villaId:int}")]
+        [Authorize]
         public async Task<ActionResult<ResponseDTO>> DeleteVilla([FromRoute] int villaId)
         {
             return Ok(await _villaService.DeleteVilla(villaId));

@@ -12,5 +12,6 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
     {
         Task<ResponseDTO> Register(RegisterRequestDTO registerRequest);
         Task<ResponseDTO> Login(LoginRequestDTO loginRequest);
+        Task<ResponseDTO> VerifyRefreshToken(LoginResponseDTO loginResponseDTO);
     }
 }

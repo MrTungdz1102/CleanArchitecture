@@ -3,12 +3,14 @@ using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Models.ViewModel;
 using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
+    [Authorize(Roles = Constants.Role_Admin + "," + Constants.Role_Manager)]
     public class AmenityController : Controller
     {
         private readonly IAmenityService _aminityService;
@@ -95,7 +97,6 @@ namespace CleanArchitecture.WebUI.Controllers
             }
             return View(amenityVM);
         }
-
         public async Task<IActionResult> Update(int amenityId)
         {
             ResponseDTO? response = await _aminityService.GetAmenityById(amenityId);

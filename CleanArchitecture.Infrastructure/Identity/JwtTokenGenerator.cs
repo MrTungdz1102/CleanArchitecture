@@ -1,4 +1,6 @@
-﻿using CleanArchitecture.ApplicationCore.Interfaces.Commons;
+﻿using Azure.Core;
+using CleanArchitecture.ApplicationCore.Commons;
+using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -16,15 +18,23 @@ namespace CleanArchitecture.Infrastructure.Identity
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<AppUser> _userManager;
+        private AppUser? _user;
+        private const string _loginProvider = "TungDaoAPI";
+        private const string _refreshToken = "TungDaoRefreshToken";
         public JwtTokenGenerator(IConfiguration configuration, UserManager<AppUser> userManager)
         {
             _configuration = configuration;
             _userManager = userManager;
         }
 
-        public Task<string> CreateRefreshToken()
+        public async Task<string> CreateRefreshToken(string userName)
         {
-            throw new NotImplementedException();
+            _user = await _userManager.FindByNameAsync(userName);
+            if (_user == null) throw new UserNotFoundException(userName);
+            await _userManager.RemoveAuthenticationTokenAsync(_user, _loginProvider, _refreshToken);
+            var newRefreshToken = await _userManager.GenerateUserTokenAsync(_user, _loginProvider, _refreshToken);
+            await _userManager.SetAuthenticationTokenAsync(_user, _loginProvider, _refreshToken, newRefreshToken);
+            return newRefreshToken;
         }
 
         public async Task<string> GenerateToken(string userName)
@@ -54,6 +64,28 @@ namespace CleanArchitecture.Infrastructure.Identity
             };
             var token = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<string> VerifyRefreshToken(LoginResponseDTO loginResponseDTO)
+        {
+            var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            var tokenContent = jwtSecurityTokenHandler.ReadJwtToken(loginResponseDTO.Token);
+            var username = tokenContent.Claims.ToList().FirstOrDefault(q => q.Type == JwtRegisteredClaimNames.Email)?.Value;
+            _user = await _userManager.FindByNameAsync(username);
+
+            if (_user == null || _user.Id != loginResponseDTO.Id)
+            {
+                return null;
+            }
+
+            var isValidRefreshToken = await _userManager.VerifyUserTokenAsync(_user, _loginProvider, _refreshToken, loginResponseDTO.RefreshToken);
+
+            if (isValidRefreshToken)
+            {
+                return await GenerateToken(username);                
+            }
+            await _userManager.UpdateSecurityStampAsync(_user);
+            return null;
         }
     }
 }

@@ -51,7 +51,7 @@ namespace CleanArchitecture.WebUI.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
+        [Authorize(Roles = Constants.Role_Admin + "," + Constants.Role_Manager)]
         public async Task<IActionResult> CheckOut(Booking booking)
         {
             ResponseDTO? response = await _bookingService.UpdateBookingStatus(booking.Id, Constants.StatusCompleted, booking.VillaNumber);
@@ -66,7 +66,7 @@ namespace CleanArchitecture.WebUI.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
+        [Authorize(Roles = Constants.Role_Admin + "," + Constants.Role_Manager)]
         public async Task<IActionResult> CancelBooking(Booking booking)
         {
             ResponseDTO? response = await _bookingService.UpdateBookingStatus(booking.Id, Constants.StatusCancelled, 0);

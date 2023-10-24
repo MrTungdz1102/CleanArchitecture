@@ -26,5 +26,11 @@ namespace CleanArchitecture.API.Controllers
         {
             return Ok(await _authService.Register(registerRequest));
         }
+
+        [HttpPost("VerifyRefreshToken")]
+        public async Task<ActionResult<ResponseDTO>> VerifyRefreshToken([FromBody] LoginResponseDTO loginResponse)
+        {
+            return Ok(await _authService.VerifyRefreshToken(loginResponse));
+        }
     }
 }
