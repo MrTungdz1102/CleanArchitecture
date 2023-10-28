@@ -13,5 +13,7 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Repositories
         IRepository<VillaNumber> villaNumberRepo { get; }
         IRepository<Amenity> amenityRepo { get; }
         IRepository<Booking> bookingRepo { get; }
+        // IRepository<UserRefreshToken> userRefreshTokenRepo { get; }
+        IUserRefreshTokenRepository userRefreshTokenRepo { get; }
     }
 }

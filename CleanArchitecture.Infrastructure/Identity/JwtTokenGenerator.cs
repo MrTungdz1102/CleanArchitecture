@@ -1,6 +1,6 @@
 ﻿using Azure.Core;
 using CleanArchitecture.ApplicationCore.Commons;
-using CleanArchitecture.ApplicationCore.Interfaces.Commons;
+using CleanArchitecture.ApplicationCore.Interfaces.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -27,17 +27,17 @@ namespace CleanArchitecture.Infrastructure.Identity
             _userManager = userManager;
         }
 
-        public async Task<string> CreateRefreshToken(string userName)
+        public async Task<string> CreateRefreshToken(string userId)
         {
-            _user = await _userManager.FindByNameAsync(userName);
-            if (_user == null) throw new UserNotFoundException(userName);
+            _user = await _userManager.FindByIdAsync(userId);
+            if (_user == null) throw new UserNotFoundException(userId);
             await _userManager.RemoveAuthenticationTokenAsync(_user, _loginProvider, _refreshToken);
             var newRefreshToken = await _userManager.GenerateUserTokenAsync(_user, _loginProvider, _refreshToken);
             await _userManager.SetAuthenticationTokenAsync(_user, _loginProvider, _refreshToken, newRefreshToken);
             return newRefreshToken;
         }
 
-        public async Task<string> GenerateToken(string userName)
+        public async Task<string> GenerateToken(string userName, string jwtTokenId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityKey = Encoding.UTF8.GetBytes(_configuration["JWTSettings:Key"]);
@@ -48,7 +48,7 @@ namespace CleanArchitecture.Infrastructure.Identity
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, jwtTokenId),
                 new Claim(JwtRegisteredClaimNames.Name, user.Name)
             };
             var roles = await _userManager.GetRolesAsync(user);
@@ -66,7 +66,7 @@ namespace CleanArchitecture.Infrastructure.Identity
             return tokenHandler.WriteToken(token);
         }
 
-        public async Task<string> VerifyRefreshToken(LoginResponseDTO loginResponseDTO)
+        public async Task<LoginResponseDTO> VerifyRefreshToken(LoginResponseDTO loginResponseDTO)
         {
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var tokenContent = jwtSecurityTokenHandler.ReadJwtToken(loginResponseDTO.Token);
@@ -82,10 +82,34 @@ namespace CleanArchitecture.Infrastructure.Identity
 
             if (isValidRefreshToken)
             {
-                return await GenerateToken(username);                
+                var jwtTokenId = $"JTI{Guid.NewGuid()}";
+                var token =  await GenerateToken(username, jwtTokenId);
+                return new LoginResponseDTO
+                {
+                    Token = token,
+                    Id = _user.Id,
+                    RefreshToken = await CreateRefreshToken(loginResponseDTO.Email),
+                    RefreshTokenExpire = DateTime.Now.AddMinutes(int.Parse(_configuration["RefreshToken:ExpiresDay"]))
+                };
             }
             await _userManager.UpdateSecurityStampAsync(_user);
             return null;
+        }
+
+        public bool ValidateAccessToken(string accessToken, string expectedUserId, string expectedTokenId)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwt = tokenHandler.ReadJwtToken(accessToken);
+                var jwtTokenId = jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Jti).Value;
+                var userId = jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub).Value;
+                return userId == expectedUserId && jwtTokenId == expectedTokenId;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Entities.DTOs;
-using CleanArchitecture.ApplicationCore.Interfaces.Commons;
+using CleanArchitecture.ApplicationCore.Interfaces.Identity;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.ApplicationCore.Specifications;

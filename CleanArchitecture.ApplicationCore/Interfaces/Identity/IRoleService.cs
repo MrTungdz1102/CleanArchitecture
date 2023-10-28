@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.ApplicationCore.Interfaces.Commons
+namespace CleanArchitecture.ApplicationCore.Interfaces.Identity
 {
     public interface IRoleService
     {

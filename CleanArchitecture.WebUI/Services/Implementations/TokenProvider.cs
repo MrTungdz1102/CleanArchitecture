@@ -1,5 +1,8 @@
-﻿using CleanArchitecture.WebUI.Services.Interfaces;
+﻿using CleanArchitecture.WebUI.Models.ViewModel;
+using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace CleanArchitecture.WebUI.Services.Implementations
@@ -11,6 +14,17 @@ namespace CleanArchitecture.WebUI.Services.Implementations
         {
             _accessor = accessor;
         }
+
+        //public string CallRefreshToken(AppUserVM appUserVM)
+        //{
+        //    appUserVM = new AppUserVM
+        //    {
+        //        Id = _accessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier),
+        //        Token = _accessor.HttpContext.Request.Cookies[$"{Constants.TokenCookie}"],
+        //        RefreshToken = 
+        //    }
+        //}
+
         public void ClearToken()
         {
             _accessor.HttpContext?.Response.Cookies.Delete(Constants.TokenCookie);

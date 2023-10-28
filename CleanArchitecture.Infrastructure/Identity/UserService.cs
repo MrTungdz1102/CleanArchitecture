@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchitecture.ApplicationCore.Entities.DTOs;
-using CleanArchitecture.ApplicationCore.Interfaces.Commons;
+using CleanArchitecture.ApplicationCore.Interfaces.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Stripe;

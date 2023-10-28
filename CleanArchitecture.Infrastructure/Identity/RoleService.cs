@@ -1,5 +1,5 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
-using CleanArchitecture.ApplicationCore.Interfaces.Commons;
+using CleanArchitecture.ApplicationCore.Interfaces.Identity;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
