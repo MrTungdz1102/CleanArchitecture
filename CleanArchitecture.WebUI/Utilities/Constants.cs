@@ -16,6 +16,8 @@
         }
         public static string APIUrlBase { get; set; }
         public const string TokenCookie = "JWTToken";
+        public const string RefreshToken = "RefreshToken";
+        public const string RefreshTokenExpires = "RefreshTokenExpires";
 
         public const string StatusPending = "Pending";
         public const string StatusApproved = "Approved";

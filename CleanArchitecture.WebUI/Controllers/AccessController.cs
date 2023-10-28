@@ -45,8 +45,8 @@ namespace CleanArchitecture.WebUI.Controllers
                 //   TempData["success"] = "Hello " + loginVM.Email;
                 await Console.Out.WriteLineAsync(loginVM.Email);
                 AppUserVM appUserVM = JsonConvert.DeserializeObject<AppUserVM>(response.Result.ToString());
-                await SignInUser(appUserVM.Token, appUserVM.AppUser);
-                _token.SetToken(appUserVM.Token);
+                await SignInUser(appUserVM);
+                _token.SetToken(appUserVM.Token, appUserVM.RefreshToken, appUserVM.RefreshTokenExpire.ToString());
                 //var roles = HttpContext.User.FindAll(ClaimTypes.Role);
                 //if (roles.Any(x => x.Value == Utilities.Constants.Role_Admin))
                 //{
@@ -155,10 +155,10 @@ namespace CleanArchitecture.WebUI.Controllers
             _token.ClearToken();
             return RedirectToAction("Index", "Home");
         }
-        private async Task SignInUser(string token, AppUser appUser)
+        private async Task SignInUser(AppUserVM appUser)
         {
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            JwtSecurityToken jwt = handler.ReadJwtToken(token);
+            JwtSecurityToken jwt = handler.ReadJwtToken(appUser.Token);
             ClaimsIdentity identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Email).Value));
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub).Value));
@@ -168,7 +168,7 @@ namespace CleanArchitecture.WebUI.Controllers
             identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(x => x.Type == "role").Value));
             identity.AddClaim(new Claim(ClaimTypes.Email, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Email).Value));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub).Value));
-            identity.AddClaim(new Claim(ClaimTypes.MobilePhone, appUser.PhoneNumber));
+            identity.AddClaim(new Claim(ClaimTypes.MobilePhone, jwt.Claims.FirstOrDefault(x => x.Type == "PhoneNumber").Value));
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }

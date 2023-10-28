@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,18 +30,21 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("CreateAmenity")]
+        [Authorize]
         public async Task<ActionResult<ResponseDTO>> CreateAmenity([FromBody] Amenity amenity)
         {
             return Ok(await _amenityService.CreateAmenity(amenity));
         }
 
         [HttpPut("UpdateAmenity")]
+        [Authorize]
         public async Task<ActionResult<ResponseDTO>> UpdateAmenity([FromBody] Amenity amenity)
         {
             return Ok(await _amenityService.UpdateAmenity(amenity));
         }
 
         [HttpDelete("DeleteAmenity/{amenityId:int}")]
+        [Authorize]
         public async Task<ActionResult<ResponseDTO>> DeleteAmenity([FromRoute] int amenityId)
         {
             return Ok(await _amenityService.DeleteAmenity(amenityId));

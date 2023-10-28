@@ -11,6 +11,7 @@ namespace CleanArchitecture.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BookingAPIController : ControllerBase
     {
         private readonly IBookingService _bookingService;

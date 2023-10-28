@@ -25,6 +25,7 @@ namespace CleanArchitecture.Infrastructure.Data
         public DbSet<Amenity> Amenities { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
