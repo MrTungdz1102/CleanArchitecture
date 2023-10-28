@@ -168,7 +168,7 @@ namespace CleanArchitecture.WebUI.Controllers
             identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(x => x.Type == "role").Value));
             identity.AddClaim(new Claim(ClaimTypes.Email, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Email).Value));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub).Value));
-            identity.AddClaim(new Claim(ClaimTypes.MobilePhone, appUser.PhoneNumber));
+            identity.AddClaim(new Claim(ClaimTypes.MobilePhone, jwt.Claims.FirstOrDefault(x => x.Type == "PhoneNumber").Value));
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }

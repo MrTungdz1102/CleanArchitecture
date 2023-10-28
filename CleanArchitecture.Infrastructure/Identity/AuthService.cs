@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
+using CleanArchitecture.ApplicationCore.Entities.DTOs;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Identity;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
@@ -53,7 +54,7 @@ namespace CleanArchitecture.Infrastructure.Identity
                 else
                 {
                     var jwtTokenId = $"JTI{Guid.NewGuid()}";
-                    var token = await _tokenGenerator.GenerateToken(loginRequest.Email, jwtTokenId);
+                    var token = await _tokenGenerator.GenerateToken(_user.Id, jwtTokenId);
                     LoginResponseDTO loginResponse = new LoginResponseDTO
                     {
                         Id = _user.Id,
@@ -62,7 +63,7 @@ namespace CleanArchitecture.Infrastructure.Identity
                         PhoneNumber = _user.PhoneNumber,
                         Token = token,
                         RefreshToken = await CreateUserRefreshToken(_user.Id, jwtTokenId),
-                        RefreshTokenExpire = DateTime.Now.AddDays(int.Parse(_configuration["RefreshToken:ExpiresDay"]))
+                        RefreshTokenExpire = DateTime.Now.AddMinutes(int.Parse(_configuration["RefreshToken:ExpiresDay"]))
                     };
                     _response.Result = loginResponse;
                     return _response;
@@ -160,12 +161,12 @@ namespace CleanArchitecture.Infrastructure.Identity
             return userRefreshToken.RefreshToken;
         }
 
-        public async Task<ResponseDTO> RefreshAccessToken(LoginResponseDTO loginResponseDTO)
+        public async Task<ResponseDTO> RefreshAccessToken(TokenDTO tokenDTO)
         {
             try
             {
                 // Find an existing refresh token
-                var specification = new UserRefreshTokenSpecification(loginResponseDTO.RefreshToken);
+                var specification = new UserRefreshTokenSpecification(tokenDTO.RefreshToken);
                 UserRefreshToken? existingRefreshToken = await _unitOfWork.userRefreshTokenRepo.FirstOrDefaultAsync(specification);
                 if (existingRefreshToken == null)
                 {
@@ -174,7 +175,7 @@ namespace CleanArchitecture.Infrastructure.Identity
                     return _response;
                 }
                 // Compare data from existing refresh and access token provided and if there is any mismatch then consider it as a fraud
-                bool isValidToken = _tokenGenerator.ValidateAccessToken(loginResponseDTO.Token, existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+                bool isValidToken = _tokenGenerator.ValidateAccessToken(tokenDTO.AccessToken, existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
                 if (!isValidToken)
                 {
                     _response.IsSuccess = false;
@@ -208,10 +209,11 @@ namespace CleanArchitecture.Infrastructure.Identity
                      _response.Message = "Refresh token was expire";
                     return _response;
                 }
-                _response.Result = new LoginResponseDTO
+                _response.Result = new TokenDTO
                 {
-                    Token = await _tokenGenerator.GenerateToken(user.UserName, existingRefreshToken.JwtTokenId),
-                    RefreshToken = newRefreshToken
+                    AccessToken = await _tokenGenerator.GenerateToken(user.Id, existingRefreshToken.JwtTokenId),
+                    RefreshToken = newRefreshToken,
+                    RefreshTokenExpire = existingRefreshToken.ExpireTime                   
                 };
             }
             catch (Exception ex)

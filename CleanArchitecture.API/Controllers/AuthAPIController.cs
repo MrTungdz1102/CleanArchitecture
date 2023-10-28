@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
+using CleanArchitecture.ApplicationCore.Entities.DTOs;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,9 +37,9 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("RefreshAccessToken")]
-        public async Task<ActionResult<ResponseDTO>> RefreshAccessToken([FromBody] LoginResponseDTO loginResponseDTO)
+        public async Task<ActionResult<ResponseDTO>> RefreshAccessToken([FromBody] TokenDTO tokenDTO)
         {
-            return Ok(await _authService.RefreshAccessToken(loginResponseDTO));
+            return Ok(await _authService.RefreshAccessToken(tokenDTO));
         }
     }
 }

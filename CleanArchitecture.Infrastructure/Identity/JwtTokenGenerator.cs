@@ -37,19 +37,20 @@ namespace CleanArchitecture.Infrastructure.Identity
             return newRefreshToken;
         }
 
-        public async Task<string> GenerateToken(string userName, string jwtTokenId)
+        public async Task<string> GenerateToken(string userId, string jwtTokenId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityKey = Encoding.UTF8.GetBytes(_configuration["JWTSettings:Key"]);
             var credentials = new SigningCredentials(new SymmetricSecurityKey(securityKey), SecurityAlgorithms.HmacSha256Signature);
-            var user = await _userManager.FindByNameAsync(userName);
-            if (user == null) throw new UserNotFoundException(userName);
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) throw new UserNotFoundException(userId);
             var claimList = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, jwtTokenId),
-                new Claim(JwtRegisteredClaimNames.Name, user.Name)
+                new Claim(JwtRegisteredClaimNames.Name, user.Name),
+                new Claim("PhoneNumber", user.PhoneNumber)
             };
             var roles = await _userManager.GetRolesAsync(user);
             claimList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));

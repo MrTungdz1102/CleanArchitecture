@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.WebUI.Models.ViewModel;
+﻿using CleanArchitecture.WebUI.Models.DTOs;
+using CleanArchitecture.WebUI.Models.ViewModel;
 using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
 using Microsoft.IdentityModel.Tokens;
@@ -28,13 +29,30 @@ namespace CleanArchitecture.WebUI.Services.Implementations
         public void ClearToken()
         {
             _accessor.HttpContext?.Response.Cookies.Delete(Constants.TokenCookie);
+            _accessor.HttpContext?.Response.Cookies.Delete(Constants.RefreshToken);
         }
 
-        public string? GetToken()
+        public TokenDTO? GetToken()
         {
-            string? token = null;
-            bool? hasToken = _accessor.HttpContext?.Request.Cookies.TryGetValue(Constants.TokenCookie, out token);
-            return hasToken is true ? token : null;
+            //string? token = null;
+            //bool? hasToken = _accessor.HttpContext?.Request.Cookies.TryGetValue(Constants.TokenCookie, out token);
+            //return hasToken is true ? token : null;
+            try
+            {
+                bool hasAccessToken = _accessor.HttpContext.Request.Cookies.TryGetValue(Constants.TokenCookie, out string accessToken);
+                bool hasRefreshToken = _accessor.HttpContext.Request.Cookies.TryGetValue(Constants.RefreshToken, out string refreshToken);
+
+                TokenDTO tokenDTO = new()
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
+                };
+                return hasAccessToken ? tokenDTO : null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public void SetToken(string token, string refreshToken, string refreshTokenExpires)
