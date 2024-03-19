@@ -7,6 +7,7 @@ namespace CleanArchitecture.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+  //  [Authorize]
     public class ChartAPIController : ControllerBase
     {
         private readonly IChartService _chartSerice;

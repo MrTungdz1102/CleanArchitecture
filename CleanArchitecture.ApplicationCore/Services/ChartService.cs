@@ -5,6 +5,7 @@ using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.ApplicationCore.Specifications;
+using System.Collections;
 
 namespace CleanArchitecture.ApplicationCore.Services
 {

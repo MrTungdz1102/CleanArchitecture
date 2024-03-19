@@ -180,9 +180,9 @@ namespace CleanArchitecture.WebUI.Controllers
             return View(amenityVM);
         }
         [HttpPost]
-        public async Task<IActionResult> Delete(Amenity amenity)
+        public async Task<IActionResult> Delete(AmenityVM amenity)
         {
-            ResponseDTO? response = await _aminityService.GetAmenityById(amenity.Id);
+            ResponseDTO? response = await _aminityService.DeleteAmenity(amenity.Amenity.Id);
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Amenity updated successfully";

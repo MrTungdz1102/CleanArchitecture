@@ -40,7 +40,7 @@ namespace CleanArchitecture.WebUI.Controllers
         public async Task<IActionResult> Login(LoginVM loginVM)
         {
             ResponseDTO? response = await _authService.Login(loginVM);
-            if (response != null && response.IsSuccess)
+            if (response.Result != null && response.IsSuccess)
             {
                 //   TempData["success"] = "Hello " + loginVM.Email;
                 await Console.Out.WriteLineAsync(loginVM.Email);
