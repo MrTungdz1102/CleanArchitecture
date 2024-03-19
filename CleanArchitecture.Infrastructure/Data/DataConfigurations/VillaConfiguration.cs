@@ -18,6 +18,9 @@ namespace CleanArchitecture.Infrastructure.Data.DataConfigurations
                       Occupancy = 4,
                       Price = 200,
                       SquareFeet = 550,
+                      CityId = 1,
+                      OwnerName = "Tung Dao Duc",
+                      StartRating = 5
                   },
 new Villa
 {
@@ -28,6 +31,9 @@ new Villa
     Occupancy = 4,
     Price = 300,
     SquareFeet = 550,
+    CityId = 1,
+    OwnerName = "Tung Dao",
+    StartRating = 4.5
 },
 new Villa
 {
@@ -38,6 +44,9 @@ new Villa
     Occupancy = 4,
     Price = 400,
     SquareFeet = 750,
+    CityId = 2,
+    OwnerName = "Tung",
+    StartRating = 4.9
 }
                 );
         }

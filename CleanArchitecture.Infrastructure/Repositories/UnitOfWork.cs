@@ -16,6 +16,9 @@ namespace CleanArchitecture.Infrastructure.Repositories
         public IRepository<VillaNumber> villaNumberRepo { get; private set; }
         public IRepository<Amenity> amenityRepo { get; private set; }
         public IRepository<Booking> bookingRepo { get; private set; }
+        public IRepository<City> cityRepo { get; private set; }
+        public IRepository<Review> reviewRepo { get; private set; }
+
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
@@ -23,6 +26,8 @@ namespace CleanArchitecture.Infrastructure.Repositories
             villaNumberRepo = new Repository<VillaNumber>(_db);
             amenityRepo = new Repository<Amenity>(_db);
             bookingRepo = new Repository<Booking>(_db);
+            cityRepo = new Repository<City>(_db);
+            reviewRepo = new Repository<Review>(_db);
         }
     }
 }

@@ -4,6 +4,7 @@ using CleanArchitecture.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240319032906_addMoreTable")]
+    partial class addMoreTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,8 +277,8 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         {
                             Id = 1,
                             Content = "Rất vui được ở lại ! Các chủ nhà đã chào đón",
-                            CreatedAt = new DateTime(2024, 3, 19, 10, 39, 55, 306, DateTimeKind.Local).AddTicks(1112),
-                            ModifiedAt = new DateTime(2024, 3, 19, 10, 39, 55, 306, DateTimeKind.Local).AddTicks(1123),
+                            CreatedAt = new DateTime(2024, 3, 19, 10, 29, 6, 222, DateTimeKind.Local).AddTicks(9961),
+                            ModifiedAt = new DateTime(2024, 3, 19, 10, 29, 6, 222, DateTimeKind.Local).AddTicks(9973),
                             Rating = 5,
                             UserId = "3bb437a2-da65-4b7e-bf85-e24bc6052031",
                             VillaId = 1
@@ -284,8 +287,8 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         {
                             Id = 2,
                             Content = "Thanks for serving our!",
-                            CreatedAt = new DateTime(2024, 3, 19, 10, 39, 55, 306, DateTimeKind.Local).AddTicks(1124),
-                            ModifiedAt = new DateTime(2024, 3, 19, 10, 39, 55, 306, DateTimeKind.Local).AddTicks(1124),
+                            CreatedAt = new DateTime(2024, 3, 19, 10, 29, 6, 222, DateTimeKind.Local).AddTicks(9974),
+                            ModifiedAt = new DateTime(2024, 3, 19, 10, 29, 6, 222, DateTimeKind.Local).AddTicks(9975),
                             Rating = 4,
                             UserId = "6af96a07-d096-46a8-aec8-9aa8566617bd",
                             VillaId = 1
@@ -299,9 +302,6 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
@@ -340,49 +340,41 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
-
                     b.ToTable("Villas");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CityId = 1,
                             Description = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://placehold.co/600x400",
                             Name = "Royal Villa",
                             Occupancy = 4,
-                            OwnerName = "Tung Dao Duc",
                             Price = 200.0,
                             SquareFeet = 550,
-                            StartRating = 5.0
+                            StartRating = 0.0
                         },
                         new
                         {
                             Id = 2,
-                            CityId = 1,
                             Description = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://placehold.co/600x401",
                             Name = "Premium Pool Villa",
                             Occupancy = 4,
-                            OwnerName = "Tung Dao",
                             Price = 300.0,
                             SquareFeet = 550,
-                            StartRating = 4.5
+                            StartRating = 0.0
                         },
                         new
                         {
                             Id = 3,
-                            CityId = 2,
                             Description = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://placehold.co/600x402",
                             Name = "Luxury Pool Villa",
                             Occupancy = 4,
-                            OwnerName = "Tung",
                             Price = 400.0,
                             SquareFeet = 750,
-                            StartRating = 4.9000000000000004
+                            StartRating = 0.0
                         });
                 });
 
@@ -724,17 +716,6 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Villa");
-                });
-
-            modelBuilder.Entity("CleanArchitecture.ApplicationCore.Entities.Villa", b =>
-                {
-                    b.HasOne("CleanArchitecture.ApplicationCore.Entities.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("CleanArchitecture.ApplicationCore.Entities.VillaNumber", b =>

@@ -25,13 +25,16 @@ namespace CleanArchitecture.Infrastructure.Data
         public DbSet<Amenity> Amenities { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new VillaConfiguration());
-            modelBuilder.ApplyConfiguration(new VillaNumberConfiguration());
-            modelBuilder.ApplyConfiguration(new AmenityConfiguration());
-            modelBuilder.ApplyConfiguration(new BookingConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            //modelBuilder.ApplyConfiguration(new VillaConfiguration());
+            //modelBuilder.ApplyConfiguration(new VillaNumberConfiguration());
+            //modelBuilder.ApplyConfiguration(new AmenityConfiguration());
+            //modelBuilder.ApplyConfiguration(new BookingConfiguration());
         }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder builder)
