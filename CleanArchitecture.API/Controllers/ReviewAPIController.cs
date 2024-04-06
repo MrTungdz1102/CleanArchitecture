@@ -8,11 +8,11 @@ namespace CleanArchitecture.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReviewController : ControllerBase
+    public class ReviewAPIController : ControllerBase
     {
         private readonly IReviewService _reviewService;
 
-        public ReviewController(IReviewService reviewService)
+        public ReviewAPIController(IReviewService reviewService)
         {
             _reviewService = reviewService;
         }
@@ -35,10 +35,10 @@ namespace CleanArchitecture.API.Controllers
             return Ok(await _reviewService.DeleteReview(reviewId));
         }
 
-        [HttpGet("GetAllReviewByHotelId/{hotelId:int}")]
-        public async Task<ActionResult<ResponseDTO>> GetAllReviewByHotelId([FromRoute] int hotelId)
+        [HttpGet("GetAllReviewByVillaId/{villaId:int}")]
+        public async Task<ActionResult<ResponseDTO>> GetAllReviewByVillaId([FromRoute] int villaId)
         {
-            return Ok(await _reviewService.GetAllReviewByHotelId(hotelId));
+            return Ok(await _reviewService.GetAllReviewByVillaId(villaId));
         }
     }
 }

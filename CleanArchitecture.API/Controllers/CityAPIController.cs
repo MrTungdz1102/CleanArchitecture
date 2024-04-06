@@ -8,11 +8,11 @@ namespace CleanArchitecture.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CityController : ControllerBase
+    public class CityAPIController : ControllerBase
     {
         private readonly ICityService _cityService;
 
-        public CityController(ICityService cityService)
+        public CityAPIController(ICityService cityService)
         {
             _cityService = cityService;
         }

@@ -43,6 +43,9 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddAutoMapper(typeof(MapConfig));
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
 builder.Services.AddControllers();
@@ -101,14 +104,24 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+});
+
 var app = builder.Build();
 Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+
+app.UseCors("AllowAll");
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 app.UseSerilogRequestLogging();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseStaticFiles();

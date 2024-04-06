@@ -45,7 +45,7 @@ namespace CleanArchitecture.ApplicationCore.Services
                     {
                         await villa.Image.CopyToAsync(fileStream);
                     }
-                    var urlFilePath = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}{_httpContextAccessor.HttpContext.Request.PathBase}/Images/{fileName}";
+                    var urlFilePath = $"{_httpContextAccessor.HttpContext!.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}{_httpContextAccessor.HttpContext.Request.PathBase}/Images/{fileName}";
                     villa.ImageUrl = urlFilePath;
                     villa.ImageLocalPath = filePath;
                 }
@@ -148,7 +148,7 @@ namespace CleanArchitecture.ApplicationCore.Services
                         await villa.Image.CopyToAsync(fileStream);
                     }
                     // var urlFilePath = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}/Images/{fileName}";
-                    var urlFilePath = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}{_httpContextAccessor.HttpContext.Request.PathBase}/Images/{fileName}";
+                    var urlFilePath = $"{_httpContextAccessor.HttpContext!.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}{_httpContextAccessor.HttpContext.Request.PathBase}/Images/{fileName}";
                     villa.ImageUrl = urlFilePath;
                     villa.ImageLocalPath = filePath;
                 }

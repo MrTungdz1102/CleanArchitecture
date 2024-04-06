@@ -106,7 +106,7 @@ namespace CleanArchitecture.WebUI.Controllers
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Register Success " + registerVM.Email;
-                EmailVM email = new EmailVM { Email = registerVM.Email, Subject = "Register By Tung Dao", Message = "<p>New Account Created Successfull</p>" };
+                EmailVM email = new EmailVM { Email = registerVM.Email, Subject = "Register Account", Message = "<p>New Account Created Successfull</p>" };
                 response = await _emailService.SendEmailAsync(email);
                 if (response != null && response.IsSuccess)
                 {

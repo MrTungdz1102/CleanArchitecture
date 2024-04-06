@@ -31,5 +31,11 @@ namespace CleanArchitecture.ApplicationCore.Entities.DTOs
 
         public virtual ICollection<Amenity> VillaAmenity { get; set; }
         public bool IsAvailable { get; set; } = true;
+
+        public double StartRating { get; set; }
+        public string? OwnerName { get; set; }
+
+        public int CityId { get; set; }
+        public City? City { get; set; }
     }
 }

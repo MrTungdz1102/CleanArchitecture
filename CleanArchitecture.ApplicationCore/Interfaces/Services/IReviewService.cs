@@ -10,7 +10,7 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
 {
     public interface IReviewService
     {
-        Task<ResponseDTO> GetAllReviewByHotelId(int villaId); // QueryParameter query
+        Task<ResponseDTO> GetAllReviewByVillaId(int villaId); // QueryParameter query
         Task<ResponseDTO> CreateReview(Review review);
         Task<ResponseDTO> UpdateReview(Review review);
         Task<ResponseDTO> DeleteReview(int reviewId);

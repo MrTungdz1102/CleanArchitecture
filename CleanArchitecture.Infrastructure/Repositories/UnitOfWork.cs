@@ -18,6 +18,7 @@ namespace CleanArchitecture.Infrastructure.Repositories
         public IRepository<Booking> bookingRepo { get; private set; }
         public IRepository<City> cityRepo { get; private set; }
         public IRepository<Review> reviewRepo { get; private set; }
+        public IRepository<Coupon> couponRepo { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -28,6 +29,7 @@ namespace CleanArchitecture.Infrastructure.Repositories
             bookingRepo = new Repository<Booking>(_db);
             cityRepo = new Repository<City>(_db);
             reviewRepo = new Repository<Review>(_db);
+            couponRepo = new Repository<Coupon>(_db);
         }
     }
 }

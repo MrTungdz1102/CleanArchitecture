@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.ApplicationCore.Specifications
 {
-    public class ReviewSpecification : Specification<Review>
+    public class CouponSpecification : Specification<Coupon>
     {
-        public ReviewSpecification(int villaId)
+        public CouponSpecification(string couponCode)
         {
-            Query.Where(x => x.VillaId == villaId).Take(5).OrderByDescending(x => x.Id);
+            Query.Where(x => x.CouponCode == couponCode);
         }
     }
 }

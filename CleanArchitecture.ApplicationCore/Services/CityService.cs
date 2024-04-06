@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
+using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using System;
@@ -14,10 +15,13 @@ namespace CleanArchitecture.ApplicationCore.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
-        public CityService(IUnitOfWork unitOfWork)
+        private readonly IEmailSender _emailSender;
+
+        public CityService(IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
+            _emailSender = emailSender;
         }
         public async Task<ResponseDTO> CreateCity(City city)
         {

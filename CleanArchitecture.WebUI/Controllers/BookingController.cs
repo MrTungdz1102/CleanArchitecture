@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.WebUI.Models;
 using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Models.ViewModel;
+using CleanArchitecture.WebUI.Services.Implementations;
 using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -23,14 +24,18 @@ namespace CleanArchitecture.WebUI.Controllers
         private readonly IPaymentService _paymentService;
         private readonly IVillaNumberService _villaNumberService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public BookingController(IVillaService villaService, IBookingService bookingService, IPaymentService paymentService, IVillaNumberService villaNumberService, IWebHostEnvironment webHostEnvironment)
+		private readonly IEmailService _emailService;
+
+		public BookingController(IVillaService villaService, IBookingService bookingService, IPaymentService paymentService, IVillaNumberService villaNumberService, IWebHostEnvironment webHostEnvironment, IEmailService emailService)
         {
             _villaService = villaService;
             _bookingService = bookingService;
             _paymentService = paymentService;
             _villaNumberService = villaNumberService;
             _webHostEnvironment = webHostEnvironment;
-        }
+            _emailService = emailService;
+
+		}
 
         public IActionResult Index()
         {
@@ -202,6 +207,13 @@ namespace CleanArchitecture.WebUI.Controllers
                     PaymentResponse paymentResponse = JsonConvert.DeserializeObject<PaymentResponse>(response.Result.ToString());
                     await _bookingService.UpdateBookingStatus(bookingId, Constants.StatusApproved, 0);
                     await _bookingService.UpdateBookingPayment(bookingId, paymentResponse.StripeSessionId, paymentResponse.PaymentIntentId);
+                    EmailVM email = new EmailVM
+                    {
+                        Email = HttpContext.User.FindFirstValue(ClaimTypes.Email),
+                        Subject = "Booking Confirmation",
+                        Message = "Your order has been comfirm! Thank you for using our services!"
+                    };
+                    await _emailService.SendEmailAsync(email);
                 }
                 else
                 {

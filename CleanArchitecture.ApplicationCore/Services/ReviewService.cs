@@ -58,12 +58,12 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetAllReviewByHotelId(int villaId)
+        public async Task<ResponseDTO> GetAllReviewByVillaId(int villaId)
         {
             try
             {
                 ReviewSpecification specification = new ReviewSpecification(villaId);
-                await _unitOfWork.reviewRepo.ListAsync(specification);
+                _response.Result = await _unitOfWork.reviewRepo.ListAsync(specification);
             }
             catch (Exception ex)
             {

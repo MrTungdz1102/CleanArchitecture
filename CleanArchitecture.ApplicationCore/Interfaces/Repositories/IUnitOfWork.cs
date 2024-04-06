@@ -15,5 +15,6 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Repositories
         IRepository<Booking> bookingRepo { get; }
         IRepository<City> cityRepo { get; }
         IRepository<Review> reviewRepo { get; }
+        IRepository<Coupon> couponRepo { get; }
     }
 }
