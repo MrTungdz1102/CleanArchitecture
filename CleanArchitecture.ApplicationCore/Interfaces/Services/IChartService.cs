@@ -9,11 +9,11 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
 {
     public interface IChartService
     {
-        Task<ResponseDTO> GetTotalBookingRadialChartData();
+        Task<ResponseDTO> GetTotalBookingRadialChartData(string? ownerId = null);
         Task<ResponseDTO> GetRegisteredUserChartData();
-        Task<ResponseDTO> GetRevenueChartData();
-        Task<ResponseDTO> GetBookingPieChartData();
-        Task<ResponseDTO> GetMemberAndBookingLineChartData();
+        Task<ResponseDTO> GetRevenueChartData(string? ownerId = null);
+        Task<ResponseDTO> GetBookingPieChartData(string? ownerId = null);
+        Task<ResponseDTO> GetMemberAndBookingLineChartData(string? ownerId = null);
         RadialBarChart GetRadialCartDataModel(int totalCount, double currentMonthCount, double prevMonthCount);
     }
 }

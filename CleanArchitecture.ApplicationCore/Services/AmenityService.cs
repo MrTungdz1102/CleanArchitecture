@@ -52,12 +52,12 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetAllAmenity(QueryParameter query)
+        public async Task<ResponseDTO> GetAllAmenity(QueryParameter query, string? userId)
         {
             try
             {
                 var totalSize = await _unitOfWork.amenityRepo.CountAsync();
-                var specification = new AmenitySpecification(query);
+                var specification = new AmenitySpecification(query, userId);
                 List<Amenity> amenities = await _unitOfWork.amenityRepo.ListAsync(specification);
                 _response.Result = new PageResult<Amenity>
                 {

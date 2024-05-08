@@ -4,10 +4,10 @@ namespace CleanArchitecture.WebUI.Services.Interfaces
 {
     public interface IChartService
     {
-        Task<ResponseDTO?> GetBookingPieChart();
-        Task<ResponseDTO?> GetMemberAndBookingLineChart();
+        Task<ResponseDTO?> GetBookingPieChart(string? ownerId);
+        Task<ResponseDTO?> GetMemberAndBookingLineChart(string? ownerId);
         Task<ResponseDTO?> GetRegisterUserChart();
-        Task<ResponseDTO?> GetRevenueChart();
-        Task<ResponseDTO?> GetTotalBookingRadialChart();
+        Task<ResponseDTO?> GetRevenueChart(string? ownerId);
+        Task<ResponseDTO?> GetTotalBookingRadialChart(string? ownerId);
     }
 }

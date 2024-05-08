@@ -119,12 +119,12 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetAllVillaNumber(QueryParameter queryParameter)
+        public async Task<ResponseDTO> GetAllVillaNumber(QueryParameter queryParameter, string? userId)
         {
             try
             {
                 var totalSize = await _unitOfWork.villaNumberRepo.CountAsync();
-                var specification = new VillaNumberSpecification(queryParameter);                
+                var specification = new VillaNumberSpecification(queryParameter, userId);                
                 List<VillaNumber> villas = await _unitOfWork.villaNumberRepo.ListAsync(specification);
                 _response.Result = new PageResult<VillaNumber>
                 {

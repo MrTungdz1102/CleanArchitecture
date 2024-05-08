@@ -4,6 +4,7 @@ using CleanArchitecture.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240506093644_update_villa")]
+    partial class update_villa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,18 +273,18 @@ namespace CleanArchitecture.Infrastructure.Migrations
                             CouponId = 1,
                             CouponCode = "10OFF",
                             DiscountAmount = 50.0,
-                            EndingDate = new DateTime(2024, 6, 5, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(4911),
+                            EndingDate = new DateTime(2024, 6, 5, 16, 36, 44, 550, DateTimeKind.Local).AddTicks(7484),
                             MinAmount = 200,
-                            StartingDate = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(4900)
+                            StartingDate = new DateTime(2024, 5, 6, 16, 36, 44, 550, DateTimeKind.Local).AddTicks(7469)
                         },
                         new
                         {
                             CouponId = 2,
                             CouponCode = "20OFF",
                             DiscountAmount = 100.0,
-                            EndingDate = new DateTime(2024, 5, 16, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(4917),
+                            EndingDate = new DateTime(2024, 5, 16, 16, 36, 44, 550, DateTimeKind.Local).AddTicks(7490),
                             MinAmount = 500,
-                            StartingDate = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(4916)
+                            StartingDate = new DateTime(2024, 5, 6, 16, 36, 44, 550, DateTimeKind.Local).AddTicks(7489)
                         });
                 });
 
@@ -323,8 +326,8 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         {
                             Id = 1,
                             Content = "Rất vui được ở lại ! Các chủ nhà đã chào đón",
-                            CreatedAt = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(6770),
-                            ModifiedAt = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(6774),
+                            CreatedAt = new DateTime(2024, 5, 6, 16, 36, 44, 551, DateTimeKind.Local).AddTicks(334),
+                            ModifiedAt = new DateTime(2024, 5, 6, 16, 36, 44, 551, DateTimeKind.Local).AddTicks(338),
                             Rating = 5,
                             UserId = "3bb437a2-da65-4b7e-bf85-e24bc6052031",
                             VillaId = 1
@@ -333,8 +336,8 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         {
                             Id = 2,
                             Content = "Thanks for serving our!",
-                            CreatedAt = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(6776),
-                            ModifiedAt = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(6776),
+                            CreatedAt = new DateTime(2024, 5, 6, 16, 36, 44, 551, DateTimeKind.Local).AddTicks(343),
+                            ModifiedAt = new DateTime(2024, 5, 6, 16, 36, 44, 551, DateTimeKind.Local).AddTicks(343),
                             Rating = 4,
                             UserId = "6af96a07-d096-46a8-aec8-9aa8566617bd",
                             VillaId = 1
@@ -375,9 +378,6 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Property<int>("Occupancy")
                         .HasColumnType("int");
 
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
@@ -386,6 +386,9 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.Property<double>("StartRating")
                         .HasColumnType("float");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -402,10 +405,10 @@ namespace CleanArchitecture.Infrastructure.Migrations
                             ImageUrl = "https://placehold.co/600x400",
                             Name = "Royal Villa",
                             Occupancy = 4,
-                            OwnerId = "ed4cdaa3-868e-43d6-b899-c54e5fdd76eb",
                             Price = 200.0,
                             SquareFeet = 550,
-                            StartRating = 5.0
+                            StartRating = 5.0,
+                            UserId = "ed4cdaa3-868e-43d6-b899-c54e5fdd76eb"
                         },
                         new
                         {
@@ -415,10 +418,10 @@ namespace CleanArchitecture.Infrastructure.Migrations
                             ImageUrl = "https://placehold.co/600x401",
                             Name = "Premium Pool Villa",
                             Occupancy = 4,
-                            OwnerId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1",
                             Price = 300.0,
                             SquareFeet = 550,
-                            StartRating = 4.5
+                            StartRating = 4.5,
+                            UserId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1"
                         },
                         new
                         {
@@ -428,10 +431,10 @@ namespace CleanArchitecture.Infrastructure.Migrations
                             ImageUrl = "https://placehold.co/600x402",
                             Name = "Luxury Pool Villa",
                             Occupancy = 4,
-                            OwnerId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1",
                             Price = 400.0,
                             SquareFeet = 750,
-                            StartRating = 4.9000000000000004
+                            StartRating = 4.9000000000000004,
+                            UserId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1"
                         });
                 });
 

@@ -17,9 +17,9 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("GetAllVillaNumber")]
-        public async Task<ActionResult<ResponseDTO>> GetAllVillaNumber([FromQuery] QueryParameter queryParameter)
+        public async Task<ActionResult<ResponseDTO>> GetAllVillaNumber([FromQuery] QueryParameter queryParameter, string? userId)
         {
-            return Ok(await _service.GetAllVillaNumber(queryParameter));
+            return Ok(await _service.GetAllVillaNumber(queryParameter, userId));
         }
 
         [HttpGet("GetVillaNumber/{villaNumberId:int}")]

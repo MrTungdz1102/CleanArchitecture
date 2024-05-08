@@ -10,7 +10,7 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
 {
     public interface IVillaNumberService
     {
-        Task<ResponseDTO> GetAllVillaNumber(QueryParameter queryParameter);
+        Task<ResponseDTO> GetAllVillaNumber(QueryParameter queryParameter, string? userId);
         Task<ResponseDTO> GetVillaNumber(int villaNumberId);
         Task<ResponseDTO> CreateVillaNumber(VillaNumber villaNumber);
         Task<ResponseDTO> UpdateVillaNumber(VillaNumber villaNumber);

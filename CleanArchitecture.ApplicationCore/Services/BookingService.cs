@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.ApplicationCore.Commons;
+﻿using Ardalis.Specification;
+using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
@@ -52,11 +53,11 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetAllBookingUser(string userId, string? statusFilter)
+        public async Task<ResponseDTO> GetAllBookingUser(string userId, string? statusFilter, bool isCustomer = false)
         {
             try
             {
-                var specification = new BookingSpecification(userId, statusFilter);
+                 var specification = new BookingSpecification(userId, statusFilter, isCustomer);
                 _response.Result = await _unitOfWork.bookingRepo.ListAsync(specification);
             }
             catch (Exception ex)

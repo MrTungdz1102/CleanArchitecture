@@ -364,10 +364,22 @@ namespace CleanArchitecture.WebUI.Controllers
             {
                 status = "";
             }
-            if (!User.IsInRole(Constants.Role_Admin))
+            if (User.IsInRole(Constants.Role_Admin))
+            {
+                ResponseDTO? response = await _bookingService.GetAllBooking(status);
+                if (response.Result is not null && response.IsSuccess)
+                {
+                    List<Booking> result = JsonConvert.DeserializeObject<List<Booking>>(response.Result.ToString());
+                    return Json(new { data = result });
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }            }
+            else if(User.IsInRole(Constants.Role_Customer))
             {
                 userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                ResponseDTO? response = await _bookingService.GetAllBookingUser(userId, status);
+                ResponseDTO? response = await _bookingService.GetAllBookingUser(userId, status, true);
                 if (response.Result is not null && response.IsSuccess)
                 {
                     List<Booking> result = JsonConvert.DeserializeObject<List<Booking>>(response.Result.ToString());
@@ -380,7 +392,8 @@ namespace CleanArchitecture.WebUI.Controllers
             }
             else
             {
-                ResponseDTO? response = await _bookingService.GetAllBooking(status);
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                ResponseDTO? response = await _bookingService.GetAllBookingUser(userId, status, false);
                 if (response.Result is not null && response.IsSuccess)
                 {
                     List<Booking> result = JsonConvert.DeserializeObject<List<Booking>>(response.Result.ToString());

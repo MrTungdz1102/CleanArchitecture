@@ -10,7 +10,7 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
 {
     public interface IAmenityService
     {
-        Task<ResponseDTO> GetAllAmenity(QueryParameter query);
+        Task<ResponseDTO> GetAllAmenity(QueryParameter query, string? userId);
         Task<ResponseDTO> GetAmenity(int amenityId);
         Task<ResponseDTO> CreateAmenity(Amenity amenity);
         Task<ResponseDTO> UpdateAmenity(Amenity amenity);

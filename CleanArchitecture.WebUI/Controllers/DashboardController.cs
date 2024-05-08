@@ -1,14 +1,16 @@
 ﻿using CleanArchitecture.WebUI.Models;
 using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Services.Interfaces;
+using CleanArchitecture.WebUI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
     public class DashboardController : Controller
     {
-        private readonly IChartService _chartService;
+        private readonly IChartService _chartService;   
 
         public DashboardController(IChartService chartService)
         {
@@ -20,7 +22,12 @@ namespace CleanArchitecture.WebUI.Controllers
         }
         public async Task<IActionResult> GetMemberAndBookingLineChartData()
         {
-            ResponseDTO? response = await _chartService.GetMemberAndBookingLineChart();
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response = await _chartService.GetMemberAndBookingLineChart(userId);
             if(response is not null && response.IsSuccess)
             {
                 LineChart lineChart = JsonConvert.DeserializeObject<LineChart>(response.Result.ToString());
@@ -35,7 +42,12 @@ namespace CleanArchitecture.WebUI.Controllers
 
         public async Task<IActionResult> GetBookingPieChartData()
         {
-            ResponseDTO? response = await _chartService.GetBookingPieChart();
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response = await _chartService.GetBookingPieChart(userId);
             if (response is not null && response.IsSuccess)
             {
                 PieChart pieChart = JsonConvert.DeserializeObject<PieChart>(response.Result.ToString());
@@ -50,7 +62,12 @@ namespace CleanArchitecture.WebUI.Controllers
 
         public async Task<IActionResult> GetTotalBookingRadialChartData()
         {
-            ResponseDTO? response = await _chartService.GetTotalBookingRadialChart();
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response = await _chartService.GetTotalBookingRadialChart(userId);
             if (response is not null && response.IsSuccess)
             {
                 RadialBarChart radialBarChart = JsonConvert.DeserializeObject<RadialBarChart>(response.Result.ToString());
@@ -65,7 +82,12 @@ namespace CleanArchitecture.WebUI.Controllers
 
         public async Task<IActionResult> GetRevenueChartData()
         {
-            ResponseDTO? response = await _chartService.GetRevenueChart();
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response = await _chartService.GetRevenueChart(userId);
             if (response is not null && response.IsSuccess)
             {
                 RadialBarChart radialBarChart = JsonConvert.DeserializeObject<RadialBarChart>(response.Result.ToString());

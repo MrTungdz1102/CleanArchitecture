@@ -5,7 +5,7 @@ namespace CleanArchitecture.WebUI.Services.Interfaces
 {
     public interface IVillaService
     {
-        Task<ResponseDTO?> GetAllVilla(); 
+        Task<ResponseDTO?> GetAllVilla(string? userId); 
         Task<ResponseDTO?> GetVillaById(int id);
         Task<ResponseDTO?> CreateVilla(Villa villa);
         Task<ResponseDTO?> UpdateVilla(Villa villa);

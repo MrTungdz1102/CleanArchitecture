@@ -1,4 +1,4 @@
-﻿@if (User.IsInRole(Constants.Role_Admin))
+﻿@if (User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Customer))
 {
     Layout = "_LayoutAdmin";
 }

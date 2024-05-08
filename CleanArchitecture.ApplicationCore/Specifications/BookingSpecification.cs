@@ -21,9 +21,16 @@ namespace CleanArchitecture.ApplicationCore.Specifications
         {
             Query.Where(x => x.Id == bookingId && x.Status == paymentStatus).Include(x => x.Villa);
         }
-        public BookingSpecification(string? userId, string? status)
+        public BookingSpecification(string? userId, string? status, bool isCustomer)
         {
-            Query.Where(x => (userId == null || x.UserId == userId) && (status == null || x.Status == status) && (!string.IsNullOrEmpty(userId) || !string.IsNullOrEmpty(status)));
+            if(isCustomer)
+            {
+                Query.Where(x => x.Villa.OwnerId == userId && (status == null || x.Status == status) && (!string.IsNullOrEmpty(userId) || !string.IsNullOrEmpty(status)));
+            }
+            else
+            {
+                Query.Where(x => (userId == null || x.UserId == userId) && (status == null || x.Status == status) && (!string.IsNullOrEmpty(userId) || !string.IsNullOrEmpty(status)));
+            }
         }
         public BookingSpecification(string? status)
         {

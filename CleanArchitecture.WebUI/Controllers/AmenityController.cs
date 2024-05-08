@@ -6,6 +6,7 @@ using CleanArchitecture.WebUI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
@@ -27,10 +28,15 @@ namespace CleanArchitecture.WebUI.Controllers
                 PageNumber = (page == null || page < 0) ? 1 : page.Value
             };
             ViewBag.PageNumber = page ?? 0;
-            ResponseDTO? response = await _aminityService.GetAllAmenity(query);
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response = await _aminityService.GetAllAmenity(query, userId);
             List<Amenity> amenityList = null;
-            PageResult<Amenity> pageResult = new PageResult<Amenity>();
-            if (response != null && response.IsSuccess)
+            PageResult<Amenity>? pageResult = new PageResult<Amenity>();
+            if (response!.Result != null && response.IsSuccess)
             {
                 pageResult = JsonConvert.DeserializeObject<PageResult<Amenity>>(Convert.ToString(response.Result));
                 amenityList = pageResult.Items;
@@ -45,9 +51,14 @@ namespace CleanArchitecture.WebUI.Controllers
         }
         public async Task<IActionResult> Create()
         {
-            ResponseDTO? response = await _villaService.GetAllVilla();
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response = await _villaService.GetAllVilla(userId);
             List<Villa> villas = null;
-            if(response.Result != null && response.IsSuccess)
+            if (response.Result != null && response.IsSuccess)
             {
                 villas = JsonConvert.DeserializeObject<List<Villa>>(Convert.ToString(response.Result));
             }
@@ -69,7 +80,7 @@ namespace CleanArchitecture.WebUI.Controllers
         public async Task<IActionResult> Create(AmenityVM amenityVM)
         {
             ResponseDTO? response = await _aminityService.CreateAmenity(amenityVM.Amenity);
-            if(response != null && response.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Amenity created successfully";
                 return RedirectToAction(nameof(Index));
@@ -77,7 +88,12 @@ namespace CleanArchitecture.WebUI.Controllers
             else
             {
                 TempData["error"] = response?.Message;
-                response = await _villaService.GetAllVilla();
+                string? userId = null;
+                if (User.IsInRole(Constants.Role_Customer))
+                {
+                    userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                }
+                response = await _villaService.GetAllVilla(userId);
                 IEnumerable<Villa> listVillaNumber = new List<Villa>();
                 if (response != null && response.IsSuccess)
                 {
@@ -99,7 +115,12 @@ namespace CleanArchitecture.WebUI.Controllers
         public async Task<IActionResult> Update(int amenityId)
         {
             ResponseDTO? response = await _aminityService.GetAmenityById(amenityId);
-            ResponseDTO? response1 = await _villaService.GetAllVilla();
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response1 = await _villaService.GetAllVilla(userId);
             Amenity amenity = null;
             List<Villa> villas = null;
             if (response != null && response.IsSuccess && response1 != null && response1.IsSuccess)
@@ -127,7 +148,7 @@ namespace CleanArchitecture.WebUI.Controllers
         public async Task<IActionResult> Update(AmenityVM amenityVM)
         {
             ResponseDTO? response = await _aminityService.UpdateAmenity(amenityVM.Amenity);
-            if(response != null && response.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Amenity updated successfully";
                 return RedirectToAction(nameof(Index));
@@ -135,7 +156,12 @@ namespace CleanArchitecture.WebUI.Controllers
             else
             {
                 TempData["error"] = response?.Message;
-                ResponseDTO? response1 = await _villaService.GetAllVilla();
+                string? userId = null;
+                if (User.IsInRole(Constants.Role_Customer))
+                {
+                    userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                }
+                ResponseDTO? response1 = await _villaService.GetAllVilla(userId);
                 IEnumerable<Villa> listVilla = new List<Villa>();
                 if (response1 != null && response1.IsSuccess)
                 {
@@ -156,7 +182,12 @@ namespace CleanArchitecture.WebUI.Controllers
         public async Task<IActionResult> Delete(int amenityId)
         {
             ResponseDTO? response = await _aminityService.GetAmenityById(amenityId);
-            ResponseDTO? response1 = await _villaService.GetAllVilla();
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response1 = await _villaService.GetAllVilla(userId);
             Amenity amenity = null;
             List<Villa> villas = null;
             if (response != null && response.IsSuccess && response1 != null && response1.IsSuccess)

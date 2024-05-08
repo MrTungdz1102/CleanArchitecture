@@ -10,6 +10,6 @@ namespace CleanArchitecture.WebUI.Services.Interfaces
         Task<ResponseDTO?> UpdateBookingStatus(int bookingId, string status, int villaNumber);
         Task<ResponseDTO?> GetBooking(int bookingId);
         Task<ResponseDTO?> GetAllBooking(string? status);
-        Task<ResponseDTO?> GetAllBookingUser(string? userId, string? status);
+        Task<ResponseDTO?> GetAllBookingUser(string? userId, string? status, bool isCustomer);
     }
 }

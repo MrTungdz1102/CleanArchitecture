@@ -11,9 +11,16 @@ namespace CleanArchitecture.ApplicationCore.Specifications
 {
     public class VillaNumberSpecification : Specification<VillaNumber>
     {
-        public VillaNumberSpecification(QueryParameter queryParameters)
+        public VillaNumberSpecification(QueryParameter queryParameters, string? userId)
         {
-            Query.Include(x => x.Villa).Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).OrderBy(x => x.VillaId);
+            if(userId != null)
+            {
+                Query.Include(x => x.Villa).Where(x => x.Villa.OwnerId == userId).Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).OrderBy(x => x.VillaId);
+            }
+            else
+            {
+                Query.Include(x => x.Villa).Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).OrderBy(x => x.VillaId);
+            }
         }
 
         public VillaNumberSpecification(int? villaNumberId = null)

@@ -33,9 +33,9 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("GetAllBookingUser")]
-        public async Task<ActionResult<ResponseDTO>> GetAllBooking(string userId, string? status)
+        public async Task<ActionResult<ResponseDTO>> GetAllBooking(string userId, string? status, bool isCustomer)
         {
-            return Ok(await _bookingService.GetAllBookingUser(userId, status));
+            return Ok(await _bookingService.GetAllBookingUser(userId, status, isCustomer));
         }
 
         [HttpGet("GetAllBooking")]

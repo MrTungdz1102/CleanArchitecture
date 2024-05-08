@@ -10,9 +10,9 @@ namespace CleanArchitecture.ApplicationCore.Specifications
 {
     public class VillaSpecification : Specification<Villa>
     {
-        public VillaSpecification()
+        public VillaSpecification(string userId)
         {
-            
+            Query.Where(x => x.OwnerId == userId);
         }
     }
 }

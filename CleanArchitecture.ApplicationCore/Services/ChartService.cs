@@ -23,11 +23,11 @@ namespace CleanArchitecture.ApplicationCore.Services
             _response = new ResponseDTO();
             _userService = userService;
         }
-        public async Task<ResponseDTO> GetBookingPieChartData()
+        public async Task<ResponseDTO> GetBookingPieChartData(string? ownerId = null)
         {
             try
             {
-                var specification = new BookingFilterSpecification(DateTime.Now, PaymentStatus.StatusPending, PaymentStatus.StatusCancelled);
+                var specification = new BookingFilterSpecification(DateTime.Now, PaymentStatus.StatusPending, PaymentStatus.StatusCancelled, ownerId);
                 List<Booking> bookings = await _unitOfWork.bookingRepo.ListAsync(specification);
                 List<string> customerWithOneBooking = bookings.GroupBy(b => b.UserId).Where(x => x.Count() == 1).Select(x => x.Key).ToList();
                 int bookingsByNewCustomer = customerWithOneBooking.Count();
@@ -47,11 +47,11 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetMemberAndBookingLineChartData()
+        public async Task<ResponseDTO> GetMemberAndBookingLineChartData(string? ownerId = null)
         {
             try
             {
-                var specification = new BookingFilterSpecification(DateTime.Now.AddDays(-30), DateTime.Now);
+                var specification = new BookingFilterSpecification(DateTime.Now.AddDays(-30), DateTime.Now, ownerId);
                 List<Booking> bookings = await _unitOfWork.bookingRepo.ListAsync(specification);
                 var bookingData = bookings.GroupBy(b => b.BookingDate.Date).Select(u => new
                 {
@@ -136,11 +136,11 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetRevenueChartData()
+        public async Task<ResponseDTO> GetRevenueChartData(string? ownerId = null)
         {
             try
             {
-                var specification = new BookingFilterSpecification(PaymentStatus.StatusPending, PaymentStatus.StatusCancelled);
+                var specification = new BookingFilterSpecification(PaymentStatus.StatusPending, PaymentStatus.StatusCancelled, ownerId);
                 List<Booking> bookings = await _unitOfWork.bookingRepo.ListAsync(specification);
                 var totalRevenue = Convert.ToInt32(bookings.Sum(u => u.TotalCost));
                 var countByCurrentMonth = bookings.Where(u => u.BookingDate >= currentMonthStartDate &&
@@ -158,11 +158,11 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetTotalBookingRadialChartData()
+        public async Task<ResponseDTO> GetTotalBookingRadialChartData(string? ownerId = null)
         {
             try
             {
-                var specification = new BookingFilterSpecification(PaymentStatus.StatusPending, PaymentStatus.StatusCancelled);
+                var specification = new BookingFilterSpecification(PaymentStatus.StatusPending, PaymentStatus.StatusCancelled, ownerId);
                 List<Booking> bookings = await _unitOfWork.bookingRepo.ListAsync(specification);
 
                 var countByCurrentMonth = bookings.Count(x => x.BookingDate >= currentMonthStartDate &&

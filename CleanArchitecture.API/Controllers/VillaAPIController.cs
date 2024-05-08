@@ -29,9 +29,9 @@ namespace CleanArchitecture.API.Controllers
 
         [HttpGet("GetAllVilla")]
         
-        public async Task<ActionResult<ResponseDTO>> GetAllVilla()
+        public async Task<ActionResult<ResponseDTO>> GetAllVilla(string? userId)
         {
-            return Ok(await _villaService.GetAllVilla());
+            return Ok(await _villaService.GetAllVilla(userId));
         }
 
         [HttpGet("GetVilla/{villaId:int}")]

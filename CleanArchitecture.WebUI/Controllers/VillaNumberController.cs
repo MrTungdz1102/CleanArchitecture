@@ -6,6 +6,7 @@ using CleanArchitecture.WebUI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
@@ -26,7 +27,12 @@ namespace CleanArchitecture.WebUI.Controllers
                 PageNumber = (page == null || page < 0) ? 1 : page.Value
             };
             ViewBag.PageNumber = page ?? 0;
-            ResponseDTO? response = await _villaNumberService.GetAllVillaNumber(query);
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response = await _villaNumberService.GetAllVillaNumber(query, userId);
             List<VillaNumber> villaNumberList = null;
             PageResult<VillaNumber>? pageResult = new PageResult<VillaNumber>();
             if (response != null && response.IsSuccess)
@@ -44,7 +50,12 @@ namespace CleanArchitecture.WebUI.Controllers
         }
         public async Task<IActionResult> Create()
         {
-            ResponseDTO? response = await _villaService.GetAllVilla();
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response = await _villaService.GetAllVilla(userId);
             IEnumerable<Villa> listVilla = new List<Villa>();
             if (response != null && response.IsSuccess)
             {
@@ -77,7 +88,12 @@ namespace CleanArchitecture.WebUI.Controllers
             else
             {
                 TempData["error"] = response?.Message;
-                response = await _villaService.GetAllVilla();
+                string? userId = null;
+                if (User.IsInRole(Constants.Role_Customer))
+                {
+                    userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                }
+                response = await _villaService.GetAllVilla(userId);
                 IEnumerable<Villa> listVillaNumber = new List<Villa>();
                 if (response != null && response.IsSuccess)
                 {
@@ -97,7 +113,12 @@ namespace CleanArchitecture.WebUI.Controllers
         }
         public async Task<IActionResult> Update(int villaNumberId)
         {
-            ResponseDTO? response1 = await _villaService.GetAllVilla();
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response1 = await _villaService.GetAllVilla(userId);
             IEnumerable<Villa> listVilla = new List<Villa>();
             VillaNumber villaNumber = new VillaNumber();
             ResponseDTO? response2 = await _villaNumberService.GetVillaNumberById(villaNumberId);
@@ -135,7 +156,12 @@ namespace CleanArchitecture.WebUI.Controllers
             else
             {
                 TempData["error"] = response?.Message;
-                ResponseDTO? response1 = await _villaService.GetAllVilla();
+                string? userId = null;
+                if (User.IsInRole(Constants.Role_Customer))
+                {
+                    userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                }
+                ResponseDTO? response1 = await _villaService.GetAllVilla(userId);
                 IEnumerable<Villa> listVilla = new List<Villa>();
                 if (response1 != null && response1.IsSuccess)
                 {
@@ -156,7 +182,12 @@ namespace CleanArchitecture.WebUI.Controllers
 
         public async Task<IActionResult> Delete(int villaNumberId)
         {
-            ResponseDTO? response1 = await _villaService.GetAllVilla();
+            string? userId = null;
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response1 = await _villaService.GetAllVilla(userId);
             IEnumerable<Villa> listVilla = new List<Villa>();
             VillaNumber villaNumber = new VillaNumber();
             ResponseDTO? response2 = await _villaNumberService.GetVillaNumberById(villaNumberId);

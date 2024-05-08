@@ -33,11 +33,16 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
-        public async Task<ResponseDTO?> GetAllAmenity(QueryParameter queryParameter)
+        public async Task<ResponseDTO?> GetAllAmenity(QueryParameter queryParameter, string? userId)
         {
+            string apiUrl = Constants.APIUrlBase + "/api/AmenityAPI/GetAllAmenity?PageNumber=" + queryParameter.PageNumber + "&PageSize=" + queryParameter.PageSize;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                apiUrl += $"&userId={userId}";
+            }
             return await _baseService.SendAsync(new RequestDTO
             {
-                Url = Constants.APIUrlBase + "/api/AmenityAPI/GetAllAmenity?PageNumber=" + queryParameter.PageNumber + "&PageSize=" + queryParameter.PageSize,
+                Url = apiUrl,
                 ApiType = Constants.ApiType.GET
             });
         }

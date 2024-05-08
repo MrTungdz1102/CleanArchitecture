@@ -12,20 +12,30 @@ namespace CleanArchitecture.WebUI.Services.Implementations
         {
             _baseSerivce = baseService;
         }
-        public async Task<ResponseDTO?> GetBookingPieChart()
+        public async Task<ResponseDTO?> GetBookingPieChart(string? ownerId)
         {
+            string apiUrl = Constants.APIUrlBase + "/api/chartAPI/GetBookingPieChart";
+            if (!string.IsNullOrEmpty(ownerId))
+            {
+                apiUrl += $"?ownerId={ownerId}";
+            }
             return await _baseSerivce.SendAsync(new RequestDTO
             {
-                Url = Constants.APIUrlBase + "/api/chartAPI/GetBookingPieChart",
+                Url = apiUrl,
                 ApiType = Constants.ApiType.GET
             });
         }
 
-        public async Task<ResponseDTO?> GetMemberAndBookingLineChart()
+        public async Task<ResponseDTO?> GetMemberAndBookingLineChart(string? ownerId)
         {
+            string apiUrl = Constants.APIUrlBase + "/api/chartAPI/GetMemberAndBookingLineChart";
+            if (!string.IsNullOrEmpty(ownerId))
+            {
+                apiUrl += $"?ownerId={ownerId}";
+            }
             return await _baseSerivce.SendAsync(new RequestDTO
             {
-                Url = Constants.APIUrlBase + "/api/chartAPI/GetMemberAndBookingLineChart",
+                Url = apiUrl,
                 ApiType = Constants.ApiType.GET
             });
         }
@@ -39,20 +49,30 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
-        public async Task<ResponseDTO?> GetRevenueChart()
+        public async Task<ResponseDTO?> GetRevenueChart(string? ownerId)
         {
+            string apiUrl = Constants.APIUrlBase + "/api/chartAPI/GetRevenueChart";
+            if (!string.IsNullOrEmpty(ownerId))
+            {
+                apiUrl += $"?ownerId={ownerId}";
+            }
             return await _baseSerivce.SendAsync(new RequestDTO
             {
-                Url = Constants.APIUrlBase + "/api/chartAPI/GetRevenueChart",
+                Url = apiUrl,
                 ApiType = Constants.ApiType.GET
             });
         }
 
-        public async Task<ResponseDTO?> GetTotalBookingRadialChart()
+        public async Task<ResponseDTO?> GetTotalBookingRadialChart(string? ownerId)
         {
+            string apiUrl = Constants.APIUrlBase + "/api/chartAPI/GetTotalBookingRadialChart";
+            if (!string.IsNullOrEmpty(ownerId))
+            {
+                apiUrl += $"?ownerId={ownerId}";
+            }
             return await _baseSerivce.SendAsync(new RequestDTO
             {
-                Url = Constants.APIUrlBase + "/api/chartAPI/GetTotalBookingRadialChart",
+                Url = apiUrl,
                 ApiType = Constants.ApiType.GET
             });
         }

@@ -10,7 +10,7 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
 {
     public interface IVillaService
     {
-        Task<ResponseDTO> GetAllVilla();
+        Task<ResponseDTO> GetAllVilla(string? userId);
         Task<ResponseDTO> GetVilla(int villaId);
         Task<ResponseDTO> CreateVilla(Villa villa);
         Task<ResponseDTO> UpdateVilla(Villa villa);

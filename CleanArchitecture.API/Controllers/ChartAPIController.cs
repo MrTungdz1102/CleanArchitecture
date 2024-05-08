@@ -18,15 +18,15 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("GetBookingPieChart")]
-        public async Task<ActionResult<ResponseDTO>> GetBookingPieChart()
+        public async Task<ActionResult<ResponseDTO>> GetBookingPieChart(string? ownerId)
         {
-            return Ok(await _chartSerice.GetBookingPieChartData());
+            return Ok(await _chartSerice.GetBookingPieChartData(ownerId));
         }
 
         [HttpGet("GetMemberAndBookingLineChart")]
-        public async Task<ActionResult<ResponseDTO>> GetMemberAndBookingLineChart()
+        public async Task<ActionResult<ResponseDTO>> GetMemberAndBookingLineChart(string? ownerId)
         {
-            return Ok(await _chartSerice.GetMemberAndBookingLineChartData());
+            return Ok(await _chartSerice.GetMemberAndBookingLineChartData(ownerId));
         }
 
         [HttpGet("GetRegisterUserChart")]
@@ -36,15 +36,15 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("GetRevenueChart")]
-        public async Task<ActionResult<ResponseDTO>> GetRevenueChart()
+        public async Task<ActionResult<ResponseDTO>> GetRevenueChart(string? ownerId)
         {
-            return Ok(await _chartSerice.GetRevenueChartData());
+            return Ok(await _chartSerice.GetRevenueChartData(ownerId));
         }
 
         [HttpGet("GetTotalBookingRadialChart")]
-        public async Task<ActionResult<ResponseDTO>> GetTotalBookingRadialChart()
+        public async Task<ActionResult<ResponseDTO>> GetTotalBookingRadialChart(string? ownerId)
         {
-            return Ok(await _chartSerice.GetTotalBookingRadialChartData());
+            return Ok(await _chartSerice.GetTotalBookingRadialChartData(ownerId));
         }
     }
 }

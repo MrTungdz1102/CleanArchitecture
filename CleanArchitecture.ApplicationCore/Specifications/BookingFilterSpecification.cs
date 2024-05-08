@@ -1,30 +1,47 @@
 ﻿using Ardalis.Specification;
 using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.ApplicationCore.Specifications
 {
     public class BookingFilterSpecification : Specification<Booking>
     {
-        public BookingFilterSpecification(string firstStatus, string secondStatus)
+        public BookingFilterSpecification(string firstStatus, string secondStatus, string? ownerId = null)
         {
-            Query.Where(x => x.Status == firstStatus || x.Status == secondStatus);
+            if (ownerId is not null)
+            {
+                Query.Include(x => x.Villa).Where(x => (x.Status == firstStatus || x.Status == secondStatus) && x.Villa.OwnerId == ownerId);
+            }
+            else
+            {
+                Query.Where(x => x.Status == firstStatus || x.Status == secondStatus);
+            }
         }
-        public BookingFilterSpecification(DateTime date, string firstStatus, string secondStatus)
+        public BookingFilterSpecification(DateTime date, string firstStatus, string secondStatus, string? ownerId = null)
         {
-            Query.Where(u => u.BookingDate >= date.AddDays(-30) &&
-           (u.Status != PaymentStatus.StatusPending || u.Status == PaymentStatus.StatusCancelled));
+            if (ownerId is not null)
+            {
+                Query.Include(x => x.Villa).Where(u => u.BookingDate >= date.AddDays(-30) &&
+                                            (u.Status != PaymentStatus.StatusPending 
+                                            || u.Status == PaymentStatus.StatusCancelled) &&                          u.Villa!.OwnerId == ownerId);
+            }
+            else
+            {
+                Query.Where(u => u.BookingDate >= date.AddDays(-30) &&
+                        (u.Status != PaymentStatus.StatusPending 
+                        || u.Status == PaymentStatus.StatusCancelled));
+            }
         }
-        public BookingFilterSpecification(DateTime startTime, DateTime endTime)
+        public BookingFilterSpecification(DateTime startTime, DateTime endTime, string? ownerId = null)
         {
-            Query.Where(x =>x.BookingDate >= startTime && x.BookingDate <= endTime);
+            if (ownerId is not null)
+            {
+                Query.Include(x => x.Villa).Where(x => (x.BookingDate >= startTime && x.BookingDate <= endTime) && x.Villa!.OwnerId == ownerId);
+            }
+            else
+            {
+                Query.Where(x => x.BookingDate >= startTime && x.BookingDate <= endTime);
+            }  
         }
     }
 }

@@ -17,9 +17,9 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("GetAllAmenity")]
-        public async Task<ActionResult<ResponseDTO>> GetAllAmenity([FromQuery] QueryParameter query)
+        public async Task<ActionResult<ResponseDTO>> GetAllAmenity([FromQuery] QueryParameter query, string? userId)
         {
-            return Ok(await _amenityService.GetAllAmenity(query));
+            return Ok(await _amenityService.GetAllAmenity(query, userId));
         }
 
         [HttpGet("GetAmenity/{amenityId:int}")]

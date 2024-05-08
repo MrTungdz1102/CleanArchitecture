@@ -41,11 +41,16 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
-        public async Task<ResponseDTO?> GetAllVilla()
+        public async Task<ResponseDTO?> GetAllVilla(string? userId)
         {
+            string apiUrl = Constants.APIUrlBase + "/api/VillaAPI/GetAllVilla";
+            if (!string.IsNullOrEmpty(userId))
+            {
+                apiUrl += $"?userId={userId}";
+            }
             return await _baseService.SendAsync(new RequestDTO
             {
-                Url = Constants.APIUrlBase + "/api/VillaAPI/GetAllVilla",
+                Url = apiUrl,
                 ApiType = Constants.ApiType.GET
             });
         }

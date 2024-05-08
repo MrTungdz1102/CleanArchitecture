@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Ardalis.Specification;
+using AutoMapper;
 using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Entities.DTOs;
@@ -95,11 +96,19 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetAllVilla()
+        public async Task<ResponseDTO> GetAllVilla(string? userId)
         {
             try
             {
-                _response.Result = await _unitOfWork.villaRepo.ListAsync();
+                if(userId != null)
+                {
+                    var specification = new VillaSpecification(userId);
+                    _response.Result = await _unitOfWork.villaRepo.ListAsync(specification);
+                }
+                else
+                {
+                    _response.Result = await _unitOfWork.villaRepo.ListAsync();
+                }   
             }
             catch (Exception ex)
             {

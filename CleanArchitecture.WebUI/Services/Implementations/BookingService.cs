@@ -23,7 +23,7 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
-        public async Task<ResponseDTO?> GetAllBookingUser(string? userId, string? status)
+        public async Task<ResponseDTO?> GetAllBookingUser(string? userId, string? status, bool isCustomer)
         {
             string apiUrl = Constants.APIUrlBase + "/api/BookingAPI/GetAllBookingUser";
 
@@ -44,6 +44,7 @@ namespace CleanArchitecture.WebUI.Services.Implementations
                 {
                     apiUrl += $"status={status}";
                 }
+                apiUrl += $"&isCustomer={isCustomer}";
             }
             return await _baseService.SendAsync(new RequestDTO
             {

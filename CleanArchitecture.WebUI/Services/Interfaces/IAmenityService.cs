@@ -6,7 +6,7 @@ namespace CleanArchitecture.WebUI.Services.Interfaces
 {
     public interface IAmenityService
     {
-        Task<ResponseDTO?> GetAllAmenity(QueryParameter queryParameter);
+        Task<ResponseDTO?> GetAllAmenity(QueryParameter queryParameter, string? userId);
         Task<ResponseDTO?> GetAmenityById(int id);
         Task<ResponseDTO?> CreateAmenity(Amenity amenity);
         Task<ResponseDTO?> UpdateAmenity(Amenity amenity);
