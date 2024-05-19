@@ -19,9 +19,9 @@ namespace CleanArchitecture.Infrastructure.Payment
         {
             try
             {
-                TimeSpan timeSpan = coupon.EndingDate - coupon.StartingDate;
-                int totalDays = (int)timeSpan.TotalDays;
-                long DurationInMonths = (long)totalDays / 30;
+                //TimeSpan timeSpan = coupon.EndingDate - coupon.StartingDate;
+                //int totalDays = (int)timeSpan.TotalDays;
+                //long DurationInMonths = (long)(totalDays + 30) / 30;
 
                 var options = new Stripe.CouponCreateOptions
                 {
@@ -29,7 +29,7 @@ namespace CleanArchitecture.Infrastructure.Payment
                     Name = coupon.CouponCode,
                     Currency = "USD",
                     Id = coupon.CouponCode,
-                    DurationInMonths = DurationInMonths
+                   // DurationInMonths = DurationInMonths
                 };
                 var service = new Stripe.CouponService();
                 await service.CreateAsync(options);

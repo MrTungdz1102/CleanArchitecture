@@ -1,19 +1,13 @@
-﻿using Ardalis.Specification;
-using AutoMapper;
+﻿using AutoMapper;
 using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Entities.DTOs;
-using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.ApplicationCore.Specifications;
+using CleanArchitecture.ApplicationCore.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.ApplicationCore.Services
 {
@@ -57,7 +51,7 @@ namespace CleanArchitecture.ApplicationCore.Services
                 }
                 _response.Result = await _unitOfWork.villaRepo.AddAsync(villa);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _response.IsSuccess = false;
                 _response.Message = ex.Message;
@@ -88,7 +82,7 @@ namespace CleanArchitecture.ApplicationCore.Services
                     await _unitOfWork.villaRepo.DeleteAsync(deleteVila);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _response.IsSuccess = false;
                 _response.Message = ex.Message;
@@ -100,7 +94,7 @@ namespace CleanArchitecture.ApplicationCore.Services
         {
             try
             {
-                if(userId != null)
+                if (userId != null)
                 {
                     var specification = new VillaSpecification(userId);
                     _response.Result = await _unitOfWork.villaRepo.ListAsync(specification);
@@ -108,7 +102,7 @@ namespace CleanArchitecture.ApplicationCore.Services
                 else
                 {
                     _response.Result = await _unitOfWork.villaRepo.ListAsync();
-                }   
+                }
             }
             catch (Exception ex)
             {
@@ -161,8 +155,8 @@ namespace CleanArchitecture.ApplicationCore.Services
                     villa.ImageUrl = urlFilePath;
                     villa.ImageLocalPath = filePath;
                 }
-                    // _mapper.Map(productDTO, product);
-                    await _unitOfWork.villaRepo.UpdateAsync(villa);
+                // _mapper.Map(productDTO, product);
+                await _unitOfWork.villaRepo.UpdateAsync(villa);
             }
             catch (Exception ex)
             {
@@ -172,20 +166,23 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetAllDetailVilla(int nights, DateOnly checkInDate)
+        public async Task<ResponseDTO> GetAllDetailVilla(int nights, long checkInDate)
         {
             try
             {
+                DateTime dateTime = checkInDate.ToDateTime();
+
+                DateOnly date = DateOnly.FromDateTime(dateTime);
                 List<Villa> villas = await _unitOfWork.villaRepo.ListAsync();
                 List<VillaDTO> villaDTO = _mapper.Map<List<VillaDTO>>(villas);
-                foreach(var villa in villaDTO)
+                foreach (var villa in villaDTO)
                 {
                     var specification = new AmenitySpecification(villa.Id);
                     villa.VillaAmenity = await _unitOfWork.amenityRepo.ListAsync(specification);
                     var villaNumberList = await _unitOfWork.villaNumberRepo.ListAsync();
                     var bookingSpecification = new BookingFilterSpecification(PaymentStatus.StatusApproved, PaymentStatus.StatusCheckedIn);
                     var bookedVilla = await _unitOfWork.bookingRepo.ListAsync(bookingSpecification);
-                    int roomAvailable = _villaNumberService.CountVillaRoomAvailable(villa.Id, villaNumberList, checkInDate, nights, bookedVilla);
+                    int roomAvailable = _villaNumberService.CountVillaRoomAvailable(villa.Id, villaNumberList, date, nights, bookedVilla);
                     villa.IsAvailable = roomAvailable > 0 ? true : false;
                 }
                 _response.Result = villaDTO;
@@ -198,16 +195,19 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> IsVillaAvailableByDate(int villaId, int nights, DateOnly checkInDate)
+        public async Task<ResponseDTO> IsVillaAvailableByDate(int villaId, int nights, long checkInDate)
         {
             try
             {
+                DateTime dateTime = checkInDate.ToDateTime();
+
+                DateOnly date = DateOnly.FromDateTime(dateTime);
                 var villaNumbersList = await _unitOfWork.villaNumberRepo.ListAsync();
-                 var bookingSpecification = new BookingFilterSpecification(PaymentStatus.StatusApproved, PaymentStatus.StatusCheckedIn);
+                var bookingSpecification = new BookingFilterSpecification(PaymentStatus.StatusApproved, PaymentStatus.StatusCheckedIn);
                 var bookedVillas = await _unitOfWork.bookingRepo.ListAsync(bookingSpecification);
                 int roomAvailable = _villaNumberService.CountVillaRoomAvailable
-                    (villaId, villaNumbersList, checkInDate, nights, bookedVillas);
-                _response.IsSuccess = roomAvailable > 0 ? true : false;                
+                    (villaId, villaNumbersList, date, nights, bookedVillas);
+                _response.IsSuccess = roomAvailable > 0 ? true : false;
             }
             catch (Exception ex)
             {

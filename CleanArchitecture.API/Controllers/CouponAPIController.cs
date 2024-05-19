@@ -25,14 +25,14 @@ namespace CleanArchitecture.API.Controllers
             return Ok(await _discountService.GetAllCoupon());
         }
 
-        [HttpGet("GetCouponById/{id:int}")]
+        [HttpGet("GetCouponById/{couponId:int}")]
         public async Task<ActionResult<ResponseDTO>> GetCouponById(int couponId)
         {
             return Ok(await _discountService.GetCouponById(couponId));
         }
 
-        [HttpGet("GetByCode/{code}")]
-        public async Task<ActionResult<ResponseDTO>> GetByCode(string couponCode)
+        [HttpGet("GetCouponByCode/{couponCode}")]
+        public async Task<ActionResult<ResponseDTO>> GetCouponByCode(string couponCode)
         {
             return Ok(await _discountService.GetCouponByCode(couponCode));
         }
@@ -44,13 +44,13 @@ namespace CleanArchitecture.API.Controllers
             return Ok(await _discountService.CreateCoupon(coupon));
         }
 
-        [HttpPut("UpdateCoupon/{id:int}")]
+        [HttpPut("UpdateCoupon")]
         public async Task<ActionResult<ResponseDTO>> UpdateCoupon([FromBody] ApplicationCore.Entities.Coupon coupon)
         {
             return Ok(await _discountService.UpdateCoupon(coupon));
         }
 
-        [HttpDelete("DeleteCoupon/{id:int}")]
+        [HttpDelete("DeleteCoupon/{couponId:int}")]
         public async Task<ActionResult<ResponseDTO>> DeleteCoupon(int couponId)
         {
             return Ok(await _discountService.DeleteCoupon(couponId));

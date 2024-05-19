@@ -1,21 +1,26 @@
 ﻿using CleanArchitecture.WebUI.Models;
 using CleanArchitecture.WebUI.Models.DTOs;
+using CleanArchitecture.WebUI.Models.ViewModel;
 using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Security.Claims;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Constants.Role_Admin)]
     public class VillaController : Controller
     {
         private readonly IVillaService _villaService;
-        public VillaController(IVillaService villaService)
+        private readonly ICityService _cityService;
+
+        public VillaController(IVillaService villaService, ICityService cityService)
         {
             _villaService = villaService;
+            _cityService = cityService;
         }
         public async Task<IActionResult> Index()
         {
@@ -26,7 +31,8 @@ namespace CleanArchitecture.WebUI.Controllers
                 userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
             ResponseDTO? response = await _villaService.GetAllVilla(userId);
-            if (response != null && response.IsSuccess) {
+            if (response != null && response.IsSuccess)
+            {
                 villaList = JsonConvert.DeserializeObject<List<Villa>>(Convert.ToString(response.Result));
             }
             else
@@ -36,15 +42,38 @@ namespace CleanArchitecture.WebUI.Controllers
             }
             return View(villaList);
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            ResponseDTO? response = await _cityService.GetAllCity();
+            List<City> cityList = new List<City>();
+            if (response != null && response.IsSuccess)
+            {
+                cityList = JsonConvert.DeserializeObject<List<City>>(Convert.ToString(response.Result));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+                return RedirectToAction("Index", "Home");
+            }
+            VillaVM villaVM = new VillaVM
+            {
+                CityList = cityList.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                })
+            };
+            return View(villaVM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Villa villa)
+        public async Task<IActionResult> Create(VillaVM villaVM)
         {
-            ResponseDTO? response = await _villaService.CreateVilla(villa);
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                villaVM.Villa.OwnerId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response = await _villaService.CreateVilla(villaVM.Villa);
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Villa created successfully";
@@ -53,28 +82,64 @@ namespace CleanArchitecture.WebUI.Controllers
             else
             {
                 TempData["error"] = response?.Message;
+                response = await _cityService.GetAllCity();
+                List<City> cityList = new List<City>();
+                if (response != null && response.IsSuccess)
+                {
+                    cityList = JsonConvert.DeserializeObject<List<City>>(Convert.ToString(response.Result));
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                    return RedirectToAction("Index", "Home");
+                }
+                villaVM = new VillaVM
+                {
+                    CityList = cityList.Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString()
+                    })
+                };
             }
-            return View(villa);
+            return View(villaVM);
         }
 
         public async Task<IActionResult> Update(int villaId)
         {
             Villa? villa = null;
-            ResponseDTO? response = await _villaService.GetVillaById(villaId);
-            if (response != null && response.IsSuccess)
+            IEnumerable<City> listCity = new List<City>();
+            ResponseDTO? response1 = await _villaService.GetVillaById(villaId);
+            ResponseDTO? response2 = await _cityService.GetAllCity();
+            if ((response1 != null && response1.IsSuccess) && (response2 != null && response2.IsSuccess))
             {
-                villa = JsonConvert.DeserializeObject<Villa>(Convert.ToString(response.Result));
+                villa = JsonConvert.DeserializeObject<Villa>(Convert.ToString(response1.Result));
+                listCity = JsonConvert.DeserializeObject<List<City>>(Convert.ToString(response2.Result));
             }
             else
             {
-                TempData["error"] = response?.Message;
+                TempData["error"] = response1?.Message;
+                TempData["error"] = response2?.Message;
             }
-            return View(villa);
+            VillaVM villaVM = new VillaVM
+            {
+                CityList = listCity.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }),
+                Villa = villa
+            };
+            return View(villaVM);
         }
         [HttpPost]
-        public async Task<IActionResult> Update(Villa villa)
+        public async Task<IActionResult> Update(VillaVM villaVM)
         {
-            ResponseDTO? response = await _villaService.UpdateVilla(villa);
+            if (User.IsInRole(Constants.Role_Customer))
+            {
+                villaVM.Villa.OwnerId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            ResponseDTO? response = await _villaService.UpdateVilla(villaVM.Villa);
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Villa updated successfully";
@@ -83,28 +148,59 @@ namespace CleanArchitecture.WebUI.Controllers
             else
             {
                 TempData["error"] = response?.Message;
+                response = await _cityService.GetAllCity();
+                List<City> cityList = new List<City>();
+                if (response != null && response.IsSuccess)
+                {
+                    cityList = JsonConvert.DeserializeObject<List<City>>(Convert.ToString(response.Result));
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                    return RedirectToAction("Index", "Home");
+                }
+                villaVM = new VillaVM
+                {
+                    CityList = cityList.Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString()
+                    })
+                };
             }
-            return View(villa);
+            return View(villaVM);
         }
         public async Task<IActionResult> Delete(int villaId)
         {
             Villa? villa = null;
-            ResponseDTO? response = await _villaService.GetVillaById(villaId);
-            if (response != null && response.IsSuccess)
+            IEnumerable<City> listCity = new List<City>();
+            ResponseDTO? response1 = await _villaService.GetVillaById(villaId);
+            ResponseDTO? response2 = await _cityService.GetAllCity();
+            if ((response1 != null && response1.IsSuccess) && (response2 != null && response2.IsSuccess))
             {
-                villa = JsonConvert.DeserializeObject<Villa>(Convert.ToString(response.Result));
+                villa = JsonConvert.DeserializeObject<Villa>(Convert.ToString(response1.Result));
+                listCity = JsonConvert.DeserializeObject<List<City>>(Convert.ToString(response2.Result));
             }
             else
             {
-                TempData["error"] = response?.Message;
+                TempData["error"] = response1?.Message;
             }
-            return View(villa);
+            VillaVM villaVM = new VillaVM
+            {
+                CityList = listCity.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }),
+                Villa = villa
+            };
+            return View(villaVM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(Villa villa)
+        public async Task<IActionResult> Delete(VillaVM villaVM)
         {
-            ResponseDTO? response = await _villaService.DeleteVilla(villa.Id);
+            ResponseDTO? response = await _villaService.DeleteVilla(villaVM.Villa.Id);
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Villa deleted successfully";
@@ -114,7 +210,7 @@ namespace CleanArchitecture.WebUI.Controllers
             {
                 TempData["error"] = response?.Message;
             }
-            return View(villa);
+            return View(villaVM);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace CleanArchitecture.WebUI.Controllers
                 PageSize = 7,
                 PageNumber = (page == null || page < 0) ? 1 : page.Value
             };
-            ViewBag.PageNumber = page ?? 0;
+            ViewBag.PageNumber = page ?? 1;
             string? userId = null;
             if (User.IsInRole(Constants.Role_Customer))
             {

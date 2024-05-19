@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿﻿@{
+    var culture = CultureInfo.CurrentCulture.Name;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -13,18 +16,27 @@
     <link rel="stylesheet" href="~/css/spinner.css" asp-append-version="true" />
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="~/css/apexcharts.css" />
-
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow">
-            <div class="container-fluid d-flex justify-content-between">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
+            <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/resort.png" style="width:35px; margin-left: 5%;" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-            </div>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-action="OnGetSetCultureCookie" asp-controller="Home" asp-route-cltr="en" asp-route-returnUrl="@Context.Request.Path" localize-content><span class="fi fi-us" style="margin-right: 5px"></span>@_loc["English"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-action="OnGetSetCultureCookie" asp-controller="Home" asp-route-cltr="vi" asp-route-returnUrl="@Context.Request.Path" localize-content><span class="fi fi-vn" style="margin-right: 5px"></span>@_loc["Vietnamese"]</a>
+                    </li>
+                </ul>
+            </div>   
             @await Html.PartialAsync("_LoginPartialAdmin")
         </nav>
     </header>
@@ -36,83 +48,95 @@
                     <ul class="navbar-nav">
                         <li>
                             <div class="text-mute small fw-bold text-uppercase px-3">
-                                Menu
+                                <localize>Menu</localize>
                             </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
                                 <span class="me-2"><i class="bi bi-speedometer2"></i></span>
-                                <span>Dashboard</span>
+                                <localize>Dashboard</localize>
                             </a>
                         </li>
                         <li>
                             <div class="text-muted small fw-bold text-uppercase px-3 mt-2">
-                                Content Management
+                                <localize>Content Management</localize>
                             </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Villa" asp-action="Index">
                                 <span class="me-2"><i class="bi bi-house-door"></i></span>
-                                <span>Villa</span>
+                                <span localize-content>Hotel</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="VillaNumber" asp-action="Index">
-                                <span class="me-2"><i class="bi bi-list-ol"></i></i></span>
-                                <span>VillaNumber</span>
+                                <span class="me-2"><i class="bi bi-list-ol"></i></span>
+                                <span localize-content>Hotel Room</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Amenity" asp-action="Index">
                                 <span class="me-2"><i class="bi bi-building"></i></span>
-                                <span>Amenity</span>
+                                <span localize-content>Amenity</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Booking" asp-action="Index" >
+                            <a class="nav-link" asp-controller="Booking" asp-action="Index">
                                 <span class="me-2"><i class="bi bi-journal-plus"></i></span>
-                                <span>Booking</span>
+                                <span localize-content>Booking</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Coupon" asp-action="Index">
+                                <span class="me-2"><i class="bi bi-cash-coin"></i></span>
+                                <span localize-content>Coupon</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="City" asp-action="Index">
+                                <span class="me-2"><i class="bi bi-map"></i></i></span>
+                                <span localize-content>City</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Reservation" asp-action="Index">
                                 <span class="me-2"><i class="bi bi-calendar-check"></i></span>
-                                <span>Reservation</span>
+                                <span localize-content>Reservation</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Customer" asp-action="Index">
                                 <span class="me-2"><i class="bi bi-people"></i></span>
-                                <span>Customer</span>
+                                <span localize-content>Customer</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Payment" asp-action="Index">
                                 <span class="me-2"><i class="bi bi-credit-card"></i></span>
-                                <span>Payment</span>
+                                <span localize-content>Payment</span>
                             </a>
                         </li>
                         <li>
-                            <div class="text-muted small fw-bold text-uppercase px-3 mt-2">
-                                System Management
+                            <div class="text-muted small fw-bold text-uppercase px-3 mt-2" >
+                                <localize>System Management</localize>
                             </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="User" asp-action="Index">
                                 <span class="me-2"><i class="bi bi-people-fill"></i></span>
-                                <span>User</span>
+                                <span localize-content>User</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Role" asp-action="Index">
                                 <span class="me-2"><i class="bi bi-award"></i></span>
-                                <span>Role</span>
+                                <span localize-content>Role</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Access" asp-action="Index">
                                 <span class="me-2"><i class="bi bi-door-open"></i></span>
-                                <span>Access</span>
+                                <span localize-content>Access</span>
                             </a>
                         </li>
                     </ul>

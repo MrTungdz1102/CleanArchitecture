@@ -1,7 +1,6 @@
 ﻿using CleanArchitecture.WebUI.Models;
 using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Models.ViewModel;
-using CleanArchitecture.WebUI.Services.Implementations;
 using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -24,9 +23,10 @@ namespace CleanArchitecture.WebUI.Controllers
         private readonly IPaymentService _paymentService;
         private readonly IVillaNumberService _villaNumberService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-		private readonly IEmailService _emailService;
+        private readonly IEmailService _emailService;
+        private readonly ICouponService _couponService;
 
-		public BookingController(IVillaService villaService, IBookingService bookingService, IPaymentService paymentService, IVillaNumberService villaNumberService, IWebHostEnvironment webHostEnvironment, IEmailService emailService)
+        public BookingController(IVillaService villaService, IBookingService bookingService, IPaymentService paymentService, IVillaNumberService villaNumberService, IWebHostEnvironment webHostEnvironment, IEmailService emailService, ICouponService couponService)
         {
             _villaService = villaService;
             _bookingService = bookingService;
@@ -34,8 +34,10 @@ namespace CleanArchitecture.WebUI.Controllers
             _villaNumberService = villaNumberService;
             _webHostEnvironment = webHostEnvironment;
             _emailService = emailService;
+            _couponService = couponService;
 
-		}
+
+        }
 
         public IActionResult Index()
         {
@@ -45,7 +47,7 @@ namespace CleanArchitecture.WebUI.Controllers
         public async Task<IActionResult> CheckIn(Booking booking)
         {
             ResponseDTO? response = await _bookingService.UpdateBookingStatus(booking.Id, Constants.StatusCheckedIn, booking.VillaNumber);
-            if(response is not null && response.IsSuccess)
+            if (response is not null && response.IsSuccess)
             {
                 TempData["success"] = "Booking Updated Successfully.";
                 return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
@@ -91,7 +93,7 @@ namespace CleanArchitecture.WebUI.Controllers
         {
             ResponseDTO? response = await _bookingService.GetBooking(bookingId);
             Booking booking = new Booking();
-            if(response is not null && response.IsSuccess)
+            if (response is not null && response.IsSuccess)
             {
                 booking = JsonConvert.DeserializeObject<Booking>(response.Result.ToString());
             }
@@ -118,7 +120,7 @@ namespace CleanArchitecture.WebUI.Controllers
             {
                 TempData["error"] = response?.Message;
                 return RedirectToAction("Index", "Home");
-            }           
+            }
             Booking booking = new Booking
             {
                 VillaId = villaId,
@@ -148,7 +150,9 @@ namespace CleanArchitecture.WebUI.Controllers
                 TempData["error"] = response?.Message;
                 return RedirectToAction("Index", "Home");
             }
-            response = await _villaService.IsVillaAvailableByDate(villa.Id, booking.Nights, booking.CheckInDate);
+            DateTime dateTime = booking.CheckInDate.ToDateTime(TimeOnly.Parse("10:00 PM"));
+            long date = dateTime.ToUnixTime();
+            response = await _villaService.IsVillaAvailableByDate(villa.Id, booking.Nights, date);
             if (!response.IsSuccess)
             {
                 {
@@ -162,8 +166,25 @@ namespace CleanArchitecture.WebUI.Controllers
                     });
                 }
             }
-            
-            booking.TotalCost = villa.Price * booking.Nights;
+            if (booking.CouponCode is not null)
+            {
+                Coupon? coupon = null;
+                response = await _couponService.GetCouponByCode(booking.CouponCode);
+                if (response is not null && response.IsSuccess)
+                {
+                    coupon = JsonConvert.DeserializeObject<Coupon>(Convert.ToString(response.Result));
+                    booking.TotalCost = villa.Price * booking.Nights - coupon.DiscountAmount;
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
+            }
+            else
+            {
+                booking.TotalCost = villa.Price * booking.Nights;
+            }
+
             booking.Status = Constants.StatusPending;
             booking.BookingDate = DateTime.Now;
             ResponseDTO? response1 = await _bookingService.CreateBooking(booking);
@@ -221,6 +242,17 @@ namespace CleanArchitecture.WebUI.Controllers
                 }
             }
             return View(bookingId);
+        }
+
+        public async Task<IActionResult> ApplyCoupon(string couponCode)
+        {
+            ResponseDTO? response = await _couponService.GetCouponByCode(couponCode);
+            Coupon? coupon = null;
+            if (response.Result is not null && response.IsSuccess)
+            {
+                coupon = JsonConvert.DeserializeObject<Coupon>(response.Result.ToString());
+            }
+            return Json(coupon);
         }
 
         [HttpPost]
@@ -375,8 +407,9 @@ namespace CleanArchitecture.WebUI.Controllers
                 else
                 {
                     TempData["error"] = response?.Message;
-                }            }
-            else if(User.IsInRole(Constants.Role_Customer))
+                }
+            }
+            else if (User.IsInRole(Constants.Role_Customer))
             {
                 userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 ResponseDTO? response = await _bookingService.GetAllBookingUser(userId, status, true);

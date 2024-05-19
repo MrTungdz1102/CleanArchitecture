@@ -26,7 +26,7 @@ namespace CleanArchitecture.WebUI.Controllers
                 PageSize = 7,
                 PageNumber = (page == null || page < 0) ? 1 : page.Value
             };
-            ViewBag.PageNumber = page ?? 0;
+            ViewBag.PageNumber = page ?? 1;
             string? userId = null;
             if (User.IsInRole(Constants.Role_Customer))
             {
@@ -39,13 +39,13 @@ namespace CleanArchitecture.WebUI.Controllers
             {
                 pageResult = JsonConvert.DeserializeObject<PageResult<VillaNumber>>(Convert.ToString(response.Result));
                 villaNumberList = pageResult.Items;
-                ViewBag.TotalCount = (int)Math.Ceiling((double)pageResult.TotalCount/query.PageSize);               
+                ViewBag.TotalCount = (int)Math.Ceiling((double)pageResult.TotalCount / query.PageSize);
             }
             else
             {
                 TempData["error"] = response?.Message;
                 return RedirectToAction("Index", "Home");
-            }   
+            }
             return View(villaNumberList);
         }
         public async Task<IActionResult> Create()
@@ -148,7 +148,7 @@ namespace CleanArchitecture.WebUI.Controllers
         public async Task<IActionResult> Update(VillaNumberVM villaNumberVM)
         {
             ResponseDTO? response = await _villaNumberService.UpdateVillaNumber(villaNumberVM.VillaNumber);
-            if(response != null && response.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "The villa Number has been updated successfully.";
                 return RedirectToAction(nameof(Index));
@@ -175,7 +175,7 @@ namespace CleanArchitecture.WebUI.Controllers
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
-                });   
+                });
             }
             return View(villaNumberVM);
         }

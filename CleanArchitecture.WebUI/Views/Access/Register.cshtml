@@ -7,7 +7,7 @@
         <div class="card-header bg-success bg-gradient ml-0 py-4">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h2 class="py-2 text-white">Register</h2>
+                    <h2 class="py-2 text-white" localize-content>Register</h2>
                 </div>
             </div>
         </div>
@@ -24,22 +24,22 @@
                         </div>
                         <div class="form-floating mb-3 col-md-6">
                             <input asp-for="Name" class="form-control" />
-                            <label asp-for="Name" class="ms-2 text-muted"></label>
+                            <label asp-for="Name" class="ms-2 text-muted" localize-content>Name</label>
                             <span asp-validation-for="Name" class="text-danger" />
                         </div>
                         <div class="form-floating mb-3 col-md-6">
                             <input asp-for="PhoneNumber" class="form-control" />
-                            <label asp-for="PhoneNumber" class="ms-2 text-muted"></label>
+                            <label asp-for="PhoneNumber" class="ms-2 text-muted" localize-content>Phone</label>
                             <span asp-validation-for="PhoneNumber" class="text-danger" />
                         </div>
                         <div class="form-floating mb-3 col-md-6">
                             <input asp-for="Password" class="form-control" />
-                            <label asp-for="Password" class="ms-2 text-muted"></label>
+                            <label asp-for="Password" class="ms-2 text-muted" localize-content>Password</label>
                             <span asp-validation-for="Password" class="text-danger" />
                         </div>
                         <div class="form-floating mb-3 col-md-6">
                             <input asp-for="ConfirmPassword" class="form-control" />
-                            <label asp-for="ConfirmPassword" class="ms-2 text-muted">Confirm Password</label>
+                            <label asp-for="ConfirmPassword" class="ms-2 text-muted" localize-content>Confirm Password</label>
                             <span asp-validation-for="ConfirmPassword" class="text-danger" />
                         </div>
 
@@ -69,7 +69,7 @@
                             <span asp-validation-for="Roles" class="text-danger" />
                         </div> *@
                         <div class="col-12">
-                            <button type="submit" class="w-100 btn btn-lg btn-outline-success">Register</button>
+                            <button type="submit" class="w-100 btn btn-lg btn-outline-success" localize-content>Register</button>
                         </div>
                     </form> 
                 </div>

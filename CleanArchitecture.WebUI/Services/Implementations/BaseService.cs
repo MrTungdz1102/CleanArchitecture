@@ -91,7 +91,7 @@ namespace CleanArchitecture.WebUI.Services.Implementations
                     case HttpStatusCode.InternalServerError:
                         return new() { IsSuccess = false, Message = "Internal Server Error" };
                     case HttpStatusCode.BadRequest:
-                        return new() { IsSuccess = false, Message = "Bad Request" };
+                        return new() { IsSuccess = false, Message = "Bad Request " + responseMessage.ReasonPhrase };
                     default:
                         var apiContent = await responseMessage.Content.ReadAsStringAsync();
                         var apiResponseDto = JsonConvert.DeserializeObject<ResponseDTO>(apiContent);

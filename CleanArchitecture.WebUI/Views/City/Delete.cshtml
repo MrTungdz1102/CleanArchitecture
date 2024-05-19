@@ -1,0 +1,66 @@
+﻿@model CleanArchitecture.WebUI.Models.City
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="w-100 card border-0 p-4">
+    <div class="card-header bg-success bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2" localize-content>Delete City</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body border p-4">
+        <form method="post" class="row">
+            <input asp-for="Id" hidden />
+            <div class="row">
+                <div class="col-2 offset-2">
+                    <label class="control-label pt-2" style="font-size:20px;" localize-content> City Name</label>
+                </div>
+                <div class="col-4 pb-3">
+                    <input asp-for="Name" disabled class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2 offset-2">
+                    <label class="control-label pt-2" style="font-size:20px;" localize-content>Postal Code</label>
+                </div>
+                <div class="col-4 pb-3">
+                    <input asp-for="PostOffice" disabled class="form-control" />
+                    <span asp-validation-for="PostOffice" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2 offset-2">
+                    <label class="control-label pt-2" style="font-size:20px;" localize-content>Country Name</label>
+                </div>
+                <div class="col-4 pb-3">
+                    <input asp-for="CountryName" disabled class="form-control" />
+                    <span asp-validation-for="CountryName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2 offset-4">
+
+                    <a asp-action="Index" class="btn-secondary btn form-control " localize-content>Back To List</a>
+                </div>
+                <div class="col-2">
+                    <button type="submit" class="btn btn-danger form-control" localize-content>Delete</button>
+
+                </div>
+            </div>
+
+            <div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+

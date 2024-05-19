@@ -1,0 +1,471 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Access" xml:space="preserve">
+    <value>Quyền Truy Cập</value>
+  </data>
+  <data name="Actual Check-in Date" xml:space="preserve">
+    <value>Ngày Nhận Phòng Thực Tế</value>
+  </data>
+  <data name="Actual Check-out Date" xml:space="preserve">
+    <value>Ngày Trả Phòng Thực Tế</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Tất Cả</value>
+  </data>
+  <data name="Amenity" xml:space="preserve">
+    <value>Tiện Ích</value>
+  </data>
+  <data name="Amenity List" xml:space="preserve">
+    <value>Danh Sách Tiện Ích</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Áp Dụng</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Đã Thanh Toán</value>
+  </data>
+  <data name="Back to Bookings" xml:space="preserve">
+    <value>Trở Lại Đặt Phòng</value>
+  </data>
+  <data name="Back To List" xml:space="preserve">
+    <value>Trở Lại</value>
+  </data>
+  <data name="Book" xml:space="preserve">
+    <value>Đặt Phòng</value>
+  </data>
+  <data name="Booking" xml:space="preserve">
+    <value>Đơn Đặt</value>
+  </data>
+  <data name="Booking Date" xml:space="preserve">
+    <value>Ngày Đặt</value>
+  </data>
+  <data name="Booking List" xml:space="preserve">
+    <value>Danh Sách Đơn Đặt</value>
+  </data>
+  <data name="Booking Total" xml:space="preserve">
+    <value>Tổng Tiền Đơn Đặt</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="Cancel Booking" xml:space="preserve">
+    <value>Hủy Đặt Phòng</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Đã Hủy</value>
+  </data>
+  <data name="Check Availability" xml:space="preserve">
+    <value>Kiểm Tra Phòng</value>
+  </data>
+  <data name="Check In" xml:space="preserve">
+    <value>Nhận Phòng</value>
+  </data>
+  <data name="Check In Date" xml:space="preserve">
+    <value>Ngày Nhận Phòng</value>
+  </data>
+  <data name="Check Out / Complete Booking" xml:space="preserve">
+    <value>Trả Phòng</value>
+  </data>
+  <data name="Check Out Date" xml:space="preserve">
+    <value>Ngày Trả Phòng</value>
+  </data>
+  <data name="CheckedIn" xml:space="preserve">
+    <value>Đã Đến</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Thành Phố</value>
+  </data>
+  <data name="City List" xml:space="preserve">
+    <value>Danh Sách Thành Phố</value>
+  </data>
+  <data name="City Name" xml:space="preserve">
+    <value>Tên Thành Phố</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Đã Hoàn Thành</value>
+  </data>
+  <data name="Confirm Password" xml:space="preserve">
+    <value>Xác Nhận Mật Khẩu</value>
+  </data>
+  <data name="Content Management" xml:space="preserve">
+    <value>QUẢN LÝ NỘI DUNG</value>
+  </data>
+  <data name="Country Name" xml:space="preserve">
+    <value>Quốc Gia</value>
+  </data>
+  <data name="Coupon" xml:space="preserve">
+    <value>Mã Giảm Giá</value>
+  </data>
+  <data name="Coupon Code" xml:space="preserve">
+    <value>Mã Giảm Giá</value>
+  </data>
+  <data name="Coupon List" xml:space="preserve">
+    <value>Danh Sách Mã Giảm Giá</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Thêm</value>
+  </data>
+  <data name="Create Amenity" xml:space="preserve">
+    <value>Thêm Tiện Ích</value>
+  </data>
+  <data name="Create New Amenity" xml:space="preserve">
+    <value>Thêm Mới Tiện Ích</value>
+  </data>
+  <data name="Create New City" xml:space="preserve">
+    <value>Tạo Mới Thành Phố</value>
+  </data>
+  <data name="Create New Coupon" xml:space="preserve">
+    <value>Tạo Mới Mã Giảm Giá</value>
+  </data>
+  <data name="Create New Hotel" xml:space="preserve">
+    <value>Tạo Mới Khách Sạn</value>
+  </data>
+  <data name="Create New Room" xml:space="preserve">
+    <value>Tạo Phòng Mới</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Khách Hàng</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Bảng Điều Khiển</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
+  <data name="Delete Amenity" xml:space="preserve">
+    <value>Xóa Tiện Ích</value>
+  </data>
+  <data name="Delete City" xml:space="preserve">
+    <value>Xóa Thành Phố</value>
+  </data>
+  <data name="Delete Coupon" xml:space="preserve">
+    <value>Xóa Mã Giảm Giá</value>
+  </data>
+  <data name="Delete Hotel" xml:space="preserve">
+    <value>Xóa Khách Sạn</value>
+  </data>
+  <data name="Delete Room" xml:space="preserve">
+    <value>Xóa Phòng</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Mô Tả</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Chi Tiết</value>
+  </data>
+  <data name="Discount Amount" xml:space="preserve">
+    <value>Số Tiền Chiết Khấu</value>
+  </data>
+  <data name="Download PPT" xml:space="preserve">
+    <value>Tải Xuống PPT</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Sửa</value>
+  </data>
+  <data name="Ending Date" xml:space="preserve">
+    <value>Ngày Kết Thúc</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>Tiếng Anh</value>
+  </data>
+  <data name="Enter Booking Details" xml:space="preserve">
+    <value>Thông Tin Chi Tiết Đơn Đặt</value>
+  </data>
+  <data name="Explore Nearby City" xml:space="preserve">
+    <value>Khám Phá Các Thành Phố</value>
+  </data>
+  <data name="Forgot your password?" xml:space="preserve">
+    <value>Quên Mật Khẩu</value>
+  </data>
+  <data name="Generate Invoice" xml:space="preserve">
+    <value>Tạo Hóa Đơn</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Xin Chào</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Trang Chủ</value>
+  </data>
+  <data name="Hotel" xml:space="preserve">
+    <value>Khách Sạn</value>
+  </data>
+  <data name="Hotel Details" xml:space="preserve">
+    <value>Chi Tiết Khách Sạn</value>
+  </data>
+  <data name="Hotel List" xml:space="preserve">
+    <value>Danh Sách Khách Sạn</value>
+  </data>
+  <data name="Hotel Name" xml:space="preserve">
+    <value>Tên Khách Sạn</value>
+  </data>
+  <data name="Hotel Room" xml:space="preserve">
+    <value>Phòng</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Đăng Nhập</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Đăng Xuất</value>
+  </data>
+  <data name="Looks Good! Checkout Now" xml:space="preserve">
+    <value>Đặt Phòng Ngay</value>
+  </data>
+  <data name="Manage Booking" xml:space="preserve">
+    <value>Quản Lý Đơn Đặt</value>
+  </data>
+  <data name="Minimum Amount" xml:space="preserve">
+    <value>Số Tiền Tối Thiểu</value>
+  </data>
+  <data name="Modify Selection" xml:space="preserve">
+    <value>Chỉnh Sửa Đơn Đặt</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Tiếp Theo</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Số Đêm</value>
+  </data>
+  <data name="No. of nights" xml:space="preserve">
+    <value>Số Đêm Ở</value>
+  </data>
+  <data name="Occupancy" xml:space="preserve">
+    <value>Sức Chứa</value>
+  </data>
+  <data name="Pack your bags! You are one step closer to an amazing vacation!" xml:space="preserve">
+    <value>Chúc quý khách có một kì nghỉ dưỡng vui vẻ!</value>
+  </data>
+  <data name="Participant People" xml:space="preserve">
+    <value>Số Người</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Mật Khẩu</value>
+  </data>
+  <data name="Payment" xml:space="preserve">
+    <value>Thanh Toán</value>
+  </data>
+  <data name="Payment Date" xml:space="preserve">
+    <value>Ngày Thanh Toán</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Đang Chờ</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Số Điện Thoại</value>
+  </data>
+  <data name="Postal Code" xml:space="preserve">
+    <value>Mã Bưu Điện</value>
+  </data>
+  <data name="PostOffice" xml:space="preserve">
+    <value>Mã Bưu Điện</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Trước</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Giá</value>
+  </data>
+  <data name="Price per night" xml:space="preserve">
+    <value>Giá mỗi đêm</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Đăng Ký</value>
+  </data>
+  <data name="Register as a new user" xml:space="preserve">
+    <value>Đăng Ký Tài Khoản Mới</value>
+  </data>
+  <data name="Remember Me" xml:space="preserve">
+    <value>Nhớ Mật Khẩu</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Gỡ</value>
+  </data>
+  <data name="Reservation" xml:space="preserve">
+    <value>Đặt Trước</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Vai Trò</value>
+  </data>
+  <data name="Room" xml:space="preserve">
+    <value>Phòng</value>
+  </data>
+  <data name="Room List" xml:space="preserve">
+    <value>Danh Sách Phòng</value>
+  </data>
+  <data name="Sold Out" xml:space="preserve">
+    <value>Hết Phòng</value>
+  </data>
+  <data name="Special Details" xml:space="preserve">
+    <value>Chi Tiết</value>
+  </data>
+  <data name="SquareFeet" xml:space="preserve">
+    <value>Diện Tích</value>
+  </data>
+  <data name="Starting Date" xml:space="preserve">
+    <value>Ngày Bắt Đầu</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Trạng Thái</value>
+  </data>
+  <data name="System Management" xml:space="preserve">
+    <value>QUẢN LÝ HỆ THỐNG</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Tổng</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Cập Nhật</value>
+  </data>
+  <data name="Update Amenity" xml:space="preserve">
+    <value>Cập Nhật Tiện Ích</value>
+  </data>
+  <data name="Update City" xml:space="preserve">
+    <value>Cập Nhật Thành Phố</value>
+  </data>
+  <data name="Update Coupon" xml:space="preserve">
+    <value>Cập Nhật Mã Giảm Giá</value>
+  </data>
+  <data name="Update Hotel" xml:space="preserve">
+    <value>Cập Nhật Khách Sạn</value>
+  </data>
+  <data name="Update Room" xml:space="preserve">
+    <value>Cập Nhật Phòng</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Người Dùng</value>
+  </data>
+  <data name="Vietnamese" xml:space="preserve">
+    <value>Tiếng Việt</value>
+  </data>
+  <data name="You can view all order details in Manage Order Section." xml:space="preserve">
+    <value>Quý khách có thể xem thông tin chỉ tiết đơn đặt trong mục Quản Lý Đơn Đặt.</value>
+  </data>
+  <data name="Your Order Number is" xml:space="preserve">
+    <value>Mã Đơn Đặt Của Quý Khách Là</value>
+  </data>
+  <data name="Your Vacation is Confirmed!" xml:space="preserve">
+    <value>Đơn Đặt Phòng Của Bạn Đã Được Xác Nhận!</value>
+  </data>
+</root>

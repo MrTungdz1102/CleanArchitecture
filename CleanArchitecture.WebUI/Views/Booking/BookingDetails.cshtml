@@ -10,11 +10,11 @@
         <div class="col-12 col-lg-6 p-4 2 mt-2 mt-md-0">
             <div class="row p-1 " style="border-radius:20px; ">
                 <div class="col-6">
-                    <h3 class="text-success">Villa Details</h3>
+                    <h3 class="text-success" localize-content>Hotel Details</h3>
                 </div>
                 <div class="col-6 text-end">
                     <a class="btn btn-secondary my-2"
-                       asp-controller="Booking" asp-action="Index"><i class="bi bi-arrow-left-circle"></i> Back to Bookings</a>
+                       asp-controller="Booking" asp-action="Index"><i class="bi bi-arrow-left-circle"></i> <localize>Back to Bookings</localize> </a>
                 </div>
                 <hr />
                 @await Html.PartialAsync("_VillaDetailPartial", @Model.Villa)
@@ -37,13 +37,13 @@
                             <button asp-action="GenerateInvoice" asp-route-id="@Model.Id"
                                     asp-route-downloadType="word" type="submit"
                                     class="btn btn-sm btn-secondary my-1">
-                                <i class="bi bi-file-earmark-word"></i> Generate Invoice (word)
+                                <i class="bi bi-file-earmark-word"></i> <localize>Generate Invoice</localize> (word)
                             </button>
 
                             <button asp-action="GenerateInvoice" asp-route-id="@Model.Id"
                                     asp-route-downloadType="pdf" type="submit"
                                     class="btn btn-sm btn-secondary my-1">
-                                <i class="bi bi-file-earmark-pdf"></i> Generate Invoice (pdf)
+                                <i class="bi bi-file-earmark-pdf"></i> <localize>Generate Invoice</localize> (pdf)
                             </button>
 
                         </div>
@@ -62,25 +62,25 @@
                 <input asp-for="Nights" hidden />
                 <div class="row pt-1 mb-3 " style="border-radius:20px; ">
                     <div class="col-6">
-                        <h3 class="text-success">Enter Booking Details</h3>
+                        <h3 class="text-success" localize-content>Enter Booking Details</h3>
                     </div>
                     <div class="col-6">
                         @if ((Model.Status == Constants.StatusApproved || Model.Status == Constants.StatusPending)
                         && (User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Customer)))
                         {
                             <button type="submit" asp-controller="Booking" asp-action="CancelBooking" class="btn btn-sm btn-outline-danger form-control my-1">
-                                <i class="bi bi-x-circle"></i> &nbsp; Cancel Booking
+                                <i class="bi bi-x-circle"></i> &nbsp; <localize>Cancel Booking</localize>
                             </button>
                         }
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group pt-2 col-6">
-                        <label class="text-warning">Name</label>
+                        <label class="text-warning" localize-content>Name</label>
                         <input asp-for="Name" class="form-control" />
                     </div>
                     <div class="form-group pt-2 col-6">
-                        <label class="text-warning">Phone</label>
+                        <label class="text-warning" localize-content>Phone</label>
                         <input asp-for="Phone" class="form-control" />
                     </div>
                     <div class="form-group pt-2 col-6">
@@ -89,39 +89,48 @@
                     </div>
 
                     <div class="form-group pt-2 col-6">
-                        <label class="text-warning">No. of nights</label>
+                        <label class="text-warning" localize-content>No. of nights</label>
                         <input asp-for="Nights" disabled class="form-control" />
                     </div>
                     <div class="form-group pt-2 col-6">
-                        <label class="text-warning">Status</label>
+                        <label class="text-warning" localize-content>Status</label>
                         <input asp-for="Status" disabled class="form-control" />
                     </div>
                     <div class="form-group pt-2 col-6">
-                        <label class="text-warning">Booking Date</label>
+                        <label class="text-warning" localize-content>Booking Date</label>
                         <input asp-for="BookingDate" disabled class="form-control" />
                     </div>
                     <div class="form-group pt-2 col-6">
-                        <label class="text-warning">Check-in Date</label>
+                        <label class="text-warning" localize-content>Check In Date</label>
                         <input asp-for="CheckInDate" disabled class="form-control" />
                     </div>
                     <div class="form-group pt-2 col-6">
-                        <label class="text-warning">Actual Check-in Date</label>
+                        <label class="text-warning" localize-content>Actual Check-in Date</label>
                         <input asp-for="ActualCheckInDate" disabled class="form-control" />
                     </div>
 
 
                     <div class="form-group pt-2 col-6">
-                        <label class="text-warning">Check-out Date</label>
+                        <label class="text-warning" localize-content>Check Out Date</label>
                         <input asp-for="CheckOutDate" disabled class="form-control" />
                     </div>
                     <div class="form-group pt-2 col-6">
-                        <label class="text-warning">Actual Check-out Date</label>
+                        <label class="text-warning" localize-content>Actual Check-out Date</label>
                         <input asp-for="ActualCheckOutDate" disabled class="form-control" />
+                    </div>
+                    <div class="form-group pt-2 col-6">
+                        <label class="text-warning" localize-content>Participant People</label>
+                        <input asp-for="Participants" disabled class="form-control" />
+                    </div>
+
+                    <div class="form-group pt-2 col-6">
+                        <label class="text-warning" localize-content>Coupon Code</label>
+                        <input asp-for="CouponCode" disabled class="form-control" />
                     </div>
                     @if (Model.Status == Constants.StatusApproved && User.IsInRole(Constants.Role_Admin))
                     {
                         <div class="form-group pt-2 col-6">
-                            <label class="text-danger" asp-for="VillaNumber"></label>
+                            <label class="text-danger" asp-for="VillaNumber" localize-content>Room</label>
 
                             <select class="form-select" asp-for="VillaNumber">
                                 @foreach (var item in Model.VillaNumbers)
@@ -137,7 +146,7 @@
                         @if (Model.Status == Constants.StatusCheckedIn || Model.Status == Constants.StatusCompleted)
                         {
                             <div class="form-group pt-2 col-6">
-                                <label class="text-warning">Villa Number</label>
+                                <label class="text-warning" localize-content>Room</label>
                                 <input asp-for="VillaNumber" disabled class="form-control" />
                             </div>
                         }
@@ -154,12 +163,12 @@
                             <input asp-for="StripeSessionId" disabled class="form-control" />
                         </div>
                         <div class="form-group pt-2 col-6">
-                            <label class="text-warning">Payment Date</label>
+                            <label class="text-warning" localize-content>Payment Date</label>
                             <input asp-for="PaymentDate" disabled class="form-control" />
                         </div>
                     }
                     <div class="form-group pt-2 col-6">
-                        <label class="text-warning">Status</label>
+                        <label class="text-warning" localize-content>Status</label>
                         <input asp-for="Status" disabled class="form-control" />
                     </div>
                 </div>
@@ -170,14 +179,14 @@
                         {
                             <button type="submit" asp-controller="Booking" asp-action="CheckIn"
                                     class="btn btn-warning form-control my-1">
-                                <i class="bi bi-check2-square"></i> &nbsp; Check In
+                                <i class="bi bi-check2-square"></i> &nbsp; <localize>Check In</localize>
                             </button>
                         }
                         @if (Model.Status == Constants.StatusCheckedIn)
                         {
                             <button type="submit" asp-controller="Booking" asp-action="CheckOut"
                                     class="btn btn-success form-control my-1">
-                                <i class="bi bi-clipboard2-check"></i> &nbsp; Check Out / Complete Booking
+                                <i class="bi bi-clipboard2-check"></i> &nbsp; <localize>Check Out / Complete Booking</localize>
                             </button>
                         }
                     }

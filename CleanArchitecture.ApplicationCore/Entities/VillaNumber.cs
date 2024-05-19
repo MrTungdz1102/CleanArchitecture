@@ -20,8 +20,8 @@ namespace CleanArchitecture.ApplicationCore.Entities
         public int VillaId { get; set; }
         public Villa? Villa { get; set; }
         public string? SpecialDetails { get; set; }
-        public int AdultCapacity { get; set; }
-        public int ChildCapacity { get; set; }
+        //public int AdultCapacity { get; set; }
+        //public int ChildCapacity { get; set; }
      //   public double PricePerNight { get; set; }
     }
 }

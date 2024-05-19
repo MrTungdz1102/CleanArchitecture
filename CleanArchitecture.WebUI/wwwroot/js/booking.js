@@ -5,6 +5,10 @@ $(document).ready(function () {
     const urlParams = new URLSearchParams(window.location.search);
     var status = urlParams.get('status');
     loadDataTable(status);
+    $.fn.dataTable.ext.errMode = function (obj, param, err) {
+        var tableId = obj.sTableId;
+        console.log('Handling DataTable issue of Table ' + tableId);
+    };
 });
 
 

@@ -32,7 +32,7 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
-        public async Task<ResponseDTO?> GetAllDetailVilla(int nights, DateOnly checkInDate)
+        public async Task<ResponseDTO?> GetAllDetailVilla(int nights, long checkInDate)
         {
             return await _baseService.SendAsync(new RequestDTO
             {
@@ -64,7 +64,7 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
-        public async Task<ResponseDTO?> IsVillaAvailableByDate(int villaId, int nights, DateOnly checkInDate)
+        public async Task<ResponseDTO?> IsVillaAvailableByDate(int villaId, int nights, long checkInDate)
         {
             return await _baseService.SendAsync(new RequestDTO
             {

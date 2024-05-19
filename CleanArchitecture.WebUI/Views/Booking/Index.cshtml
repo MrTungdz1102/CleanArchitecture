@@ -40,7 +40,7 @@
     <div class="card-header bg-success bg-gradient ml-0 py-3">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-white py-2">Booking List</h2>
+                <h2 class="text-white py-2" localize-content>Booking List</h2>
             </div>
         </div>
     </div>
@@ -49,26 +49,26 @@
             <ul class="list-group list-group-horizontal-sm">
                 <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index"
                     asp-route-status="@Constants.StatusPending">
-                <li class="list-group-item @pending"> @Constants.StatusPending </li>
+                <li class="list-group-item @pending" localize-content> @Constants.StatusPending </li>
                 </a>
                 <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index"
                    asp-route-status="@Constants.StatusApproved">
-                <li class="list-group-item @approved"> @Constants.StatusApproved </li>
+                <li class="list-group-item @approved" localize-content> @Constants.StatusApproved </li>
                 </a>
                 <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index"
                    asp-route-status="@Constants.StatusCheckedIn">
-                <li class="list-group-item @checkedIn"> @Constants.StatusCheckedIn </li>
+                <li class="list-group-item @checkedIn" localize-content> @Constants.StatusCheckedIn </li>
                 </a>
                 <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index"
                    asp-route-status="@Constants.StatusCompleted">
-                <li class="list-group-item @completed"> @Constants.StatusCompleted </li>
+                <li class="list-group-item @completed" localize-content> @Constants.StatusCompleted </li>
                 </a>
                 <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index"
                    asp-route-status="@Constants.StatusCancelled">
-                <li class="list-group-item @cancelled"> @Constants.StatusCancelled </li>
+                <li class="list-group-item @cancelled" localize-content> @Constants.StatusCancelled </li>
                 </a>
                 <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index">
-                <li class="list-group-item"> All </li>
+                <li class="list-group-item" localize-content> All </li>
                 </a>
             </ul>
         </div>
@@ -76,13 +76,13 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Phone</th>
+                    <th localize-content>Name</th>
+                    <th localize-content>Phone</th>
                     <th>Email</th>
-                    <th>Status</th>
-                    <th>Check In Date</th>
-                    <th>Nights</th>
-                    <th>Total</th>
+                    <th localize-content>Status</th>
+                    <th localize-content>Check In Date</th>
+                    <th localize-content>Nights</th>
+                    <th localize-content>Total</th>
                     <th></th>
                 </tr>
             </thead>

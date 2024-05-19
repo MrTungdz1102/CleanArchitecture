@@ -2,12 +2,14 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+﻿@{
+    var culture = CultureInfo.CurrentCulture.Name;
+}
 <div class="w-100 card border-0 p-4">
     <div class="card-header bg-success bg-gradient ml-0 py-3">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-white py-2">Villa Number List</h2>
+                <h2 class="text-white py-2" localize-content>Room List</h2>
             </div>
         </div>
     </div>
@@ -15,7 +17,7 @@
         <div class="row pb-3">
             <div class="col-6 offset-6 text-end">
                 <a asp-controller="VillaNumber" asp-action="Create" class="btn btn-secondary">
-                    <i class="bi bi-plus-circle"></i> Create New Villa Number
+                    <i class="bi bi-plus-circle"></i> <localize>Create New Room</localize>
                 </a>
             </div>
         </div>
@@ -23,11 +25,11 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>
-                        Villa Name
+                    <th localize-content>
+                        Hotel Name
                     </th>
-                    <th>Villa Number</th>
-                    <th>Speical Details</th>
+                    <th localize-content>Room</th>
+                    <th localize-content>Speical Details</th>
                     <th></th>
                 </tr>
             </thead>
@@ -42,11 +44,11 @@
                             <div class="w-75 btn-group" role="group">
                                 <a asp-controller="VillaNumber" asp-action="Update" asp-route-villaNumberId="@obj.Villa_Number"
                                    class="btn btn-success mx-2">
-                                    <i class="bi bi-pencil-square"></i> Edit
+                                    <i class="bi bi-pencil-square"></i> <localize>Edit</localize>
                                 </a>
                                 <a asp-controller="VillaNumber" asp-action="Delete" asp-route-villaNumberId="@obj.Villa_Number"
                                    class="btn btn-danger mx-2">
-                                    <i class="bi bi-trash-fill"></i> Delete
+                                    <i class="bi bi-trash-fill"></i><localize>Delete</localize>
                                 </a>
                             </div>
                         </td>
@@ -58,7 +60,7 @@
             <ul class="pagination">
                 @if(ViewBag.PageNumber > 1)
                 {
-                    <li class="page-item"><a class="page-link" href="/VillaNumber/Index?page=@(ViewBag.PageNumber - 1)">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="/VillaNumber/Index?page=@(ViewBag.PageNumber - 1)" localize-content>Previous</a></li>
                 }
                 @for (int i = 1; i <= ViewBag.TotalCount; i++)
                 {
@@ -66,7 +68,7 @@
                 }
                 @if (ViewBag.PageNumber < ViewBag.TotalCount)
                 {
-                    <li class="page-item"><a class="page-link" href="/VillaNumber/Index?page=@(ViewBag.PageNumber + 1)">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="/VillaNumber/Index?page=@(ViewBag.PageNumber + 1)" localize-content>Next</a></li>
                 }
             </ul>
         </nav>

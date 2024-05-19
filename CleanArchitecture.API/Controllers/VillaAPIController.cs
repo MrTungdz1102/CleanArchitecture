@@ -1,16 +1,13 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
-using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
- //   [Authorize]
+    //   [Authorize]
     public class VillaAPIController : ControllerBase
     {
         private readonly IVillaService _villaService;
@@ -28,7 +25,7 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("GetAllVilla")]
-        
+
         public async Task<ActionResult<ResponseDTO>> GetAllVilla(string? userId)
         {
             return Ok(await _villaService.GetAllVilla(userId));
@@ -53,13 +50,13 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("GetAllDetailVilla")]
-        public async Task<ActionResult<ResponseDTO>> GetAllDetailVilla(int nights, DateOnly checkInDate)
+        public async Task<ActionResult<ResponseDTO>> GetAllDetailVilla(int nights, long checkInDate)
         {
             return Ok(await _villaService.GetAllDetailVilla(nights, checkInDate));
         }
 
         [HttpGet("IsVillaAvailableByDate")]
-        public async Task<ActionResult<ResponseDTO>> IsVillaAvailableByDate(int villaId, int nights, DateOnly checkInDate)
+        public async Task<ActionResult<ResponseDTO>> IsVillaAvailableByDate(int villaId, int nights, long checkInDate)
         {
             return Ok(await _villaService.IsVillaAvailableByDate(villaId, nights, checkInDate));
         }

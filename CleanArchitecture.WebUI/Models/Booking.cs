@@ -41,6 +41,11 @@ namespace CleanArchitecture.WebUI.Models
         public DateTime ActualCheckInDate { get; set; }
         public DateTime ActualCheckOutDate { get; set; }
 
+		public string? CouponCode { get; set; }
+
+        [RegularExpression("^[0-9]*$", ErrorMessage = "The Participants must is an integer number")]
+        public int Participants { get; set; }
+
         public int VillaNumber { get; set; }
         [ValidateNever]
         public ICollection<VillaNumber>? VillaNumbers { get; set; }

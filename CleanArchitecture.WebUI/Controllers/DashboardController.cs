@@ -10,7 +10,7 @@ namespace CleanArchitecture.WebUI.Controllers
 {
     public class DashboardController : Controller
     {
-        private readonly IChartService _chartService;   
+        private readonly IChartService _chartService;
 
         public DashboardController(IChartService chartService)
         {
@@ -28,7 +28,7 @@ namespace CleanArchitecture.WebUI.Controllers
                 userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
             ResponseDTO? response = await _chartService.GetMemberAndBookingLineChart(userId);
-            if(response is not null && response.IsSuccess)
+            if (response is not null && response.IsSuccess)
             {
                 LineChart lineChart = JsonConvert.DeserializeObject<LineChart>(response.Result.ToString());
                 return Json(lineChart);

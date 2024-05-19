@@ -1,7 +1,9 @@
-﻿@model CleanArchitecture.WebUI.Models.ViewModel.HomeVM
+﻿
+@model CleanArchitecture.WebUI.Models.ViewModel.HomeVM
 @{
     ViewData["Title"] = "Home Page";
 }
+
 <div>
     <div id="carouselExampleIndicators" class="carousel slide">
         <div class="carousel-indicators">
@@ -32,155 +34,38 @@
 		<!-- Title -->
 		<div class="row mb-4">
 			<div class="col-12 text-center">
-				<h2 style="font-size: calc(1.425rem + 2.1vw)" class="mb-0">Explore Nearby City</h2>
+				<h2 style="font-size: calc(1.425rem + 2.1vw)" class="mb-0" localize-content>Explore Nearby City</h2>
 			</div>
 		</div>
 
 		<div class="row g-4 g-md-5">
 			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/01.jpg" class="rounded-circle" alt="">
+            @{
+                int i = 1;
 
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" style="color: var(--bs-gray-900);text-decoration: none;" class="stretched-link">San Francisco</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
-			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/02.jpg" class="rounded-circle" alt="">
+                @foreach (var item in Model.CityList)
+                {
+                    string scr = "";
+                    // Đặt lại i về 1 nếu i vượt quá 11
+                    if (i > 11)
+                    {
+                        i = 1;
+                    }
 
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" class="stretched-link">Los Angeles</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
-			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/03.jpg" class="rounded-circle" alt="">
+                    scr = "/images/0" + @i + ".jpg";
+                    i++;
 
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" class="stretched-link">Miami</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
-			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/04.jpg" class="rounded-circle" alt="">
-
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" class="stretched-link">Sanjosh</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
-			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/05.jpg" class="rounded-circle" alt="">
-
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" class="stretched-link">New York</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
-			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/06.jpg" class="rounded-circle" alt="">
-
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" class="stretched-link">North Justen</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
-			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/07.jpg" class="rounded-circle" alt="">
-
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" class="stretched-link">Rio</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
-			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/08.jpg" class="rounded-circle" alt="">
-
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" class="stretched-link">Las Vegas</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
-			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/09.jpg" class="rounded-circle" alt="">
-
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" class="stretched-link">Texas</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
-			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/10.jpg" class="rounded-circle" alt="">
-
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" class="stretched-link">Chicago</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
-			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/11.jpg" class="rounded-circle" alt="">
-
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" class="stretched-link">New Keagan</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
-			<!-- Card item START -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card bg-transparent text-center p-1 h-100">
-					<!-- Image -->
-					<img src="~/images/01.jpg" class="rounded-circle" alt="">
-
-					<div class="card-body p-0 pt-3">
-						<h5 class="card-title"><a href="#" class="stretched-link">Oslo</a></h5>
-					</div>
-				</div>
-			</div>
-			<!-- Card item END -->
+                    <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                        <div class="card bg-transparent text-center p-1 h-100">
+                            <!-- Image -->
+                            <img src="@scr" class="rounded-circle" alt="">
+                            <div class="card-body p-0 pt-3">
+                                <h5 class="card-title"><a href="#" style="color: var(--bs-gray-900);text-decoration: none;" class="stretched-link">@item.Name</a></h5>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }		
 		</div> <!-- Row END -->
 
 	</section>
@@ -191,14 +76,14 @@
 
             <div class="col-12 col-md-5  offset-md-1 pl-2  pr-2 pr-md-0">
                 <div class="form-group">
-                    <label>Check In Date</label>
+                    <label localize-content>Check In Date</label>
                     <input asp-for="CheckInDate" type="date" class="form-control" />
                 </div>
             </div>
 
             <div class="col-8 col-md-3 pl-2 pr-2">
                 <div class="form-group">
-                    <label>No. of nights</label>
+                    <label localize-content>No. of nights</label>
                     <select class="form-select" asp-for="Nights">
                         @for (var i = 1; i < 12; i++)
                         {
@@ -211,8 +96,8 @@
             <div class="col-4 col-md-2 pt-4 pr-2">
                 <div class="form-group">
                     <button type="button" onclick="fnLoadVillaList()" class="btn btn-success btn-block">
-                        <i class="bi bi-search"></i>  &nbsp; Check Availability
-                    </button>
+						<i class="bi bi-search"></i>  &nbsp; <localize>Check Availability</localize>
+					</button>
 
                 </div>
             </div>

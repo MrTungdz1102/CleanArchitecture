@@ -138,6 +138,9 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Property<DateTime>("CheckOutDate")
                         .HasColumnType("date");
 
+                    b.Property<string>("CouponCode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -150,6 +153,9 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Nights")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Participants")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
@@ -270,18 +276,18 @@ namespace CleanArchitecture.Infrastructure.Migrations
                             CouponId = 1,
                             CouponCode = "10OFF",
                             DiscountAmount = 50.0,
-                            EndingDate = new DateTime(2024, 6, 5, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(4911),
+                            EndingDate = new DateTime(2024, 6, 15, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(4918),
                             MinAmount = 200,
-                            StartingDate = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(4900)
+                            StartingDate = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(4907)
                         },
                         new
                         {
                             CouponId = 2,
                             CouponCode = "20OFF",
                             DiscountAmount = 100.0,
-                            EndingDate = new DateTime(2024, 5, 16, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(4917),
+                            EndingDate = new DateTime(2024, 5, 26, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(4927),
                             MinAmount = 500,
-                            StartingDate = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(4916)
+                            StartingDate = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(4926)
                         });
                 });
 
@@ -323,8 +329,8 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         {
                             Id = 1,
                             Content = "Rất vui được ở lại ! Các chủ nhà đã chào đón",
-                            CreatedAt = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(6770),
-                            ModifiedAt = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(6774),
+                            CreatedAt = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(6770),
+                            ModifiedAt = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(6774),
                             Rating = 5,
                             UserId = "3bb437a2-da65-4b7e-bf85-e24bc6052031",
                             VillaId = 1
@@ -333,8 +339,8 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         {
                             Id = 2,
                             Content = "Thanks for serving our!",
-                            CreatedAt = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(6776),
-                            ModifiedAt = new DateTime(2024, 5, 6, 16, 43, 12, 336, DateTimeKind.Local).AddTicks(6776),
+                            CreatedAt = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(6775),
+                            ModifiedAt = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(6776),
                             Rating = 4,
                             UserId = "6af96a07-d096-46a8-aec8-9aa8566617bd",
                             VillaId = 1
@@ -440,12 +446,6 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Property<int>("Villa_Number")
                         .HasColumnType("int");
 
-                    b.Property<int>("AdultCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ChildCapacity")
-                        .HasColumnType("int");
-
                     b.Property<string>("SpecialDetails")
                         .HasColumnType("nvarchar(max)");
 
@@ -462,71 +462,51 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         new
                         {
                             Villa_Number = 101,
-                            AdultCapacity = 0,
-                            ChildCapacity = 0,
                             VillaId = 1
                         },
                         new
                         {
                             Villa_Number = 102,
-                            AdultCapacity = 0,
-                            ChildCapacity = 0,
                             VillaId = 1
                         },
                         new
                         {
                             Villa_Number = 103,
-                            AdultCapacity = 0,
-                            ChildCapacity = 0,
                             VillaId = 1
                         },
                         new
                         {
                             Villa_Number = 104,
-                            AdultCapacity = 0,
-                            ChildCapacity = 0,
                             VillaId = 2
                         },
                         new
                         {
                             Villa_Number = 105,
-                            AdultCapacity = 0,
-                            ChildCapacity = 0,
                             VillaId = 2
                         },
                         new
                         {
                             Villa_Number = 106,
-                            AdultCapacity = 0,
-                            ChildCapacity = 0,
                             VillaId = 2
                         },
                         new
                         {
                             Villa_Number = 107,
-                            AdultCapacity = 0,
-                            ChildCapacity = 0,
                             VillaId = 3
                         },
                         new
                         {
                             Villa_Number = 108,
-                            AdultCapacity = 0,
-                            ChildCapacity = 0,
                             VillaId = 3
                         },
                         new
                         {
                             Villa_Number = 109,
-                            AdultCapacity = 0,
-                            ChildCapacity = 0,
                             VillaId = 3
                         },
                         new
                         {
                             Villa_Number = 110,
-                            AdultCapacity = 0,
-                            ChildCapacity = 0,
                             VillaId = 1
                         });
                 });

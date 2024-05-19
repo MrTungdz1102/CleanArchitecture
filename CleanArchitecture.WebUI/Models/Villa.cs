@@ -27,7 +27,7 @@ namespace CleanArchitecture.WebUI.Models
         public bool IsAvailable { get; set; }
 
         public double StartRating { get; set; }
-        public string? OwnerName { get; set; }
+        public string? OwnerId { get; set; }
 
         public int CityId { get; set; }
         public City? City { get; set; }

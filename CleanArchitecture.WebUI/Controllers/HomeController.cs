@@ -2,6 +2,8 @@
 using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Models.ViewModel;
 using CleanArchitecture.WebUI.Services.Interfaces;
+using CleanArchitecture.WebUI.Utilities;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Syncfusion.Presentation;
@@ -15,23 +17,37 @@ namespace CleanArchitecture.WebUI.Controllers
         private readonly IVillaService _villaService;
         private readonly IAmenityService _amenityService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public HomeController(ILogger<HomeController> logger, IVillaService villaService, IAmenityService amenityService, IWebHostEnvironment webHostEnvironment)
+        private readonly ICityService _cityService;
+
+        public HomeController(ILogger<HomeController> logger, IVillaService villaService, IAmenityService amenityService, IWebHostEnvironment webHostEnvironment, ICityService cityService)
         {
             _logger = logger;
             _villaService = villaService;
             _amenityService = amenityService;
             _webHostEnvironment = webHostEnvironment;
+            _cityService = cityService;
         }
         //  [Authorize]
         public async Task<IActionResult> Index()
         {
+            //  var culture = CultureInfo.CurrentCulture.Name;
             int nights = 1;
-            DateOnly date = DateOnly.FromDateTime(DateTime.Now);
+            long date = DateTime.Now.ToUnixTime();
             ResponseDTO? response = await _villaService.GetAllDetailVilla(nights, date);
             List<Villa> villas = new List<Villa>();
+            List<City> cities = new List<City>();
             if (response.Result != null && response.IsSuccess)
             {
                 villas = JsonConvert.DeserializeObject<List<Villa>>(Convert.ToString(response.Result));
+                response = await _cityService.GetAllCity();
+                if (response.Result != null && response.IsSuccess)
+                {
+                    cities = JsonConvert.DeserializeObject<List<City>>(Convert.ToString(response.Result));
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
             }
             else
             {
@@ -40,7 +56,8 @@ namespace CleanArchitecture.WebUI.Controllers
             HomeVM homeVM = new HomeVM
             {
                 VillaList = villas,
-                Nights = 1
+                Nights = 1,
+                CityList = cities
             };
             homeVM.CheckInDate = DateOnly.FromDateTime(DateTime.Now);
             return View(homeVM);
@@ -50,7 +67,9 @@ namespace CleanArchitecture.WebUI.Controllers
         public async Task<IActionResult> GetVillaByDate(int nights, DateOnly checkInDate)
         {
             Thread.Sleep(250);
-            ResponseDTO? response = await _villaService.GetAllDetailVilla(nights, checkInDate);
+            DateTime dateTime = checkInDate.ToDateTime(TimeOnly.Parse("10:00 PM"));
+            long date = dateTime.ToUnixTime();
+            ResponseDTO? response = await _villaService.GetAllDetailVilla(nights, date);
             List<Villa> villas = new List<Villa>();
             if (response.Result != null && response.IsSuccess)
             {
@@ -147,8 +166,8 @@ namespace CleanArchitecture.WebUI.Controllers
                 try
                 {
                     //  imageUrl = string.Format("{0}{1}", basePath, villa.ImageUrl);
-                        imageUrl = villa.ImageLocalPath;
-                      imageData = System.IO.File.ReadAllBytes(imageUrl);
+                    imageUrl = villa.ImageLocalPath;
+                    imageData = System.IO.File.ReadAllBytes(imageUrl);
                 }
                 catch (Exception)
                 {
@@ -175,6 +194,15 @@ namespace CleanArchitecture.WebUI.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult OnGetSetCultureCookie(string cltr, string returnUrl)
+        {
+            Response.Cookies.Append(
+        CookieRequestCultureProvider.DefaultCookieName,
+        CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(cltr)),
+        new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) });
+            return LocalRedirect(returnUrl);
         }
     }
 }

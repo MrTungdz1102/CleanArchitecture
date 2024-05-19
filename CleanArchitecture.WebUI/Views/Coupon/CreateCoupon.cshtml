@@ -1,0 +1,82 @@
+﻿@model CleanArchitecture.WebUI.Models.Coupon
+@{
+    ViewData["Title"] = "CreateCoupon";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<form asp-action="CreateCoupon">
+    <br />
+    <div class="card-header bg-success bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2" localize-content>Create New Coupon</h2>
+            </div>
+        </div>
+    </div>
+    <div class="container border p-3">
+        <hr />
+        <div class="row">
+            <div class="col-2 offset-2">
+                <label class="control-label pt-2" style="font-size:20px;" localize-content> Coupon Code</label>
+            </div>
+            <div class="col-4 pb-3">
+                <input asp-for="CouponCode" class="form-control" />
+                <span asp-validation-for="CouponCode" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2 offset-2">
+                <label class="control-label pt-2" style="font-size:20px;" localize-content>Discount Amount</label>
+            </div>
+            <div class="col-4 pb-3">
+                <input asp-for="DiscountAmount" class="form-control" />
+                <span asp-validation-for="DiscountAmount" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2 offset-2">
+                <label class="control-label pt-2" style="font-size:20px;" localize-content>Minimum Amount</label>
+            </div>
+            <div class="col-4 pb-3">
+                <input asp-for="MinAmount" class="form-control" />
+                <span asp-validation-for="MinAmount" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2 offset-2">
+                <label class="control-label pt-2" style="font-size:20px;" localize-content>Starting Date</label>
+            </div>
+            <div class="col-4 pb-3">
+                <input asp-for="StartingDate" type="date" class="form-control" />
+                <span asp-validation-for="StartingDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2 offset-2">
+                <label class="control-label pt-2" style="font-size:20px;" localize-content>Ending Date</label>
+            </div>
+            <div class="col-4 pb-3">
+                <input asp-for="EndingDate" type="date" class="form-control" />
+                <span asp-validation-for="EndingDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2 offset-4">
+
+                <a asp-action="Index" class="btn-secondary btn form-control" localize-content>Back To List</a>
+            </div>
+            <div class="col-2">
+                <button type="submit" class="btn btn-success form-control" localize-content>Create</button>
+            </div>
+        </div>
+
+        <div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+

@@ -2,31 +2,89 @@
 @{
     ViewData["Title"] = "FinalizeBooking";
 }
+     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        <script>
+           
+    $(document).ready(function() {
+        $("#removeCouponButton").hide();
+         $("#totalPrice").text('$' + @Model.TotalCost + '.00');
+      $("#applyCouponButton").click(function() {
+        var couponCode = $("#couponCodeInput").val();
 
+        $.ajax({
+          url: "/Booking/ApplyCoupon",
+          type: 'GET',
+          data: { couponCode: couponCode },
+          dataType: "json",
+          success: function(response) {
+            if (response !== null) {
+                if (response.minAmount <= @Model.TotalCost) {
+                    const price = @Model.TotalCost - response.discountAmount;
+                    $("#totalPrice").text('$' + price + '.00');
+                    toastr.success('Applied Coupon Code!');
+                    $("#coupon").val(couponCode);
+                    $("#couponCodeInput").prop("disabled", true);
+                    $("#applyCouponButton").hide();
+                    $("#removeCouponButton").show();
+                }
+                else {
+                    toastr.error('The order value does not meet the requirement to use the discount code.');
+                }
+            } 
+            else {
+              toastr.error('Invalid Coupon Code!');
+            }
+          },
+          error: function(xhr, status, error) {
+            toastr.error(error);
+          }
+        });
+      });
+        $("#removeCouponButton").click(function() {
+        toastr.success('Removed Coupon Code!');
+          $("#couponCodeInput").prop("disabled", false);
+           $("#applyCouponButton").show();
+                $("#removeCouponButton").hide();
+                $("#couponCodeInput").val("");
+                 $("#coupon").val("");
+                 $("#totalPrice").text('$' + @Model.TotalCost + '.00');
+});
+    });
+    </script> 
 <div class="container pt-4 mt-0 mt-lg-4">
     <div class="row" style="border: 1px solid #aaa;">
 
         <div class="col-12 col-lg-7 p-4 2 mt-4 mt-md-0">
             <div class="row p-1 my-1 " style="border-radius:20px; ">
                 <div class="col-6">
-                    <h3 class="text-success">Villa Details</h3>
+                    <h3 class="text-success" localize-content>Hotel Details</h3>
                 </div>
                 <div class="text-end col-6 ">
                     <a asp-controller="Home" asp-action="Index"
-                                     class="btn btn-sm btn-outline-danger" style="width:200px;">
-                        <i class="bi bi-arrow-left-square"></i> &nbsp; Modify Selection
+                       class="btn btn-sm btn-outline-danger" style="width:200px;">
+                        <i class="bi bi-arrow-left-square"></i> &nbsp; <localize>Modify Selection</localize> 
                     </a>
                 </div>
                 <hr />
                 @await Html.PartialAsync("_VillaDetailPartial", @Model.Villa)
                 <hr />
-                <div class="text-end">
-                    <h4 class="text-danger font-weight-bold ">
-                        Booking Total :
-                        <span style="border-bottom:1px solid #ff6a00">
-                            @Model.TotalCost.ToString("c")
-                        </span>
-                    </h4>
+                <div class="row">
+                    <div class="col-8">
+                            <span><localize>Coupon</localize>:</span>
+                            <input type="text" name="couponCode" id="couponCodeInput" class="form-control-sm" />
+                            <button id="applyCouponButton" type="submit" class="btn btn-sm btn-success" localize-content>Apply</button>
+                            <button id="removeCouponButton" type="submit" class="btn btn-sm btn-danger"localize-content>Remove</button>
+                    </div>
+                    <div class="col-4 text-end">
+                        <h4 class="text-danger font-weight-bold ">
+                           <localize>Booking Total</localize> :
+                            <span id="totalPrice" style="border-bottom:1px solid #ff6a00">
+                              
+                            </span>
+                        </h4>
+                    </div
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,45 +97,54 @@
                 <input asp-for="Nights" hidden />
                 <div class="row pt-1 mb-3 " style="border-radius:20px; ">
                     <div class="col-12">
-                        <h3 class="text-success">Enter Booking Details</h3>
+                        <h3 class="text-success" localize-content>Enter Booking Details</h3>
                     </div>
                 </div>
 
                 <div class="form-group pt-0">
-                    <label asp-for="Name" class="text-danger">Name</label>
+                    <label asp-for="Name" class="text-danger" localize-content>Name</label>
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group pt-2">
-                    <label asp-for="Phone" class="text-danger">Phone</label>
+                    <label asp-for="Phone" class="text-danger" localize-content>Phone</label>
                     <input asp-for="Phone" class="form-control" />
                     <span asp-validation-for="Phone" class="text-danger"></span>
                 </div>
                 <div class="form-group pt-2">
-                    <label asp-for="Email" class="text-danger">Email</label>
+                    <label asp-for="Email" class="text-danger" localize-content>Email</label>
                     <input asp-for="Email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group pt-2">
-                    <label asp-for="CheckInDate" class="text-danger">Check in Date</label>
+                    <label asp-for="CheckInDate" class="text-danger" localize-content>Check In Date</label>
                     <input asp-for="CheckInDate" disabled class="form-control" />
                 </div>
                 <div class="form-group pt-2">
-                    <label asp-for="CheckOutDate" class="text-danger">Check Out Date</label>
+                    <label asp-for="CheckOutDate" class="text-danger" localize-content>Check Out Date</label>
                     <input asp-for="CheckOutDate" disabled class="form-control" />
                 </div>
                 <div class="form-group pt-2">
-                    <label asp-for="Nights" class="text-danger">No. of nights</label>
+                    <label asp-for="Nights" class="text-danger" localize-content>No. of nights</label>
                     <input asp-for="Nights" disabled class="form-control" />
+                </div>
+                 <div class="form-group pt-2">
+                    <label asp-for="Participants" class="text-danger" localize-content>Participant People</label>
+                    <input asp-for="Participants" id="coupon" class="form-control" />
+                    <span asp-validation-for="Participants" class="text-danger"></span>
+                </div>
+                <div class="form-group pt-2">
+                    <label asp-for="CouponCode" class="text-danger" localize-content>Coupon Code</label>
+                    <input asp-for="CouponCode" readonly id="coupon" class="form-control" />
                 </div>
                 <div class="form-group pt-2 pt-md-4">
                     @if (Model.Villa.IsAvailable)
                     {
-                        <button type="submit" class="btn btn-success form-control">Looks Good! Checkout Now</button>
+                        <button type="submit" class="btn btn-success form-control" localize-content>Looks Good! Checkout Now</button>
                     }
                     else
                     {
-                        <input class="btn btn-danger disabled form-control" value="Sold Out" />
+                        <input class="btn btn-danger disabled form-control" value="Sold Out" localize-content/>
                     }
                 </div>
             </form>

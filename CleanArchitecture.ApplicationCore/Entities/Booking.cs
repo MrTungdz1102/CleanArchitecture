@@ -39,6 +39,10 @@ namespace CleanArchitecture.ApplicationCore.Entities
         public DateTime ActualCheckInDate { get; set; }
         public DateTime ActualCheckOutDate { get; set; }
 
+        public string? CouponCode { get; set; }
+
+        public int Participants { get; set; }
+
         public int VillaNumber { get; set; }
         [NotMapped]
         public ICollection<VillaNumber>? VillaNumbers { get; set; }
