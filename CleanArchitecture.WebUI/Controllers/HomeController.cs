@@ -5,9 +5,11 @@ using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Syncfusion.Presentation;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
@@ -18,14 +20,16 @@ namespace CleanArchitecture.WebUI.Controllers
         private readonly IAmenityService _amenityService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ICityService _cityService;
+        private readonly IReviewService _reviewService;
 
-        public HomeController(ILogger<HomeController> logger, IVillaService villaService, IAmenityService amenityService, IWebHostEnvironment webHostEnvironment, ICityService cityService)
+        public HomeController(ILogger<HomeController> logger, IVillaService villaService, IAmenityService amenityService, IWebHostEnvironment webHostEnvironment, ICityService cityService, IReviewService reviewService)
         {
             _logger = logger;
             _villaService = villaService;
             _amenityService = amenityService;
             _webHostEnvironment = webHostEnvironment;
             _cityService = cityService;
+            _reviewService = reviewService;
         }
         //  [Authorize]
         public async Task<IActionResult> Index()
@@ -33,7 +37,7 @@ namespace CleanArchitecture.WebUI.Controllers
             //  var culture = CultureInfo.CurrentCulture.Name;
             int nights = 1;
             long date = DateTime.Now.ToUnixTime();
-            ResponseDTO? response = await _villaService.GetAllDetailVilla(nights, date);
+            ResponseDTO? response = await _villaService.GetAllDetailVilla(nights, date, null, null, null, null);
             List<Villa> villas = new List<Villa>();
             List<City> cities = new List<City>();
             if (response.Result != null && response.IsSuccess)
@@ -53,23 +57,73 @@ namespace CleanArchitecture.WebUI.Controllers
             {
                 TempData["error"] = response?.Message;
             }
+            foreach (var vila in villas)
+            {
+                response = await _reviewService.GetAllReviewByVillaId(vila.Id);
+                if (response.Result != null && response.IsSuccess)
+                {
+                    vila.ReviewList = JsonConvert.DeserializeObject<List<Review>>(Convert.ToString(response.Result));
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
+
+            }
             HomeVM homeVM = new HomeVM
             {
                 VillaList = villas,
                 Nights = 1,
-                CityList = cities
+                CityList = cities,
+                SelectCity = cities.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }),
+                SelectPrice = new List<SelectListItem>
+                {
+                    new SelectListItem
+                    {
+                        Text = "50$",
+                        Value = "50"
+                    },
+                     new SelectListItem
+                    {
+                        Text = "100$",
+                        Value = "100"
+                    },
+                     new SelectListItem
+                    {
+                        Text = "200$",
+                        Value = "200"
+                    },
+                      new SelectListItem
+                    {
+                        Text = "300$",
+                        Value = "300"
+                    },
+                       new SelectListItem
+                    {
+                        Text = "500$",
+                        Value = "500"
+                    }, new SelectListItem
+                    {
+                        Text = "1000$",
+                        Value = "1000"
+                    }
+                }
             };
             homeVM.CheckInDate = DateOnly.FromDateTime(DateTime.Now);
             return View(homeVM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetVillaByDate(int nights, DateOnly checkInDate)
+        public async Task<IActionResult> GetVillaByDate(int nights, DateOnly checkInDate, string? keyword, int? cityId, double? priceFrom, double? priceTo)
         {
             Thread.Sleep(250);
             DateTime dateTime = checkInDate.ToDateTime(TimeOnly.Parse("10:00 PM"));
             long date = dateTime.ToUnixTime();
-            ResponseDTO? response = await _villaService.GetAllDetailVilla(nights, date);
+            ResponseDTO? response = await _villaService.GetAllDetailVilla(nights, date, keyword, cityId, priceFrom, priceTo);
             List<Villa> villas = new List<Villa>();
             if (response.Result != null && response.IsSuccess)
             {
@@ -78,6 +132,19 @@ namespace CleanArchitecture.WebUI.Controllers
             else
             {
                 TempData["error"] = response?.Message;
+            }
+            foreach (var vila in villas)
+            {
+                response = await _reviewService.GetAllReviewByVillaId(vila.Id);
+                if (response.Result != null && response.IsSuccess)
+                {
+                    vila.ReviewList = JsonConvert.DeserializeObject<List<Review>>(Convert.ToString(response.Result));
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
+
             }
             HomeVM homeVM = new HomeVM()
             {
@@ -203,6 +270,70 @@ namespace CleanArchitecture.WebUI.Controllers
         CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(cltr)),
         new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) });
             return LocalRedirect(returnUrl);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateReview(string? content, int? rating, int villaId)
+        {
+            Review review = new Review();
+            review.CreatedAt = DateTime.Now;
+            review.ReviewContent = content;
+            review.Rating = rating;
+            review.VillaId = villaId;
+            review.UserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            review.UserName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+
+            ResponseDTO? response = await _reviewService.CreateReview(review);
+            if (response is not null && response.IsSuccess)
+            {
+                TempData["success"] = "Revie successfully";
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateReview(int reviewId, string? content, int? rating, int villaId)
+        {
+            ResponseDTO? response = await _reviewService.GetReview(reviewId);
+            if (response is not null && response.IsSuccess)
+            {
+                Review review = new Review();
+                review.ModifiedAt = DateTime.Now;
+                review.ReviewContent = content;
+                review.Rating = rating;
+                review.VillaId = villaId;
+                review.UserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                review.UserName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+                response = await _reviewService.UpdateReview(review);
+                if (response is not null && response.IsSuccess)
+                {
+                    TempData["success"] = "Review updated successfully";
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteReview(int reviewId)
+        {
+            ResponseDTO? response = await _reviewService.DeleteReview(reviewId);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Review deleted successfully";
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

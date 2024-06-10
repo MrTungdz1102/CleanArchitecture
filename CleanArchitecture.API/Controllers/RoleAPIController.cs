@@ -1,6 +1,5 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.API.Controllers
@@ -18,6 +17,12 @@ namespace CleanArchitecture.API.Controllers
         public ActionResult<ResponseDTO> GetAllRole()
         {
             return Ok(_roleService.GetAllRole());
+        }
+
+        [HttpGet("GetAllUserRole")]
+        public async Task<ActionResult<ResponseDTO>> GetAllUserRole(string userId)
+        {
+            return Ok(await _roleService.GetAllUserRoleAsync(userId));
         }
     }
 }

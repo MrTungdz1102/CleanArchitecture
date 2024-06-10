@@ -1,15 +1,8 @@
-﻿using Ardalis.Specification;
-using CleanArchitecture.ApplicationCore.Commons;
+﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
-using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.ApplicationCore.Specifications;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.ApplicationCore.Services
 {
@@ -57,7 +50,7 @@ namespace CleanArchitecture.ApplicationCore.Services
         {
             try
             {
-                 var specification = new BookingSpecification(userId, statusFilter, isCustomer);
+                var specification = new BookingSpecification(userId, statusFilter, isCustomer);
                 _response.Result = await _unitOfWork.bookingRepo.ListAsync(specification);
             }
             catch (Exception ex)
@@ -74,7 +67,7 @@ namespace CleanArchitecture.ApplicationCore.Services
             {
                 var specification = new BookingSpecification(bookingId);
                 Booking? booking = await _unitOfWork.bookingRepo.FirstOrDefaultAsync(specification);
-                if(booking.VillaNumber == 0 && booking.Status == PaymentStatus.StatusApproved)
+                if (booking.VillaNumber == 0 && booking.Status == PaymentStatus.StatusApproved)
                 {
                     var availableVillaNumber = await _villaNumberService.AssignAvailableVillaNumberByVilla(booking.VillaId);
                     var specificationVillaNumber = new VillaNumberSpecification(booking.VillaId, availableVillaNumber);
@@ -95,7 +88,7 @@ namespace CleanArchitecture.ApplicationCore.Services
             try
             {
                 Booking? booking = await _unitOfWork.bookingRepo.GetByIdAsync(bookingId);
-                if(booking is not null)
+                if (booking is not null)
                 {
                     if (!string.IsNullOrEmpty(sessionId))
                     {

@@ -1,0 +1,33 @@
+﻿<script>
+    !function (w, d, s, ...args) {
+        var div = d.createElement('div');
+        div.id = 'aichatbot';
+        d.body.appendChild(div);
+        w.chatbotConfig = args;
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s);
+        j.defer = true;
+        j.type = 'module';
+        j.src = 'https://aichatbot.sendbird.com/index.js';
+        f.parentNode.insertBefore(j, f);
+    }(window, document, 'script', 'A9E31911-EDDA-439B-BBC4-F4F26D573971', 'onboarding_bot', {
+        apiHost: 'https://api-cf-ap-5.sendbird.com',
+    });
+</script>
+<script>
+    window.chatwootSettings = { "position": "left", "type": "standard", "launcherTitle": "Xin chào 👋" };
+    (function (d, t) {
+        var BASE_URL = "https://chat.monetiza.win";
+        var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+        g.src = BASE_URL + "/packs/js/sdk.js";
+        g.defer = true;
+        g.async = true;
+        s.parentNode.insertBefore(g, s);
+        g.onload = function () {
+            window.chatwootSDK.run({
+                websiteToken: 'dE9XahYsJRVeV1jZcrNL1gH1',
+                baseUrl: BASE_URL
+            })
+        }
+    })(document, "script");
+</script>

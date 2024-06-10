@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.ApplicationCore.Entities
 {
+    [Table("HotelRooms")]
     public class VillaNumber
     {
         // khong set identity cho villa number, so phong (villa) phai khac nhau
         // vi du 101, 102, 103
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Display(Name = "Villa Number")]
+        [Display(Name = "Hotel Room")]
         public int Villa_Number { get; set; }
 
         [ForeignKey("Villa")]
@@ -22,6 +18,6 @@ namespace CleanArchitecture.ApplicationCore.Entities
         public string? SpecialDetails { get; set; }
         //public int AdultCapacity { get; set; }
         //public int ChildCapacity { get; set; }
-     //   public double PricePerNight { get; set; }
+        //   public double PricePerNight { get; set; }
     }
 }

@@ -3,12 +3,6 @@ using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.ApplicationCore.Specifications;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.ApplicationCore.Services
 {
@@ -39,7 +33,7 @@ namespace CleanArchitecture.ApplicationCore.Services
         {
             try
             {
-                Review? deleteReview= await _unitOfWork.reviewRepo.GetByIdAsync(reviewId);
+                Review? deleteReview = await _unitOfWork.reviewRepo.GetByIdAsync(reviewId);
                 if (deleteReview is null)
                 {
                     _response.IsSuccess = false;
@@ -64,6 +58,20 @@ namespace CleanArchitecture.ApplicationCore.Services
             {
                 ReviewSpecification specification = new ReviewSpecification(villaId);
                 _response.Result = await _unitOfWork.reviewRepo.ListAsync(specification);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        public async Task<ResponseDTO> GetReview(int reviewId)
+        {
+            try
+            {
+                _response.Result = await _unitOfWork.reviewRepo.GetByIdAsync(reviewId);
             }
             catch (Exception ex)
             {

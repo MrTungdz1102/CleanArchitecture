@@ -32,11 +32,28 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
-        public async Task<ResponseDTO?> GetAllDetailVilla(int nights, long checkInDate)
+        public async Task<ResponseDTO?> GetAllDetailVilla(int nights, long checkInDate, string? keyword, int? cityId, double? priceFrom, double? priceTo)
         {
+            string apiUrl = Constants.APIUrlBase + $"/api/VillaAPI/GetAllDetailVilla?nights={nights}&checkInDate={checkInDate}";
+            if (keyword != null)
+            {
+                apiUrl += $"&keyword={keyword}";
+            }
+            if (cityId != null)
+            {
+                apiUrl += $"&cityId={cityId}";
+            }
+            if (priceFrom != null)
+            {
+                apiUrl += $"&priceFrom={priceFrom}";
+            }
+            if (priceTo != null)
+            {
+                apiUrl += $"&priceTo={priceTo}";
+            }
             return await _baseService.SendAsync(new RequestDTO
             {
-                Url = Constants.APIUrlBase + $"/api/VillaAPI/GetAllDetailVilla?nights={nights}&checkInDate={checkInDate}",
+                Url = apiUrl,
                 ApiType = Constants.ApiType.GET
             });
         }

@@ -19,7 +19,7 @@ namespace CleanArchitecture.Infrastructure.Data.DataConfigurations
                       Price = 200,
                       SquareFeet = 550,
                       CityId = 1,
-                      OwnerId = "ed4cdaa3-868e-43d6-b899-c54e5fdd76eb",
+                      UserId = "ed4cdaa3-868e-43d6-b899-c54e5fdd76eb",
                       StartRating = 5
                   },
 new Villa
@@ -32,7 +32,7 @@ new Villa
     Price = 300,
     SquareFeet = 550,
     CityId = 1,
-    OwnerId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1",
+    UserId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1",
     StartRating = 4.5
 },
 new Villa
@@ -45,7 +45,7 @@ new Villa
     Price = 400,
     SquareFeet = 750,
     CityId = 2,
-    OwnerId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1",
+    UserId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1",
     StartRating = 4.9
 }
                 );

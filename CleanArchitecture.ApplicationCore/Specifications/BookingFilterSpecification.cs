@@ -10,7 +10,7 @@ namespace CleanArchitecture.ApplicationCore.Specifications
         {
             if (ownerId is not null)
             {
-                Query.Include(x => x.Villa).Where(x => (x.Status != firstStatus || x.Status != secondStatus) && x.Villa.OwnerId == ownerId);
+                Query.Include(x => x.Villa).Where(x => (x.Status != firstStatus || x.Status != secondStatus) && x.Villa.UserId == ownerId);
             }
             else
             {
@@ -22,13 +22,13 @@ namespace CleanArchitecture.ApplicationCore.Specifications
             if (ownerId is not null)
             {
                 Query.Include(x => x.Villa).Where(u => u.BookingDate >= date.AddDays(-30) &&
-                                            (u.Status != PaymentStatus.StatusPending 
-                                            || u.Status == PaymentStatus.StatusCancelled) &&                          u.Villa!.OwnerId == ownerId);
+                                            (u.Status != PaymentStatus.StatusPending
+                                            || u.Status == PaymentStatus.StatusCancelled) && u.Villa!.UserId == ownerId);
             }
             else
             {
                 Query.Where(u => u.BookingDate >= date.AddDays(-30) &&
-                        (u.Status != PaymentStatus.StatusPending 
+                        (u.Status != PaymentStatus.StatusPending
                         || u.Status == PaymentStatus.StatusCancelled));
             }
         }
@@ -36,12 +36,12 @@ namespace CleanArchitecture.ApplicationCore.Specifications
         {
             if (ownerId is not null)
             {
-                Query.Include(x => x.Villa).Where(x => (x.BookingDate >= startTime && x.BookingDate <= endTime) && x.Villa!.OwnerId == ownerId);
+                Query.Include(x => x.Villa).Where(x => (x.BookingDate >= startTime && x.BookingDate <= endTime) && x.Villa!.UserId == ownerId);
             }
             else
             {
                 Query.Where(x => x.BookingDate >= startTime && x.BookingDate <= endTime);
-            }  
+            }
         }
     }
 }

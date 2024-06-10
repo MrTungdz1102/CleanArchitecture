@@ -1,0 +1,59 @@
+﻿@model List<string>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="w-100 card border-0 p-4">
+    <div class="card-header bg-success bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2" localize-content>Role List</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body border p-4">
+        <div class="row pb-3">
+             <div class="col-6 offset-6 text-end">
+                <a asp-controller="Role" asp-action="Create" class="btn btn-secondary">
+                    <i class="bi bi-plus-circle"></i> <localize> Create New Role</localize>
+                </a>
+            </div> 
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th localize-content>
+                        Id
+                    </th>
+                    <th localize-content>
+                        Name
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var obj in Model)
+                {
+                    <tr>
+                        <td>@(Model.IndexOf(obj)+1)</td>
+                        <td>@obj</td>
+                        <td>
+                            <a href="#" class="btn btn-warning">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

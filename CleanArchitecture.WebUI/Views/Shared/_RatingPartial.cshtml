@@ -1,4 +1,5 @@
-﻿<hr />
+﻿@model List<CleanArchitecture.WebUI.Models.Review>
+<hr />
 
 <div class="row">
     <!-- customer reviews -->
@@ -79,11 +80,14 @@
                 </div>
             </div>
         </div>
+        <form method="post" asp-action="CreateReview" asp-controller="Home">
         <div>
-            <h4 class="mb-1">Review this book</h4>
-            <p class="font-12 ">Share your thoughts with other customers</p>
-            <a href="#!" class="btn-block">Write A Review</a>
+            <h4 class="mb-1" localize-content>Review this Hotel</h4>
+            <p class="font-12 " localize-content>Share your thoughts with other customers</p>
+            <input class="form-control mb-3"/>
+                <button type="submit" class="btn-block" localize-content>Write A Review</button>
         </div>
+        </form>
     </div>
     <!-- customer reviews list -->
     <div class="col-lg-8 col-md-7 col-12">
@@ -101,16 +105,18 @@
             </div>
         </div>
         <!-- reviews -->
-        <div class="mb-4 pb-4 border-bottom">
-            <div class="d-flex mb-3 align-items-center">
+        @foreach (var item in Model)
+        {
+            <div class="mb-4 pb-4 border-bottom">
+                <div class="d-flex mb-3 align-items-center">
                 <img src="~/images/avatar-1.png" alt="" class="rounded-circle avatar-lg">
                 <div class="ml-2">
                     <h5 class="mb-1">
-                        Sohail Rahman
+                        @item.UserName
                         @* <img src="~/images/avatar-1.png" alt=""> *@
                     </h5>
                     <p class="font-12 mb-0">
-                        <span>Kolkata</span> <span>October 03,2020</span>
+                        <span>@item.Id</span> <span>@item.CreatedAt</span>
                     </p>
                 </div>
             </div>
@@ -119,63 +125,12 @@
                 <span class="h5">Highly recommended</span>
             </div>
             <p>
-                Nice book explained in simplified method surely it will bring meaningful changes in your lifestyle which you always dream off Beat of luck coach you are great continue bringing great stuffs
+                @item.ReviewContent
             </p>
             <a href="#!" class="btn btn-light btn-sm mr-2">Helpful</a>
             <a href="#!" class="text-inherit font-14">Report abuse</a>
         </div>
-        <!-- reviews -->
-        <div class="mb-4 pb-4 border-bottom">
-            <div class="d-flex mb-3 align-items-center">
-                <img src="~/images/avatar-2.png" alt="" class="rounded-circle avatar-lg">
-                <div class="ml-2">
-                    <h5 class="mb-1">
-                        Riya Poojary
-
-                    </h5>
-                    <p class="font-12 mb-0">
-                        <span>Ahmedabad</span> <span>4 Month ago</span>
-                    </p>
-                </div>
-            </div>
-            <div class="mb-2">
-                <span class="font-14 mr-2"><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i></span>
-                <span class="h5">Beware!! This Book can change your Life :)</span>
-            </div>
-            <p>
-                And I absolutely mean it what I said in Headline of my comment.
-                I have been following coach.com from very long. His one article
-                has absolutely changed my life, imagine what this book can offer
-                to you. If you are looking to form a new habit you have to read
-                this Book.
-            </p>
-            <a href="#!" class="btn btn-light btn-sm mr-2">Helpful</a>
-            <a href="#!" class="text-inherit font-14">Report abuse</a>
-        </div>
-        <!-- reviews -->
-        <div class="mb-4 pb-4 border-bottom">
-            <div class="d-flex mb-3 align-items-center">
-                <img src="~/images/avatar-3.png" alt="" class="rounded-circle avatar-lg">
-                <div class="ml-2">
-                    <h5 class="mb-1">
-                        Francoise
-                    </h5>
-                    <p class="font-12 mb-0">
-                        <span>United Kingdom</span> <span>4 Month ago</span>
-                    </p>
-                </div>
-            </div>
-            <div class="mb-2">
-                <span class="font-14 mr-2"><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i></span>
-                <span class="h5">Absolutely superb!</span>
-            </div>
-            <p>
-                I have read so many books as part of my personal development but I always find that authors end up glorifying themselves throughout continuously going on and on about their own achievements. I urge anyone who loves the book to read his blog which has
-                loads of truly awesome resources.
-            </p>
-            <a href="#!" class="btn btn-light btn-sm mr-2">Helpful</a>
-            <a href="#!" class="text-inherit font-14">Report abuse</a>
-        </div>
+        }
         <a href="#!" style="width: 50%;" class="btn-block offset-3">Read More Reviews</a>
     </div>
 </div>

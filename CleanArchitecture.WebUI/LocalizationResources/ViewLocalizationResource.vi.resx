@@ -240,6 +240,9 @@
   <data name="Create New Hotel" xml:space="preserve">
     <value>Tạo Mới Khách Sạn</value>
   </data>
+  <data name="Create New Role" xml:space="preserve">
+    <value>Tạo Vai Trò Mới</value>
+  </data>
   <data name="Create New Room" xml:space="preserve">
     <value>Tạo Phòng Mới</value>
   </data>
@@ -293,6 +296,9 @@
   </data>
   <data name="Explore Nearby City" xml:space="preserve">
     <value>Khám Phá Các Thành Phố</value>
+  </data>
+  <data name="Find Hotel" xml:space="preserve">
+    <value>Tìm Khách Sạn</value>
   </data>
   <data name="Forgot your password?" xml:space="preserve">
     <value>Quên Mật Khẩu</value>
@@ -387,8 +393,14 @@
   <data name="Price" xml:space="preserve">
     <value>Giá</value>
   </data>
+  <data name="Price From" xml:space="preserve">
+    <value>Giá Từ</value>
+  </data>
   <data name="Price per night" xml:space="preserve">
     <value>Giá mỗi đêm</value>
+  </data>
+  <data name="Price To" xml:space="preserve">
+    <value>Giá Tối Đa</value>
   </data>
   <data name="Register" xml:space="preserve">
     <value>Đăng Ký</value>
@@ -405,14 +417,23 @@
   <data name="Reservation" xml:space="preserve">
     <value>Đặt Trước</value>
   </data>
+  <data name="Review this Hotel" xml:space="preserve">
+    <value>Đánh giá khách sạn này</value>
+  </data>
   <data name="Role" xml:space="preserve">
     <value>Vai Trò</value>
+  </data>
+  <data name="Role List" xml:space="preserve">
+    <value>Danh Sách Vai Trò</value>
   </data>
   <data name="Room" xml:space="preserve">
     <value>Phòng</value>
   </data>
   <data name="Room List" xml:space="preserve">
     <value>Danh Sách Phòng</value>
+  </data>
+  <data name="Share your thoughts with other customers" xml:space="preserve">
+    <value>Chia sẻ suy nghĩ của bạn với những người khác</value>
   </data>
   <data name="Sold Out" xml:space="preserve">
     <value>Hết Phòng</value>
@@ -458,6 +479,9 @@
   </data>
   <data name="Vietnamese" xml:space="preserve">
     <value>Tiếng Việt</value>
+  </data>
+  <data name="Write A Review" xml:space="preserve">
+    <value>Viết Đánh Giá</value>
   </data>
   <data name="You can view all order details in Manage Order Section." xml:space="preserve">
     <value>Quý khách có thể xem thông tin chỉ tiết đơn đặt trong mục Quản Lý Đơn Đặt.</value>

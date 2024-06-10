@@ -10,7 +10,7 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
         Task<ResponseDTO> CreateVilla(Villa villa);
         Task<ResponseDTO> UpdateVilla(Villa villa);
         Task<ResponseDTO> DeleteVilla(int villaId);
-        Task<ResponseDTO> GetAllDetailVilla(int nights, long checkInDate);
+        Task<ResponseDTO> GetAllDetailVilla(int nights, long checkInDate, string? keyword, int? cityId, double? priceFrom, double? priceTo);
         Task<ResponseDTO> IsVillaAvailableByDate(int villaId, int nights, long checkInDate);
     }
 }

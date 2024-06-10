@@ -1,13 +1,5 @@
 ﻿using Ardalis.Specification;
-using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
-using Microsoft.Extensions.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.ApplicationCore.Specifications
 {
@@ -23,9 +15,9 @@ namespace CleanArchitecture.ApplicationCore.Specifications
         }
         public BookingSpecification(string? userId, string? status, bool isCustomer)
         {
-            if(isCustomer)
+            if (isCustomer)
             {
-                Query.Where(x => x.Villa.OwnerId == userId && (status == null || x.Status == status) && (!string.IsNullOrEmpty(userId) || !string.IsNullOrEmpty(status)));
+                Query.Where(x => x.Villa.UserId == userId && (status == null || x.Status == status) && (!string.IsNullOrEmpty(userId) || !string.IsNullOrEmpty(status)));
             }
             else
             {
@@ -34,7 +26,7 @@ namespace CleanArchitecture.ApplicationCore.Specifications
         }
         public BookingSpecification(string? status)
         {
-            Query.Where(x =>(status == null || x.Status == status) );
+            Query.Where(x => (status == null || x.Status == status));
         }
     }
 }

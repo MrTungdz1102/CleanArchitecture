@@ -35,8 +35,6 @@ namespace CleanArchitecture.WebUI.Controllers
             _webHostEnvironment = webHostEnvironment;
             _emailService = emailService;
             _couponService = couponService;
-
-
         }
 
         public IActionResult Index()
@@ -228,13 +226,30 @@ namespace CleanArchitecture.WebUI.Controllers
                     PaymentResponse paymentResponse = JsonConvert.DeserializeObject<PaymentResponse>(response.Result.ToString());
                     await _bookingService.UpdateBookingStatus(bookingId, Constants.StatusApproved, 0);
                     await _bookingService.UpdateBookingPayment(bookingId, paymentResponse.StripeSessionId, paymentResponse.PaymentIntentId);
+
+                    string? filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "booking_success.html");
+
+                    string content = await System.IO.File.ReadAllTextAsync(filePath);
+
+                    content = content
+                .Replace("{{UserName}}", HttpContext.User.FindFirstValue(ClaimTypes.Name))
+                .Replace("{{BookingId}}", bookingId.ToString())
+                .Replace("{{Participants}}", booking.Participants.ToString())
+                .Replace("{{HotelName}}", booking.Villa.Name)
+                .Replace("{{TotalPrice}}", booking.TotalCost.ToString())
+                .Replace("{{CheckInDate}}", booking.CheckInDate.ToString())
+                .Replace("{{Discount}}", (booking.Villa.Price * booking.Nights - booking.TotalCost).ToString())
+                .Replace("{{PaymentDate}}", booking.PaymentDate.ToString())
+                .Replace("{{CheckOutDate}}", booking.CheckOutDate.ToString());
+
                     EmailVM email = new EmailVM
                     {
                         Email = HttpContext.User.FindFirstValue(ClaimTypes.Email),
                         Subject = "Booking Confirmation",
-                        Message = "Your order has been comfirm! Thank you for using our services!"
+                        Message = content
                     };
                     await _emailService.SendEmailAsync(email);
+                    TempData["succcess"] = "Your order has been successfully paid. Please check the details in your email.";
                 }
                 else
                 {

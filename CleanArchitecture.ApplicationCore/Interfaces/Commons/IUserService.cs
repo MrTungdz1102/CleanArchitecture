@@ -1,9 +1,5 @@
-﻿using CleanArchitecture.ApplicationCore.Entities.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CleanArchitecture.ApplicationCore.Commons;
+using CleanArchitecture.ApplicationCore.Entities.DTOs;
 
 namespace CleanArchitecture.ApplicationCore.Interfaces.Commons
 {
@@ -12,5 +8,10 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Commons
         Task<int> GetAllQuantityUser();
         Task<int> CountUserCreateByTime(DateTime? startDate, DateTime? endDate);
         Task<List<AppUserDTO>> GetAllUser();
+
+        Task<ResponseDTO> GetAllUserAsync();
+        Task<ResponseDTO> LockUnlockAsync(string userId);
+        Task<ResponseDTO> GetUserInfoAsync(string userId);
+        Task<ResponseDTO> UpdateUserAsync(AppUserDTO userDTO);
     }
 }

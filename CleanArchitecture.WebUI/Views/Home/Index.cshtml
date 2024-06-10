@@ -64,6 +64,7 @@
                             </div>
                         </div>
                     </div>
+                    <input hidden id="citiid" value="@item.Id" />
                 }
             }		
 		</div> <!-- Row END -->
@@ -72,48 +73,100 @@
 
     <form method="post"
           asp-action="GetVillaByDate">
-        <div class="row p-0 mx-0 py-4">
-
-            <div class="col-12 col-md-5  offset-md-1 pl-2  pr-2 pr-md-0">
-                <div class="form-group">
-                    <label localize-content>Check In Date</label>
-                    <input asp-for="CheckInDate" type="date" class="form-control" />
+          <div class="row">
+          <div class="col-9">
+            <div class="row p-0 mx-0 py-4">
+                <div class="col-12 col-md-3 pl-2 offset-2">
+                    <div class="form-group">
+                        <label localize-content>Find Hotel</label>
+                        <input asp-for="Keyword" placeholder="Find Your Destination..." type="text" class="form-control" />
+                    </div>
                 </div>
+                <div class="col-12 col-md-3 pl-2  pr-2 pr-md-0">
+                    <div class="form-group">
+                        <label localize-content>Check In Date</label>
+                        <input asp-for="CheckInDate" type="date" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-3 pl-2 pr-2">
+                    <div class="form-group">
+                        <label localize-content>No. of nights</label>
+                        <select class="form-select" asp-for="Nights">
+                            @for (var day = 1; day < 31; day++)
+                            {
+                                <option value="@day">@day</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="col-8 col-md-3 pl-2 pr-2">
-                <div class="form-group">
-                    <label localize-content>No. of nights</label>
-                    <select class="form-select" asp-for="Nights">
-                        @for (var i = 1; i < 12; i++)
-                        {
-                            <option value="@i">@i</option>
-                        }
-                    </select>
+            <div class="row p-0 mx-0 py-4">
+                <div class="col-12 col-md-3 offset-2 pl-2 pr-2">
+                    <div class="form-group">
+                        <label localize-content>City</label>
+                        <select asp-for="CityId" asp-items="@Model.SelectCity"
+                                class="form-select border shadow">
+                            <option selected>--Select City--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-8 col-md-3 pl-2 pr-2">
+                    <div class="form-group">
+                        <label localize-content>Price From</label>
+                        <select asp-for="PriceFrom" asp-items="@Model.SelectPrice"
+                                class="form-select border shadow">
+                            <option selected>--Select Price--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-8 col-md-3 pl-2 pr-2">
+                    <div class="form-group">
+                        <label localize-content>Price To</label>
+                            <select asp-for="PriceTo" asp-items="@Model.SelectPrice"
+                                class="form-select border shadow">
+                            <option selected>--Select Price--</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-
-            <div class="col-4 col-md-2 pt-4 pr-2">
-                <div class="form-group">
-                    <button type="button" onclick="fnLoadVillaList()" class="btn btn-success btn-block">
-						<i class="bi bi-search"></i>  &nbsp; <localize>Check Availability</localize>
-					</button>
-
+            </div>
+            <div class="col-3">
+                <div class="col-12 col-md-8 pt-5 pr-2 mt-5">
+                    <div class="form-group">
+                        <button type="button" onclick="fnLoadVillaList()" class="btn btn-success btn-block">
+                            <i class="bi bi-search"></i>  &nbsp; <localize>Check Availability</localize>
+                        </button>
+                    </div>
                 </div>
             </div>
-
-        </div>
+          </div>
+       
          @await Html.PartialAsync("_VillaListPartial", Model) 
     </form>
 </div>
 
 @section scripts{
     <script>
+        // var cityId = $("#CityId").val();
+        // if (!cityId) {
+        //     cityId = $("#citiid").val();
+        // }
+        // var nights = $("#Nights").val();
+        // if (!cityId) {
+        //     cityId = 1;
+        // }
         function fnLoadVillaList() {
             $('.spinner').show();
             var objData = {
                 checkInDate: $("#CheckInDate").val(),
-                nights: $("#Nights").val()
+                nights: $("#Nights").val(),
+                keyword:$("#Keyword").val(),
+                cityId: $("#CityId").val(),
+                priceFrom: $("#PriceFrom").val(),
+                priceTo: $("#PriceTo").val(),
             };
 
             $.ajax({

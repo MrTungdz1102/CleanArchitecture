@@ -1,11 +1,6 @@
 ﻿using Ardalis.Specification;
 using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.ApplicationCore.Specifications
 {
@@ -13,9 +8,9 @@ namespace CleanArchitecture.ApplicationCore.Specifications
     {
         public VillaNumberSpecification(QueryParameter queryParameters, string? userId)
         {
-            if(userId != null)
+            if (userId != null)
             {
-                Query.Include(x => x.Villa).Where(x => x.Villa.OwnerId == userId).Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).OrderBy(x => x.VillaId);
+                Query.Include(x => x.Villa).Where(x => x.Villa.UserId == userId).Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).OrderBy(x => x.VillaId);
             }
             else
             {

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CleanArchitecture.WebUI.Models.ViewModel;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace CleanArchitecture.WebUI.Models
 {
@@ -41,7 +34,7 @@ namespace CleanArchitecture.WebUI.Models
         public DateTime ActualCheckInDate { get; set; }
         public DateTime ActualCheckOutDate { get; set; }
 
-		public string? CouponCode { get; set; }
+        public string? CouponCode { get; set; }
 
         [RegularExpression("^[0-9]*$", ErrorMessage = "The Participants must is an integer number")]
         public int Participants { get; set; }

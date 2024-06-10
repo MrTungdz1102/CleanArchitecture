@@ -1,7 +1,6 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.API.Controllers
@@ -39,6 +38,12 @@ namespace CleanArchitecture.API.Controllers
         public async Task<ActionResult<ResponseDTO>> GetAllReviewByVillaId([FromRoute] int villaId)
         {
             return Ok(await _reviewService.GetAllReviewByVillaId(villaId));
+        }
+
+        [HttpGet("GetReview/{reviewId:int}")]
+        public async Task<ActionResult<ResponseDTO>> GetReview([FromRoute] int reviewId)
+        {
+            return Ok(await _reviewService.GetReview(reviewId));
         }
     }
 }

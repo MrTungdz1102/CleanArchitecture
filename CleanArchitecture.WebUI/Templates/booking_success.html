@@ -1,0 +1,28 @@
+﻿<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; color: #333333;">
+    <div class="container" style=" width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <div class="header" style="background-color: #4CAF50; color: #ffffff; padding: 10px 20px; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+            <h1 style="margin: 0; font-size: 24px;">Booking Confirmation</h1>
+        </div>
+        <div class="content" style="padding: 20px;">
+            <h2 style=" margin-top: 0; font-size: 20px;">Dear {{UserName}},</h2>
+            <p>Thank you for choosing to stay with us! We are pleased to confirm your booking as follows:</p>
+            <div class="details" style="margin: 20px 0;">
+                <p style="margin: 5px 0;"><strong>Booking Reference:</strong> {{BookingId}}</p>
+                <p style="margin: 5px 0;"><strong>Hotel Name:</strong> {{HotelName}}</p>
+                <p style="margin: 5px 0;"><strong>Check-in Date:</strong> {{CheckInDate}}</p>
+                <p style="margin: 5px 0;"><strong>Check-out Date:</strong> {{CheckOutDate}}</p>
+                <p style="margin: 5px 0;"><strong>Number of Guests:</strong> {{Participants}}</p>
+                <p style="margin: 5px 0;"><strong>Discount Amount:</strong> {{Discount}}.00$</p>
+                <p style="margin: 5px 0;"><strong>Payment Date:</strong> {{PaymentDate}}</p>
+                <p style="margin: 5px 0;"><strong>Total Price:</strong> {{TotalPrice}}.00$</p>
+            </div>
+            <p>If you have any questions or need further assistance, please do not hesitate to contact us.</p>
+            <p>We look forward to welcoming you soon!</p>
+            <p>Best regards,<br />StayEase</p>
+        </div>
+        <div class="footer" style="text-align: center; padding: 20px; background-color: #f4f4f4; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+            <p style=" margin: 0; font-size: 14px; color: #888888;">&copy; 2024 StayEase. All rights reserved.</p>
+            <p style=" margin: 0; font-size: 14px; color: #888888;">Ha Noi | +84358552038 | daotung492@gmail.com</p>
+        </div>
+    </div>
+</body>

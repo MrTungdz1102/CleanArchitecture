@@ -3,8 +3,10 @@ using CleanArchitecture.WebUI.Services.Implementations;
 using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
 using LazZiya.ExpressLocalization;
+using LazZiya.TagHelpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Syncfusion.Licensing;
 using System.Globalization;
 
@@ -69,6 +71,9 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddTransient<ITagHelperComponent, LocalizationValidationScriptsTagHelperComponent>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {
     option.ExpireTimeSpan = TimeSpan.FromHours(10);

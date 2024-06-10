@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CleanArchitecture.ApplicationCore.Commons;
+﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.Infrastructure.Identity.DTOs;
@@ -31,8 +30,15 @@ namespace CleanArchitecture.Infrastructure.Identity
             {
                 bool checkPass = false;
                 _user = await _userManager.FindByEmailAsync(loginRequest.Email);
+
                 if (_user != null)
                 {
+                    if (_user.LockoutEnd != null && _user.LockoutEnd > DateTime.Now)
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = $"User has been locked to {_user.LockoutEnd}";
+                        return _response;
+                    }
                     checkPass = await _userManager.CheckPasswordAsync(_user, loginRequest.Password);
                 }
                 if (_user == null || checkPass == false)
@@ -80,7 +86,7 @@ namespace CleanArchitecture.Infrastructure.Identity
                 {
                     if (registerRequest.Roles is null || registerRequest.Roles.Length == 0)
                     {
-                        await _roleService.AssignRole(registerRequest.Email, new string[] { "USER", "CUSTOMER" });
+                        await _roleService.AssignRole(registerRequest.Email, new string[] { "USER" });
                     }
                     else
                     {

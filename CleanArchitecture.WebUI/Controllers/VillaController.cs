@@ -71,7 +71,7 @@ namespace CleanArchitecture.WebUI.Controllers
         {
             if (User.IsInRole(Constants.Role_Customer))
             {
-                villaVM.Villa.OwnerId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                villaVM.Villa.UserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
             ResponseDTO? response = await _villaService.CreateVilla(villaVM.Villa);
             if (response != null && response.IsSuccess)
@@ -137,7 +137,7 @@ namespace CleanArchitecture.WebUI.Controllers
         {
             if (User.IsInRole(Constants.Role_Customer))
             {
-                villaVM.Villa.OwnerId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                villaVM.Villa.UserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
             ResponseDTO? response = await _villaService.UpdateVilla(villaVM.Villa);
             if (response != null && response.IsSuccess)

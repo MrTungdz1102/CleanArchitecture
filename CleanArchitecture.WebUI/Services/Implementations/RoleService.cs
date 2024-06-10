@@ -20,5 +20,14 @@ namespace CleanArchitecture.WebUI.Services.Implementations
                 ApiType = Constants.ApiType.GET
             });
         }
+
+        public async Task<ResponseDTO?> GetAllUserRoleAsync(string userId)
+        {
+            return await _baseService.SendAsync(new RequestDTO
+            {
+                Url = Constants.APIUrlBase + "/api/RoleApi/GetAllUserRole?userId=" + userId,
+                ApiType = Constants.ApiType.GET
+            });
+        }
     }
 }

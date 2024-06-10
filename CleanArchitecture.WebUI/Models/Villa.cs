@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using LazZiya.ExpressLocalization.DataAnnotations;
+using LazZiya.ExpressLocalization.Messages;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace CleanArchitecture.WebUI.Models
@@ -7,12 +9,14 @@ namespace CleanArchitecture.WebUI.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(50)]
+        [ExRequired]
+        [ExStringLength(50)]
         public string Name { get; set; }
         public string? Description { get; set; }
         [Display(Name = "Price per night")]
+        [ExRequired(ErrorMessage = DataAnnotationsErrorMessages.RequiredAttribute_ValidationError)]
         public double Price { get; set; }
+        [Required]
         public int SquareFeet { get; set; }
         [Range(1, 10)]
         public int Occupancy { get; set; }
@@ -27,7 +31,9 @@ namespace CleanArchitecture.WebUI.Models
         public bool IsAvailable { get; set; }
 
         public double StartRating { get; set; }
-        public string? OwnerId { get; set; }
+        public string? UserId { get; set; }
+
+        public IEnumerable<Review>? ReviewList { get; set; }
 
         public int CityId { get; set; }
         public City? City { get; set; }

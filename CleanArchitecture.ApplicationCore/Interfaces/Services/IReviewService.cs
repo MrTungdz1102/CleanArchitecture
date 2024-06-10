@@ -1,10 +1,5 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.ApplicationCore.Interfaces.Services
 {
@@ -14,5 +9,6 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Services
         Task<ResponseDTO> CreateReview(Review review);
         Task<ResponseDTO> UpdateReview(Review review);
         Task<ResponseDTO> DeleteReview(int reviewId);
+        Task<ResponseDTO> GetReview(int reviewId);
     }
 }

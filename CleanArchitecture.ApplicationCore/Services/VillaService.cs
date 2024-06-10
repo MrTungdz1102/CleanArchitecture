@@ -166,14 +166,15 @@ namespace CleanArchitecture.ApplicationCore.Services
             return _response;
         }
 
-        public async Task<ResponseDTO> GetAllDetailVilla(int nights, long checkInDate)
+        public async Task<ResponseDTO> GetAllDetailVilla(int nights, long checkInDate, string? keyword, int? cityId, double? priceFrom, double? priceTo)
         {
             try
             {
                 DateTime dateTime = checkInDate.ToDateTime();
 
                 DateOnly date = DateOnly.FromDateTime(dateTime);
-                List<Villa> villas = await _unitOfWork.villaRepo.ListAsync();
+                var vilaSpec = new VillaSpecification(keyword, cityId, priceFrom, priceTo);
+                List<Villa> villas = await _unitOfWork.villaRepo.ListAsync(vilaSpec);
                 List<VillaDTO> villaDTO = _mapper.Map<List<VillaDTO>>(villas);
                 foreach (var villa in villaDTO)
                 {

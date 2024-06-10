@@ -1,16 +1,9 @@
 ﻿using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.Infrastructure.Converter;
-using CleanArchitecture.Infrastructure.Data.DataConfigurations;
 using CleanArchitecture.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.Infrastructure.Data
 {
@@ -18,7 +11,7 @@ namespace CleanArchitecture.Infrastructure.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> option) : base(option)
         {
-            
+
         }
         public DbSet<Villa> Villas { get; set; }
         public DbSet<VillaNumber> VillaNumbers { get; set; }
@@ -35,6 +28,13 @@ namespace CleanArchitecture.Infrastructure.Data
             //modelBuilder.ApplyConfiguration(new VillaNumberConfiguration());
             //modelBuilder.ApplyConfiguration(new AmenityConfiguration());
             //modelBuilder.ApplyConfiguration(new BookingConfiguration());
+            modelBuilder.Entity<AppUser>(entity => { entity.ToTable(name: "Users"); });
+            modelBuilder.Entity<IdentityRole>(entity => { entity.ToTable(name: "Roles"); });
+            modelBuilder.Entity<IdentityUserRole<string>>(entity => { entity.ToTable("UserRoles"); });
+            modelBuilder.Entity<IdentityUserClaim<string>>(entity => { entity.ToTable("UserClaims"); });
+            modelBuilder.Entity<IdentityUserLogin<string>>(entity => { entity.ToTable("UserLogins"); });
+            modelBuilder.Entity<IdentityUserToken<string>>(entity => { entity.ToTable("UserTokens"); });
+            modelBuilder.Entity<IdentityRoleClaim<string>>(entity => { entity.ToTable("RoleClaims"); });
         }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder builder)

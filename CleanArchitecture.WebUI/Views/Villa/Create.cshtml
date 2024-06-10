@@ -22,7 +22,7 @@
                     <label asp-for="Villa.CityId" class="ms-2" localize-content>City</label>
                     <span asp-validation-for="Villa.CityId" class="text-danger"></span>
                 </div> 
-                @* <div asp-validation-summary="All"></div>  *@
+                 @* <div asp-validation-summary="All"></div>   *@
                  <div class="form-floating py-1 col-12">
                     <input asp-for="Villa.Name" class="form-control border shadow" />
                     <label asp-for="Villa.Name" class="ms-2"></label>
@@ -57,12 +57,12 @@
                 <div class="row pt-2">
                     <div class="col-6 col-md-3">
                         <button type="submit" class="btn btn-success w-100">
-                            <i class="bi bi-check-circle"></i> Create
+                            <i class="bi bi-check-circle"></i>  <localize>Create</localize>
                         </button>
                     </div>
                     <div class="col-6 col-md-3">
                         <a asp-controller="Villa" asp-action="Index" class="btn btn-secondary w-100">
-                            <i class="bi bi-x-circle"></i> Cancel
+                            <i class="bi bi-x-circle"></i>  <localize>Cancel</localize>
                         </a>
                     </div>
                 </div>

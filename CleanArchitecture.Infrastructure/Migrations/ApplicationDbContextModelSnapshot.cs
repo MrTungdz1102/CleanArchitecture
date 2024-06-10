@@ -276,18 +276,18 @@ namespace CleanArchitecture.Infrastructure.Migrations
                             CouponId = 1,
                             CouponCode = "10OFF",
                             DiscountAmount = 50.0,
-                            EndingDate = new DateTime(2024, 6, 15, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(4918),
+                            EndingDate = new DateTime(2024, 7, 4, 23, 30, 18, 642, DateTimeKind.Local).AddTicks(3540),
                             MinAmount = 200,
-                            StartingDate = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(4907)
+                            StartingDate = new DateTime(2024, 6, 4, 23, 30, 18, 642, DateTimeKind.Local).AddTicks(3525)
                         },
                         new
                         {
                             CouponId = 2,
                             CouponCode = "20OFF",
                             DiscountAmount = 100.0,
-                            EndingDate = new DateTime(2024, 5, 26, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(4927),
+                            EndingDate = new DateTime(2024, 6, 14, 23, 30, 18, 642, DateTimeKind.Local).AddTicks(3546),
                             MinAmount = 500,
-                            StartingDate = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(4926)
+                            StartingDate = new DateTime(2024, 6, 4, 23, 30, 18, 642, DateTimeKind.Local).AddTicks(3545)
                         });
                 });
 
@@ -299,19 +299,23 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ModifiedAt")
+                    b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Rating")
+                    b.Property<int?>("Rating")
                         .HasColumnType("int");
 
+                    b.Property<string>("ReviewContent")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -328,21 +332,23 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Content = "Rất vui được ở lại ! Các chủ nhà đã chào đón",
-                            CreatedAt = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(6770),
-                            ModifiedAt = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(6774),
+                            CreatedAt = new DateTime(2024, 6, 4, 23, 30, 18, 642, DateTimeKind.Local).AddTicks(5271),
+                            ModifiedAt = new DateTime(2024, 6, 4, 23, 30, 18, 642, DateTimeKind.Local).AddTicks(5278),
                             Rating = 5,
+                            ReviewContent = "Rất vui được ở lại ! Các chủ nhà đã chào đón",
                             UserId = "3bb437a2-da65-4b7e-bf85-e24bc6052031",
+                            UserName = "Tran My Linh",
                             VillaId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Content = "Thanks for serving our!",
-                            CreatedAt = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(6775),
-                            ModifiedAt = new DateTime(2024, 5, 16, 8, 36, 3, 419, DateTimeKind.Local).AddTicks(6776),
+                            CreatedAt = new DateTime(2024, 6, 4, 23, 30, 18, 642, DateTimeKind.Local).AddTicks(5280),
+                            ModifiedAt = new DateTime(2024, 6, 4, 23, 30, 18, 642, DateTimeKind.Local).AddTicks(5281),
                             Rating = 4,
+                            ReviewContent = "Thanks for serving our!",
                             UserId = "6af96a07-d096-46a8-aec8-9aa8566617bd",
+                            UserName = "John Wick",
                             VillaId = 1
                         });
                 });
@@ -381,9 +387,6 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Property<int>("Occupancy")
                         .HasColumnType("int");
 
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
@@ -393,11 +396,14 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Property<double>("StartRating")
                         .HasColumnType("float");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Villas");
+                    b.ToTable("Hotels");
 
                     b.HasData(
                         new
@@ -408,10 +414,10 @@ namespace CleanArchitecture.Infrastructure.Migrations
                             ImageUrl = "https://placehold.co/600x400",
                             Name = "Royal Villa",
                             Occupancy = 4,
-                            OwnerId = "ed4cdaa3-868e-43d6-b899-c54e5fdd76eb",
                             Price = 200.0,
                             SquareFeet = 550,
-                            StartRating = 5.0
+                            StartRating = 5.0,
+                            UserId = "ed4cdaa3-868e-43d6-b899-c54e5fdd76eb"
                         },
                         new
                         {
@@ -421,10 +427,10 @@ namespace CleanArchitecture.Infrastructure.Migrations
                             ImageUrl = "https://placehold.co/600x401",
                             Name = "Premium Pool Villa",
                             Occupancy = 4,
-                            OwnerId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1",
                             Price = 300.0,
                             SquareFeet = 550,
-                            StartRating = 4.5
+                            StartRating = 4.5,
+                            UserId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1"
                         },
                         new
                         {
@@ -434,10 +440,10 @@ namespace CleanArchitecture.Infrastructure.Migrations
                             ImageUrl = "https://placehold.co/600x402",
                             Name = "Luxury Pool Villa",
                             Occupancy = 4,
-                            OwnerId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1",
                             Price = 400.0,
                             SquareFeet = 750,
-                            StartRating = 4.9000000000000004
+                            StartRating = 4.9000000000000004,
+                            UserId = "2b4020a4-ba31-4031-bc5b-22461c00e6f1"
                         });
                 });
 
@@ -456,7 +462,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.HasIndex("VillaId");
 
-                    b.ToTable("VillaNumbers");
+                    b.ToTable("HotelRooms");
 
                     b.HasData(
                         new
@@ -580,7 +586,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -607,7 +613,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -632,7 +638,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("RoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -657,7 +663,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("UserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -679,7 +685,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("UserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -694,7 +700,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -713,7 +719,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("UserTokens", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.ApplicationCore.Entities.Amenity", b =>

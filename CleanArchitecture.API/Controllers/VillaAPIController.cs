@@ -25,7 +25,6 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("GetAllVilla")]
-
         public async Task<ActionResult<ResponseDTO>> GetAllVilla(string? userId)
         {
             return Ok(await _villaService.GetAllVilla(userId));
@@ -50,9 +49,9 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("GetAllDetailVilla")]
-        public async Task<ActionResult<ResponseDTO>> GetAllDetailVilla(int nights, long checkInDate)
+        public async Task<ActionResult<ResponseDTO>> GetAllDetailVilla(int nights, long checkInDate, string? keyword, int? cityId, double? priceFrom, double? priceTo)
         {
-            return Ok(await _villaService.GetAllDetailVilla(nights, checkInDate));
+            return Ok(await _villaService.GetAllDetailVilla(nights, checkInDate, keyword, cityId, priceFrom, priceTo));
         }
 
         [HttpGet("IsVillaAvailableByDate")]

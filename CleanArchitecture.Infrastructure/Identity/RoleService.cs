@@ -1,11 +1,6 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.Infrastructure.Identity
 {
@@ -48,6 +43,29 @@ namespace CleanArchitecture.Infrastructure.Identity
             try
             {
                 _response.Result = _roleManager.Roles.Select(x => x.Name).ToList();
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        public async Task<ResponseDTO> GetAllUserRoleAsync(string userId)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user is null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Can not find out user";
+                }
+                else
+                {
+                    _response.Result = await _userManager.GetRolesAsync(user);
+                }
             }
             catch (Exception ex)
             {

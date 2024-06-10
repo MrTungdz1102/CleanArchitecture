@@ -3,12 +3,6 @@ using CleanArchitecture.ApplicationCore.Entities;
 using CleanArchitecture.ApplicationCore.Interfaces.Repositories;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
 using CleanArchitecture.ApplicationCore.Specifications;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.ApplicationCore.Services
 {
@@ -86,7 +80,7 @@ namespace CleanArchitecture.ApplicationCore.Services
         {
             try
             {
-                bool roomNumberExists  = await CheckVillaNumberExits(villaNumber.Villa_Number);
+                bool roomNumberExists = await CheckVillaNumberExits(villaNumber.Villa_Number);
                 if (!roomNumberExists)
                 {
                     _response.Result = await _unitOfWork.villaNumberRepo.AddAsync(villaNumber);
@@ -96,7 +90,8 @@ namespace CleanArchitecture.ApplicationCore.Services
                     _response.Message = "Room was exist";
                     _response.IsSuccess = false;
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 _response.Message = ex.Message;
                 _response.IsSuccess = false;
@@ -109,7 +104,7 @@ namespace CleanArchitecture.ApplicationCore.Services
             try
             {
                 VillaNumber? deleteVillaNumber = await _unitOfWork.villaNumberRepo.GetByIdAsync(villaNumberId);
-                 await _unitOfWork.villaNumberRepo.DeleteAsync(deleteVillaNumber);
+                await _unitOfWork.villaNumberRepo.DeleteAsync(deleteVillaNumber);
             }
             catch (Exception ex)
             {
@@ -124,7 +119,7 @@ namespace CleanArchitecture.ApplicationCore.Services
             try
             {
                 var totalSize = await _unitOfWork.villaNumberRepo.CountAsync();
-                var specification = new VillaNumberSpecification(queryParameter, userId);                
+                var specification = new VillaNumberSpecification(queryParameter, userId);
                 List<VillaNumber> villas = await _unitOfWork.villaNumberRepo.ListAsync(specification);
                 _response.Result = new PageResult<VillaNumber>
                 {
