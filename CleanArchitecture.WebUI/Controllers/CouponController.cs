@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
-    [Authorize(Roles = Constants.Role_Admin)]
+    [Authorize(Roles = Constants.Role_Admin + "," + Constants.Role_Manager)]
     public class CouponController : Controller
     {
         private readonly ICouponService _couponService;
@@ -17,7 +17,7 @@ namespace CleanArchitecture.WebUI.Controllers
         {
             _couponService = couponService;
         }
-        
+
         public async Task<IActionResult> Index()
         {
             List<Coupon>? coupons = new List<Coupon>();
@@ -85,36 +85,36 @@ namespace CleanArchitecture.WebUI.Controllers
             return View(coupon);
         }
 
-		public async Task<IActionResult> DeleteCoupon(int id)
-		{
-			Coupon? coupon = null;
-			ResponseDTO? response = await _couponService.GetCouponById(id);
-			if (response != null && response.IsSuccess)
-			{
-				coupon = JsonConvert.DeserializeObject<Coupon>(Convert.ToString(response.Result));
-			}
-			else
-			{
-				TempData["error"] = response?.Message;
-			}
-			return View(coupon);
-		}
+        public async Task<IActionResult> DeleteCoupon(int id)
+        {
+            Coupon? coupon = null;
+            ResponseDTO? response = await _couponService.GetCouponById(id);
+            if (response != null && response.IsSuccess)
+            {
+                coupon = JsonConvert.DeserializeObject<Coupon>(Convert.ToString(response.Result));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(coupon);
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> DeleteCoupon(Coupon coupon)
-		{
-			ResponseDTO? response = await _couponService.DeleteCoupon(coupon.CouponId);
-			if (response != null && response.IsSuccess)
-			{
-				TempData["success"] = "Coupon deleted successfully";
-				return RedirectToAction(nameof(Index));
-			}
-			else
-			{
-				TempData["error"] = response?.Message;
-			}
-			return View(coupon);
-		}
+        [HttpPost]
+        public async Task<IActionResult> DeleteCoupon(Coupon coupon)
+        {
+            ResponseDTO? response = await _couponService.DeleteCoupon(coupon.CouponId);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Coupon deleted successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(coupon);
+        }
 
-	}
+    }
 }

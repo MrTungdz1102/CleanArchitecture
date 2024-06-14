@@ -11,16 +11,18 @@ using System.Security.Claims;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
-    [Authorize(Roles = Constants.Role_Admin)]
+    [Authorize(Roles = Constants.Role_Admin + "," + Constants.Role_Customer + "," + Constants.Role_Manager)]
     public class VillaController : Controller
     {
         private readonly IVillaService _villaService;
         private readonly ICityService _cityService;
+        private readonly IUserService _userService;
 
-        public VillaController(IVillaService villaService, ICityService cityService)
+        public VillaController(IVillaService villaService, ICityService cityService, IUserService userService)
         {
             _villaService = villaService;
             _cityService = cityService;
+            _userService = userService;
         }
         public async Task<IActionResult> Index()
         {
@@ -46,9 +48,15 @@ namespace CleanArchitecture.WebUI.Controllers
         {
             ResponseDTO? response = await _cityService.GetAllCity();
             List<City> cityList = new List<City>();
+            List<AppUser> users = new List<AppUser>();
             if (response != null && response.IsSuccess)
             {
                 cityList = JsonConvert.DeserializeObject<List<City>>(Convert.ToString(response.Result));
+                if (User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Manager))
+                {
+                    response = await _userService.GetAllUserAsync();
+                    users = JsonConvert.DeserializeObject<List<AppUser>>(Convert.ToString(response.Result));
+                }
             }
             else
             {
@@ -58,6 +66,11 @@ namespace CleanArchitecture.WebUI.Controllers
             VillaVM villaVM = new VillaVM
             {
                 CityList = cityList.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }),
+                UserList = users.Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -84,9 +97,15 @@ namespace CleanArchitecture.WebUI.Controllers
                 TempData["error"] = response?.Message;
                 response = await _cityService.GetAllCity();
                 List<City> cityList = new List<City>();
+                List<AppUser> users = new List<AppUser>();
                 if (response != null && response.IsSuccess)
                 {
                     cityList = JsonConvert.DeserializeObject<List<City>>(Convert.ToString(response.Result));
+                    if (User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Manager))
+                    {
+                        response = await _userService.GetAllUserAsync();
+                        users = JsonConvert.DeserializeObject<List<AppUser>>(Convert.ToString(response.Result));
+                    }
                 }
                 else
                 {
@@ -99,6 +118,11 @@ namespace CleanArchitecture.WebUI.Controllers
                     {
                         Text = x.Name,
                         Value = x.Id.ToString()
+                    }),
+                    UserList = users.Select(x => new SelectListItem
+                    {
+                        Text = x.Name + " " + x.Email,
+                        Value = x.Id.ToString()
                     })
                 };
             }
@@ -109,12 +133,18 @@ namespace CleanArchitecture.WebUI.Controllers
         {
             Villa? villa = null;
             IEnumerable<City> listCity = new List<City>();
+            List<AppUser> users = new List<AppUser>();
             ResponseDTO? response1 = await _villaService.GetVillaById(villaId);
             ResponseDTO? response2 = await _cityService.GetAllCity();
             if ((response1 != null && response1.IsSuccess) && (response2 != null && response2.IsSuccess))
             {
                 villa = JsonConvert.DeserializeObject<Villa>(Convert.ToString(response1.Result));
                 listCity = JsonConvert.DeserializeObject<List<City>>(Convert.ToString(response2.Result));
+                if (User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Manager))
+                {
+                    response1 = await _userService.GetAllUserAsync();
+                    users = JsonConvert.DeserializeObject<List<AppUser>>(Convert.ToString(response1.Result));
+                }
             }
             else
             {
@@ -128,7 +158,12 @@ namespace CleanArchitecture.WebUI.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }),
-                Villa = villa
+                Villa = villa,
+                UserList = users.Select(x => new SelectListItem
+                {
+                    Text = x.Name + " " + x.Email,
+                    Value = x.Id.ToString()
+                })
             };
             return View(villaVM);
         }
@@ -150,9 +185,15 @@ namespace CleanArchitecture.WebUI.Controllers
                 TempData["error"] = response?.Message;
                 response = await _cityService.GetAllCity();
                 List<City> cityList = new List<City>();
+                List<AppUser> users = new List<AppUser>();
                 if (response != null && response.IsSuccess)
                 {
                     cityList = JsonConvert.DeserializeObject<List<City>>(Convert.ToString(response.Result));
+                    if (User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Manager))
+                    {
+                        response = await _userService.GetAllUserAsync();
+                        users = JsonConvert.DeserializeObject<List<AppUser>>(Convert.ToString(response.Result));
+                    }
                 }
                 else
                 {
@@ -165,6 +206,11 @@ namespace CleanArchitecture.WebUI.Controllers
                     {
                         Text = x.Name,
                         Value = x.Id.ToString()
+                    }),
+                    UserList = users.Select(x => new SelectListItem
+                    {
+                        Text = x.Name + " " + x.Email,
+                        Value = x.Id.ToString()
                     })
                 };
             }
@@ -174,12 +220,18 @@ namespace CleanArchitecture.WebUI.Controllers
         {
             Villa? villa = null;
             IEnumerable<City> listCity = new List<City>();
+            List<AppUser> users = new List<AppUser>();
             ResponseDTO? response1 = await _villaService.GetVillaById(villaId);
             ResponseDTO? response2 = await _cityService.GetAllCity();
             if ((response1 != null && response1.IsSuccess) && (response2 != null && response2.IsSuccess))
             {
                 villa = JsonConvert.DeserializeObject<Villa>(Convert.ToString(response1.Result));
                 listCity = JsonConvert.DeserializeObject<List<City>>(Convert.ToString(response2.Result));
+                if (User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Manager))
+                {
+                    response1 = await _userService.GetAllUserAsync();
+                    users = JsonConvert.DeserializeObject<List<AppUser>>(Convert.ToString(response1.Result));
+                }
             }
             else
             {
@@ -192,7 +244,12 @@ namespace CleanArchitecture.WebUI.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }),
-                Villa = villa
+                Villa = villa,
+                UserList = users.Select(x => new SelectListItem
+                {
+                    Text = x.Name + " " + x.Email,
+                    Value = x.Id.ToString()
+                })
             };
             return View(villaVM);
         }

@@ -60,6 +60,16 @@
                         <label asp-for="Villa.ImageLocalPath" class="ms-2"></label>
                         <span asp-validation-for="Villa.ImageLocalPath" class="text-danger"></span>
                     </div>
+                    @if (User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Manager))
+                    {
+                        <div class="form-floating py-1 col-12">
+                            <select asp-for="@Model.Villa.UserId" asp-items="@Model.UserList" class="form-select border shadow">
+                                <option disabled selected>--Select User--</option>
+                            </select>
+                            <label asp-for="Villa.UserId" class="ms-2" localize-content>Owner</label>
+                            <span asp-validation-for="Villa.UserId" class="text-danger"></span>
+                        </div>
+                    }
                     <div class="row pt-2">
                         <div class="col-6 col-md-3">
                             <button type="submit" class="btn btn-success w-100">

@@ -1,12 +1,14 @@
 ﻿using CleanArchitecture.WebUI.Models;
 using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Services.Interfaces;
+using CleanArchitecture.WebUI.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Security.Claims;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
+    [Authorize(Roles = Constants.Role_Admin + "," + Constants.Role_Manager)]
     public class CityController : Controller
     {
         private readonly ICityService _cityService;

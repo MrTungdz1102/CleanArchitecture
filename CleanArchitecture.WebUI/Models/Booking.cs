@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace CleanArchitecture.WebUI.Models
@@ -37,6 +38,8 @@ namespace CleanArchitecture.WebUI.Models
         public string? CouponCode { get; set; }
 
         [RegularExpression("^[0-9]*$", ErrorMessage = "The Participants must is an integer number")]
+        [Range(1, int.MaxValue, ErrorMessage = "The Participants must be greater than 0")]
+        [DefaultValue(1)]
         public int Participants { get; set; }
 
         public int VillaNumber { get; set; }

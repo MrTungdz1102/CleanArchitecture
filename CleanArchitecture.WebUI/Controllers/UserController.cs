@@ -2,12 +2,16 @@
 using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Models.ViewModel;
 using CleanArchitecture.WebUI.Services.Interfaces;
+using CleanArchitecture.WebUI.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
+    [Authorize(Roles = Constants.Role_Admin + "," + Constants.Role_Manager)]
     public class UserController : Controller
     {
         private readonly IUserService _userService;

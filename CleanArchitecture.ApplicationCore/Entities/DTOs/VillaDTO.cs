@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CleanArchitecture.ApplicationCore.Entities.DTOs
 {
@@ -33,7 +28,7 @@ namespace CleanArchitecture.ApplicationCore.Entities.DTOs
         public bool IsAvailable { get; set; } = true;
 
         public double StartRating { get; set; }
-        public string? OwnerName { get; set; }
+        public string? UserId { get; set; }
 
         public int CityId { get; set; }
         public City? City { get; set; }

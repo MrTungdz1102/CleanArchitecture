@@ -71,7 +71,7 @@
                     </div>
                     <div class="modal-body m-0">
                             @await Html.PartialAsync("_VillaDetailPartial", villa)
-                            @await Html.PartialAsync("_RatingPartial", villa.ReviewList)
+                            @await Html.PartialAsync("_RatingPartial", villa)
                     </div>
                     <div class="modal-footer">
                             <button asp-controller="Home" asp-action="GeneratePPTExport"

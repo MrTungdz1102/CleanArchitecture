@@ -8,5 +8,7 @@ namespace CleanArchitecture.WebUI.Models.ViewModel
         public Villa? Villa { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem>? CityList { get; set; }
+        [ValidateNever]
+        public IEnumerable<SelectListItem>? UserList { get; set; }
     }
 }

@@ -1,12 +1,7 @@
-﻿using Azure;
-using CleanArchitecture.ApplicationCore.Commons;
+﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
+using Stripe;
 using Stripe.Checkout;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.Infrastructure.Payment
 {
@@ -52,7 +47,28 @@ namespace CleanArchitecture.Infrastructure.Payment
                 };
                 _response.Result = paymentResponse;
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                _response.Message = ex.Message;
+                _response.IsSuccess = false;
+            }
+            return _response;
+        }
+
+        public ResponseDTO Refund(string paymentIntentId)
+        {
+            try
+            {
+                var options = new RefundCreateOptions
+                {
+                    Reason = RefundReasons.RequestedByCustomer,
+                    PaymentIntent = paymentIntentId
+                };
+                RefundService service = new RefundService();
+                Refund refund = service.Create(options);
+                _response.Result = refund;
+            }
+            catch (Exception ex)
             {
                 _response.Message = ex.Message;
                 _response.IsSuccess = false;

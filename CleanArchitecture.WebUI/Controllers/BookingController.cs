@@ -74,7 +74,17 @@ namespace CleanArchitecture.WebUI.Controllers
 
         public async Task<IActionResult> CancelBooking(Booking booking)
         {
-            ResponseDTO? response = await _bookingService.UpdateBookingStatus(booking.Id, Constants.StatusCancelled, 0);
+            ResponseDTO? response = new();
+            if (booking.Status == Constants.StatusPending)
+            {
+                response = await _bookingService.UpdateBookingStatus(booking.Id, Constants.StatusCancelled, 0);
+            }
+
+            if (booking.Status == Constants.StatusApproved)
+            {
+                response = await _paymentService.Refund(booking.StripePaymentIntentId!);
+                response = await _bookingService.UpdateBookingStatus(booking.Id, Constants.StatusRefunded, 0);
+            }
             if (response is not null && response.IsSuccess)
             {
                 TempData["success"] = "Booking Canceled Successfully.";

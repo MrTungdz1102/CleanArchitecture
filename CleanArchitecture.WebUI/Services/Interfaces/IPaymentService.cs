@@ -7,5 +7,6 @@ namespace CleanArchitecture.WebUI.Services.Interfaces
     {
         Task<ResponseDTO?> CreateCheckout(StripePaymentRequest stripePaymentRequest);
         Task<ResponseDTO?> ValidatePayment(string sessionId);
+        Task<ResponseDTO?> Refund(string paymentIntentId);
     }
 }

@@ -2,6 +2,7 @@
 using LazZiya.ExpressLocalization.Messages;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CleanArchitecture.WebUI.Models
 {
@@ -37,5 +38,9 @@ namespace CleanArchitecture.WebUI.Models
 
         public int CityId { get; set; }
         public City? City { get; set; }
+
+        [ValidateNever]
+        [NotMapped]
+        public string? ReviewContent { get; set; }
     }
 }

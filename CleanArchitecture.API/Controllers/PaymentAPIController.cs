@@ -1,7 +1,5 @@
 ﻿using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Interfaces.Services;
-using CleanArchitecture.Infrastructure.Payment;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.API.Controllers
@@ -23,9 +21,15 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("ValidatePayment")]
-        public IActionResult ValidatePayment([FromBody]string sessionId)
+        public IActionResult ValidatePayment([FromBody] string sessionId)
         {
             return Ok(_paymentService.ValidatePayment(sessionId));
+        }
+
+        [HttpPost("Refund")]
+        public IActionResult Refund([FromBody] string paymentIntentId)
+        {
+            return Ok(_paymentService.Refund(paymentIntentId));
         }
 
     }

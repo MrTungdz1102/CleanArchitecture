@@ -360,6 +360,9 @@
   <data name="Occupancy" xml:space="preserve">
     <value>Sức Chứa</value>
   </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Nguời Sở Hữu</value>
+  </data>
   <data name="Pack your bags! You are one step closer to an amazing vacation!" xml:space="preserve">
     <value>Chúc quý khách có một kì nghỉ dưỡng vui vẻ!</value>
   </data>

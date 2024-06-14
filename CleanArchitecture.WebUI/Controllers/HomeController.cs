@@ -3,6 +3,7 @@ using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Models.ViewModel;
 using CleanArchitecture.WebUI.Services.Interfaces;
 using CleanArchitecture.WebUI.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -273,20 +274,21 @@ namespace CleanArchitecture.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateReview(string? content, int? rating, int villaId)
+        [Authorize]
+        public async Task<IActionResult> CreateReview(Villa villa)
         {
             Review review = new Review();
             review.CreatedAt = DateTime.Now;
-            review.ReviewContent = content;
-            review.Rating = rating;
-            review.VillaId = villaId;
+            review.ReviewContent = villa.ReviewContent;
+            review.Rating = null;
+            review.VillaId = villa.Id;
             review.UserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             review.UserName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
             ResponseDTO? response = await _reviewService.CreateReview(review);
             if (response is not null && response.IsSuccess)
             {
-                TempData["success"] = "Revie successfully";
+                TempData["success"] = "Review successfully";
             }
             else
             {
@@ -296,6 +298,7 @@ namespace CleanArchitecture.WebUI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> UpdateReview(int reviewId, string? content, int? rating, int villaId)
         {
             ResponseDTO? response = await _reviewService.GetReview(reviewId);
@@ -322,6 +325,7 @@ namespace CleanArchitecture.WebUI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> DeleteReview(int reviewId)
         {
             ResponseDTO? response = await _reviewService.DeleteReview(reviewId);

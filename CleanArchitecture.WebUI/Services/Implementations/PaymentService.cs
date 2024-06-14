@@ -23,6 +23,16 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             });
         }
 
+        public async Task<ResponseDTO?> Refund(string paymentIntentId)
+        {
+            return await _baseService.SendAsync(new RequestDTO
+            {
+                Url = Constants.APIUrlBase + "/api/PaymentAPI/Refund",
+                ApiType = Constants.ApiType.POST,
+                Data = paymentIntentId
+            });
+        }
+
         public async Task<ResponseDTO?> ValidatePayment(string sessionId)
         {
             return await _baseService.SendAsync(new RequestDTO

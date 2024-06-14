@@ -1,10 +1,13 @@
 ﻿using CleanArchitecture.WebUI.Models.DTOs;
 using CleanArchitecture.WebUI.Services.Interfaces;
+using CleanArchitecture.WebUI.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
+    [Authorize(Roles = Constants.Role_Admin + "," + Constants.Role_Manager)]
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService;

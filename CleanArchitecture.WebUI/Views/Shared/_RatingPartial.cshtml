@@ -1,4 +1,4 @@
-﻿@model List<CleanArchitecture.WebUI.Models.Review>
+﻿@model CleanArchitecture.WebUI.Models.Villa
 <hr />
 
 <div class="row">
@@ -83,8 +83,9 @@
         <form method="post" asp-action="CreateReview" asp-controller="Home">
         <div>
             <h4 class="mb-1" localize-content>Review this Hotel</h4>
-            <p class="font-12 " localize-content>Share your thoughts with other customers</p>
-            <input class="form-control mb-3"/>
+            <p class="font-12" localize-content>Share your thoughts with other customers</p>
+                <input asp-for="@Model.Id" hidden />
+                <input asp-for="@Model.ReviewContent" class="form-control mb-3"/>
                 <button type="submit" class="btn-block" localize-content>Write A Review</button>
         </div>
         </form>
@@ -105,24 +106,34 @@
             </div>
         </div>
         <!-- reviews -->
-        @foreach (var item in Model)
+         @{
+                int i = 1;
+                   
+        @foreach (var item in Model.ReviewList)
         {
+                string scr = "";
+                    if (i > 3)
+                    {
+                        i = 1;
+                    }
+                scr = "/images/avatar-" + @i + ".png";
+                i++;
             <div class="mb-4 pb-4 border-bottom">
                 <div class="d-flex mb-3 align-items-center">
-                <img src="~/images/avatar-1.png" alt="" class="rounded-circle avatar-lg">
+                        <img src="@scr" alt="" class="rounded-circle avatar-lg">
                 <div class="ml-2">
-                    <h5 class="mb-1">
+                    <h5 class="mb-1 ms-3">
                         @item.UserName
                         @* <img src="~/images/avatar-1.png" alt=""> *@
                     </h5>
-                    <p class="font-12 mb-0">
-                        <span>@item.Id</span> <span>@item.CreatedAt</span>
+                    <p class="font-12 mb-0 ms-3">
+                        <span></span> <span>@item.CreatedAt</span>
                     </p>
                 </div>
             </div>
             <div class="mb-2">
                 <span class="font-14 mr-2"><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i></span>
-                <span class="h5">Highly recommended</span>
+               @*  <span class="h5">Highly recommended</span> *@
             </div>
             <p>
                 @item.ReviewContent
@@ -130,6 +141,7 @@
             <a href="#!" class="btn btn-light btn-sm mr-2">Helpful</a>
             <a href="#!" class="text-inherit font-14">Report abuse</a>
         </div>
+        }
         }
         <a href="#!" style="width: 50%;" class="btn-block offset-3">Read More Reviews</a>
     </div>

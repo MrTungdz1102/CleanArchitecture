@@ -65,8 +65,8 @@
                         <h3 class="text-success" localize-content>Enter Booking Details</h3>
                     </div>
                     <div class="col-6">
-                        @if ((Model.Status == Constants.StatusApproved || Model.Status == Constants.StatusPending)
-                        && (User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Customer)))
+                        @* && (User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Customer) *@
+                        @if ((Model.Status == Constants.StatusApproved || Model.Status == Constants.StatusPending))
                         {
                             <button type="submit" asp-controller="Booking" asp-action="CancelBooking" class="btn btn-sm btn-outline-danger form-control my-1">
                                 <i class="bi bi-x-circle"></i> &nbsp; <localize>Cancel Booking</localize>
@@ -152,25 +152,26 @@
                         }
                     }
 
-                    @if (Model.IsPaymentSuccessful && (User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Customer)))
+                    @if (Model.IsPaymentSuccessful)
                     {
                         <div class="form-group pt-2 col-6">
                             <label class="text-warning">Stripe PaymentIntent Id</label>
-                            <input asp-for="StripePaymentIntentId" disabled class="form-control" />
+                            <input asp-for="StripePaymentIntentId" readonly class="form-control" />
                         </div>
                         <div class="form-group pt-2 col-6">
                             <label class="text-warning">Stripe Session Id</label>
-                            <input asp-for="StripeSessionId" disabled class="form-control" />
+                            <input asp-for="StripeSessionId" readonly class="form-control" />
                         </div>
                         <div class="form-group pt-2 col-6">
                             <label class="text-warning" localize-content>Payment Date</label>
-                            <input asp-for="PaymentDate" disabled class="form-control" />
+                            <input asp-for="PaymentDate" readonly class="form-control" />
                         </div>
                     }
                     <div class="form-group pt-2 col-6">
                         <label class="text-warning" localize-content>Status</label>
-                        <input asp-for="Status" disabled class="form-control" />
+                        <input asp-for="Status" readonly class="form-control" />
                     </div>
+                    <input asp-for="IsPaymentSuccessful" hidden class="form-control" />
                 </div>
                 <div class="form-group pt-2 pt-md-4">
                     @if ((User.IsInRole(Constants.Role_Admin) || User.IsInRole(Constants.Role_Customer)))
