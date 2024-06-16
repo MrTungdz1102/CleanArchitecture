@@ -9,5 +9,8 @@ namespace CleanArchitecture.WebUI.Services.Interfaces
         Task<ResponseDTO?> LockUnlockAsync(string userId);
         Task<ResponseDTO?> GetUserInfoAsync(string userId);
         Task<ResponseDTO?> UpdateUserAsync(AppUser user);
+        Task<ResponseDTO?> ForgotPasswordAsync(string email);
+        Task<ResponseDTO?> ResetPasswordAsync(ResetPasswordDTO passwordDTO);
+        Task<ResponseDTO?> ChangePasswordAsync(ChangePasswordDTO passwordDTO);
     }
 }

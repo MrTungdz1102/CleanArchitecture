@@ -1,7 +1,14 @@
 ﻿@model CleanArchitecture.WebUI.Models.ViewModel.ManageUserVM
 @{
     ViewData["Title"] = "Managment";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    if (User.IsInRole(Constants.Role_Manager))
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
 }
 
 <div class="card shadow border-0 mt-4">
@@ -18,47 +25,61 @@
             <div class="border p-3">
                 @*<div asp-validation-summary="ModelOnly"></div>*@
                 <div class="form-floating py-2 mb-3 col-12">
+                    <input asp-for="User.Email" readonly class="form-control border-0 shadow" />
+                    <label asp-for="User.Email" class="ms-2"></label>
+                </div>
+                <div class="form-floating py-2 mb-3 col-12">
                     <input asp-for="User.Name" class="form-control border-0 shadow" />
                     <label asp-for="User.Name" class="ms-2"></label>
                 </div>
                 <div class="form-floating py-2 mb-3 col-12">
                     <input asp-for="User.PhoneNumber" class="form-control border-0 shadow" />
                     <label asp-for="User.PhoneNumber" class="ms-2"></label>
-                </div>
-                <div class="form-floating py-2 mb-3 col-12">
-                    <input asp-for="User.Email" class="form-control border-0 shadow" />
-                    <label asp-for="User.Email" class="ms-2"></label>
-                </div>
-                <div class="form-floating mb-3 col-md-6">
-                    @for (var i = 0; i < Model.RoleList.Count(); i++)
-                    {
-                        <tr>
-                            <td>
-                                <div class="form-check">
-                                    @{
-                                        var isChecked = false;
-                                        if (Model.User.Roles != null)
-                                        {
-                                            isChecked = Array.Exists(Model.User.Roles, r => r == Model.RoleList.ElementAt(i).Value);
+                </div>     
+                @if (User.IsInRole(Constants.Role_Manager))
+                {
+                    <div class="form-floating mb-3 col-md-6">
+                        @for (var i = 0; i < Model.RoleList.Count(); i++)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="form-check">
+                                        @{
+                                            var isChecked = false;
+                                            if (Model.User.Roles != null)
+                                            {
+                                                isChecked = Array.Exists(Model.User.Roles, r => r == Model.RoleList.ElementAt(i).Value);
+                                            }
                                         }
-                                    }
-                                    <input class="form-check-input" name="User.Roles" for="User.Roles" type="checkbox" value="@Model.RoleList.ElementAt(i).Value" id="role-@i" @(isChecked ? "checked" : "")>
-                                    <label class="form-check-label" for="role-@i">@Model.RoleList.ElementAt(i).Text</label>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </div>
+                                        <input class="form-check-input" name="User.Roles" for="User.Roles" type="checkbox" value="@Model.RoleList.ElementAt(i).Value" id="role-@i" @(isChecked ? "checked" : "")>
+                                        <label class="form-check-label" for="role-@i">@Model.RoleList.ElementAt(i).Text</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </div>
+                }
 
                 <div class="row pt-2">
                     <div class="col-6 col-md-3">
                         <button type="submit" class="btn btn-primary form-control">Update User</button>
                     </div>
+                    @if (User.IsInRole(Constants.Role_Manager))
+                {
                     <div class="col-6 col-md-3">
-                        <a asp-action="Index" class="btn btn-outline-primary border  form-control">
+                        <a asp-action="Index" asp-controller="User" class="btn btn-outline-primary border  form-control">
                             Back to List
                         </a>
-                    </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-6 col-md-3">
+                            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-primary border  form-control">
+                                Back
+                            </a>
+                        </div>
+                    }
                 </div>
             </div>
         </form>

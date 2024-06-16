@@ -38,5 +38,23 @@ namespace CleanArchitecture.API.Controllers
         {
             return Ok(await _userService.UpdateUserAsync(userDTO));
         }
+
+        [HttpPut("ChangePassword")]
+        public async Task<ActionResult<ResponseDTO>> ChangePassword([FromBody] ChangePasswordDTO passwordDTO)
+        {
+            return Ok(await _userService.ChangePasswordAsync(passwordDTO));
+        }
+
+        [HttpPost("ForgotPassword")]
+        public async Task<ActionResult<ResponseDTO>> ForgotPassword([FromBody] string email)
+        {
+            return Ok(await _userService.ForgotPasswordAsync(email));
+        }
+
+        [HttpPost("ResetPassword")]
+        public async Task<ActionResult<ResponseDTO>> ResetPassword([FromBody] ResetPasswordDTO passwordDTO)
+        {
+            return Ok(await _userService.ResetPasswordAsync(passwordDTO));
+        }
     }
 }

@@ -13,5 +13,9 @@ namespace CleanArchitecture.ApplicationCore.Interfaces.Commons
         Task<ResponseDTO> LockUnlockAsync(string userId);
         Task<ResponseDTO> GetUserInfoAsync(string userId);
         Task<ResponseDTO> UpdateUserAsync(AppUserDTO userDTO);
+        Task<ResponseDTO> ForgotPasswordAsync(string email);
+        Task<ResponseDTO> ResetPasswordAsync(ResetPasswordDTO passwordDTO);
+        Task<ResponseDTO> ChangePasswordAsync(ChangePasswordDTO passwordDTO);
+
     }
 }

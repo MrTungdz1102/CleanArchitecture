@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CleanArchitecture.WebUI.Models.ViewModel
+﻿namespace CleanArchitecture.WebUI.Models.ViewModel
 {
     public class StripePaymentRequest
     {
@@ -12,6 +6,6 @@ namespace CleanArchitecture.WebUI.Models.ViewModel
         public string CancelUrl { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
-    //    public object Object { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

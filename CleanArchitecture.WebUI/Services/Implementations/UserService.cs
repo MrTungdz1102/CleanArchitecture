@@ -12,6 +12,27 @@ namespace CleanArchitecture.WebUI.Services.Implementations
         {
             _baseService = baseService;
         }
+
+        public async Task<ResponseDTO?> ChangePasswordAsync(ChangePasswordDTO passwordDTO)
+        {
+            return await _baseService.SendAsync(new RequestDTO
+            {
+                Url = Constants.APIUrlBase + "/api/UserAPI/ChangePassword",
+                ApiType = Constants.ApiType.PUT,
+                Data = passwordDTO
+            });
+        }
+
+        public async Task<ResponseDTO?> ForgotPasswordAsync(string email)
+        {
+            return await _baseService.SendAsync(new RequestDTO
+            {
+                Url = Constants.APIUrlBase + "/api/UserAPI/ForgotPassword",
+                ApiType = Constants.ApiType.POST,
+                Data = email
+            });
+        }
+
         public async Task<ResponseDTO?> GetAllUserAsync()
         {
             return await _baseService.SendAsync(new RequestDTO
@@ -36,6 +57,16 @@ namespace CleanArchitecture.WebUI.Services.Implementations
             {
                 Url = Constants.APIUrlBase + "/api/UserAPI/LockUnlockUser?userId=" + userId,
                 ApiType = Constants.ApiType.PUT
+            });
+        }
+
+        public async Task<ResponseDTO?> ResetPasswordAsync(ResetPasswordDTO passwordDTO)
+        {
+            return await _baseService.SendAsync(new RequestDTO
+            {
+                Url = Constants.APIUrlBase + "/api/UserAPI/ResetPassword",
+                ApiType = Constants.ApiType.POST,
+                Data = passwordDTO
             });
         }
 

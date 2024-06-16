@@ -3,7 +3,11 @@ using CleanArchitecture.ApplicationCore.Commons;
 using CleanArchitecture.ApplicationCore.Entities.DTOs;
 using CleanArchitecture.ApplicationCore.Interfaces.Commons;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace CleanArchitecture.Infrastructure.Identity
 {
@@ -11,11 +15,15 @@ namespace CleanArchitecture.Infrastructure.Identity
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly IEmailSender _email;
+        private readonly IConfiguration _configuration;
         private ResponseDTO _response;
-        public UserService(UserManager<AppUser> userManager, IMapper mapper)
+        public UserService(UserManager<AppUser> userManager, IMapper mapper, IConfiguration configuration, IEmailSender email)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _email = email;
+            _configuration = configuration;
             _response = new ResponseDTO();
         }
 
@@ -140,6 +148,105 @@ namespace CleanArchitecture.Infrastructure.Identity
                     }
                     await _userManager.UpdateAsync(user);
                     _response.Result = user;
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        public async Task<ResponseDTO> ForgotPasswordAsync(string email)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user is null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Can not find out user";
+                }
+                else
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    string host = _configuration.GetValue<string>("ClientUrl");
+                    string encodeToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+                    string resetPasswordUrl = $"{host}access/resetpassword?email={email}&token={encodeToken}";
+                    string json = JsonConvert.SerializeObject(resetPasswordUrl);
+                    _response.Result = json;
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        public async Task<ResponseDTO> ResetPasswordAsync(ResetPasswordDTO passwordDTO)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(passwordDTO.Email);
+                if (string.IsNullOrEmpty(passwordDTO.Token))
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Invalid Token";
+                    return _response;
+                }
+                if (user is null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Can not find out user";
+                }
+                else
+                {
+                    string decodeToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(passwordDTO.Token));
+                    var result = await _userManager.ResetPasswordAsync(user, decodeToken, passwordDTO.Password);
+
+                    if (result.Succeeded)
+                    {
+                        _response.IsSuccess = true;
+                        _response.Result = result;
+                        return _response;
+                    }
+
+                    _response.IsSuccess = false;
+                    _response.Message = result.Errors.ToList()[0].Description;
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        public async Task<ResponseDTO> ChangePasswordAsync(ChangePasswordDTO passwordDTO)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(passwordDTO.Email);
+                if (user is null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Can not find out user";
+                }
+                else
+                {
+                    var result = await _userManager.ChangePasswordAsync(user, passwordDTO.CurrentPassword, passwordDTO.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        _response.IsSuccess = true;
+                        _response.Result = result;
+                        return _response;
+                    }
+                    _response.IsSuccess = false;
+                    _response.Message = result.Errors.ToList()[0].Description;
                 }
             }
             catch (Exception ex)

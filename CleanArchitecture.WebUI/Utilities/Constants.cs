@@ -24,7 +24,7 @@
         public const string StatusCancelled = "Cancelled";
         public const string StatusRefunded = "Refunded";
 
-        public const string Role_Customer = "CUSTOMER";
+        public const string Role_Customer = "PARTNER";
         public const string Role_Admin = "ADMIN";
         public const string Role_User = "USER";
         public const string Role_Manager = "MANAGER";

@@ -139,7 +139,8 @@ namespace CleanArchitecture.WebUI.Controllers
                 Phone = phoneNumber,
                 Email = email,
                 Name = name,
-                UserId = userId
+                UserId = userId,
+                Participants = villa.Occupancy
             };
             booking.TotalCost = booking.Villa.Price * nights;
             return View(booking);
@@ -205,7 +206,8 @@ namespace CleanArchitecture.WebUI.Controllers
                     ApprovedUrl = domain + "Booking/BookingConfirmation?bookingId=" + bookingResult.Id,
                     CancelUrl = domain + $"Booking/FinalizeBooking?villaId={booking.VillaId}&checkInDate={booking.CheckInDate}&nights={booking.Nights}",
                     Price = booking.TotalCost,
-                    Name = villa.Name
+                    Name = villa.Name,
+                    ImageUrl = "https://tinde.tech/wp-content/uploads/2024/06/2329315.jpg"
                 };
                 response = await _paymentService.CreateCheckout(stripePayment);
                 if (response != null && response.IsSuccess)

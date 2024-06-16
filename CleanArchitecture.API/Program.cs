@@ -23,7 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
-	option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 builder.Services.AddHttpContextAccessor();
@@ -50,65 +50,72 @@ builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration
 builder.Services.AddControllers();
 builder.Services.Configure<IdentityOptions>(option =>
 {
-	option.Password.RequiredLength = 6;
-	// modify password requirement
+    option.Password.RequiredLength = 6;
+    // modify password requirement
 });
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(option =>
+{
+    option.TokenLifespan = TimeSpan.FromHours(10);
+    // modify password requirement
+});
+
 builder.Services.AddAuthentication(options =>
 {
-	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-	options.TokenValidationParameters = new TokenValidationParameters
-	{
-		ValidateIssuer = true,
-		ValidateAudience = true,
-		ValidateLifetime = true,
-		ValidateIssuerSigningKey = true,
-		ClockSkew = TimeSpan.Zero,
-		ValidIssuer = builder.Configuration["JWTSettings:Issuer"],
-		ValidAudience = builder.Configuration["JWTSettings:Audience"],
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:Key"]))
-	};
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ClockSkew = TimeSpan.Zero,
+        ValidIssuer = builder.Configuration["JWTSettings:Issuer"],
+        ValidAudience = builder.Configuration["JWTSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:Key"]))
+    };
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-	options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
-	{
-		Description = @"JWT Authorization header using the Bearer scheme. 
+    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+    {
+        Description = @"JWT Authorization header using the Bearer scheme. 
                       Enter 'Bearer' [space] and then your token in the text input below.
                       Example: 'Bearer 12345abcdef'",
-		Name = "Authorization",
-		In = ParameterLocation.Header,
-		Type = SecuritySchemeType.ApiKey,
-		Scheme = JwtBearerDefaults.AuthenticationScheme
-	});
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = JwtBearerDefaults.AuthenticationScheme
+    });
 
-	options.AddSecurityRequirement(new OpenApiSecurityRequirement
-	{
-		{
-			new OpenApiSecurityScheme
-			{
-				Reference = new OpenApiReference {
-								Type = ReferenceType.SecurityScheme,
-								Id = JwtBearerDefaults.AuthenticationScheme
-							},
-				Scheme = "0auth2",
-				Name = JwtBearerDefaults.AuthenticationScheme,
-				In = ParameterLocation.Header
-			},
-			new List<string>()
-		}
-	});
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = JwtBearerDefaults.AuthenticationScheme
+                            },
+                Scheme = "0auth2",
+                Name = JwtBearerDefaults.AuthenticationScheme,
+                In = ParameterLocation.Header
+            },
+            new List<string>()
+        }
+    });
 });
 
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
-		.AllowAnyMethod()
-		.AllowAnyHeader());
+    options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
 });
 
 var app = builder.Build();
@@ -135,9 +142,9 @@ app.MapControllers();
 app.Run();
 void SeedDatabase()
 {
-	using (var scope = app.Services.CreateScope())
-	{
-		var dbInit = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-		dbInit.Initialize();
-	}
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInit = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInit.Initialize();
+    }
 }

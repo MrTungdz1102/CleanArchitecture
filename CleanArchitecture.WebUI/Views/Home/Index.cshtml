@@ -5,7 +5,7 @@
 }
 
 <div>
-    <div id="carouselExampleIndicators" class="carousel slide">
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -28,6 +28,7 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
+
 
 	<section style="margin-top: 3%;">
 
@@ -58,13 +59,13 @@
                     <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
                         <div class="card bg-transparent text-center p-1 h-100">
                             <!-- Image -->
-                            <img src="@scr" class="rounded-circle" alt="">
+                            <img onclick="LoadVillaList(@item.Id)" src="@scr" class="rounded-circle" alt="">
                             <div class="card-body p-0 pt-3">
-                                <h5 class="card-title"><a href="#" style="color: var(--bs-gray-900);text-decoration: none;" class="stretched-link">@item.Name</a></h5>
+                                <h5 onclick="LoadVillaList(@item.Id)" class="card-title"><a href="#" style="color: var(--bs-gray-900);text-decoration: none;" class="stretched-link">@item.Name</a></h5>
                             </div>
                         </div>
                     </div>
-                    <input hidden id="citiid" value="@item.Id" />
+                   
                 }
             }		
 		</div> <!-- Row END -->
@@ -150,6 +151,51 @@
 
 @section scripts{
     <script>
+
+        var today = new Date();
+
+        // Lấy ra ngày, tháng, và năm
+        var day = today.getDate();
+        var month = today.getMonth() + 1; // Tháng (0-11), cần cộng thêm 1 để có tháng đúng (1-12)
+        var year = today.getFullYear();
+
+        // Đảm bảo ngày và tháng có hai chữ số
+        day = day < 10 ? '0' + day : day;
+        month = month < 10 ? '0' + month : month;
+
+        // Định dạng ngày tháng năm
+        var formattedDate = month + '/' + day + '/' + year;
+        console.log(formattedDate)
+        function LoadVillaList(data) {
+            $('.spinner').show();
+            var objData = {
+                checkInDate: formattedDate,
+                nights: $("#Nights").val(),
+                keyword: $("#Keyword").val(),
+                cityId: data,
+                priceFrom: $("#PriceFrom").val(),
+                priceTo: $("#PriceTo").val(),
+            };
+
+            $.ajax({
+                type: "POST",
+                data: objData,
+                url: "@Url.Action("GetVillaByDate", "Home")",
+                success: function (data) {
+                    $("#VillasList").empty();
+                    $("#VillasList").html(data);
+                    $('.spinner').hide();
+                },
+                failure: function (response) {
+                    $('.spinner').hide();
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    $('.spinner').hide();
+                    alert(response.responseText);
+                }
+            });
+        }
         // var cityId = $("#CityId").val();
         // if (!cityId) {
         //     cityId = $("#citiid").val();

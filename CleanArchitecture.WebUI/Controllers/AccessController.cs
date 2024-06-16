@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using NuGet.Protocol.Plugins;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -20,12 +19,15 @@ namespace CleanArchitecture.WebUI.Controllers
         private readonly IRoleService _roleService;
         private readonly ITokenProvider _token;
         private readonly IEmailService _emailService;
-        public AccessController(IAuthService authService, IRoleService roleService, ITokenProvider token, IEmailService emailService)
+        private readonly IUserService _userService;
+
+        public AccessController(IAuthService authService, IRoleService roleService, ITokenProvider token, IEmailService emailService, IUserService userService)
         {
             _authService = authService;
             _roleService = roleService;
             _token = token;
             _emailService = emailService;
+            _userService = userService;
         }
         public IActionResult Login(string? returnUrl = null)
         {
@@ -43,16 +45,11 @@ namespace CleanArchitecture.WebUI.Controllers
             if (response.Result != null && response.IsSuccess)
             {
                 //   TempData["success"] = "Hello " + loginVM.Email;
-                await Console.Out.WriteLineAsync(loginVM.Email);
                 AppUserVM appUserVM = JsonConvert.DeserializeObject<AppUserVM>(response.Result.ToString());
                 await SignInUser(appUserVM.Token, appUserVM.AppUser);
                 _token.SetToken(appUserVM.Token);
-                //var roles = HttpContext.User.FindAll(ClaimTypes.Role);
-                //if (roles.Any(x => x.Value == Utilities.Constants.Role_Admin))
-                //{
-                //    return RedirectToAction("Index", "Dashboard");
-                //}
-                if (HttpContext.User.IsInRole(Utilities.Constants.Role_Admin))
+                var userRoles = GetRolesFromToken(appUserVM.Token);
+                if (userRoles != null && userRoles.Any(x => x == Utilities.Constants.Role_Manager || x == Utilities.Constants.Role_Admin || x == Utilities.Constants.Role_Customer))
                 {
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -124,7 +121,7 @@ namespace CleanArchitecture.WebUI.Controllers
                 {
                     return LocalRedirect(registerVM.RedirectUrl);
                 }
-                
+
             }
             else
             {
@@ -142,9 +139,101 @@ namespace CleanArchitecture.WebUI.Controllers
                     TempData["error"] = response?.Message;
                 }
                 registerVM.RoleList = roleItems;
-            }            
+            }
             return View(registerVM);
         }
+
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordVM forgotPassword)
+        {
+            ResponseDTO? response = await _userService.ForgotPasswordAsync(forgotPassword.Email);
+            if (response != null && response.IsSuccess)
+            {
+                string? url = JsonConvert.DeserializeObject<string>(Convert.ToString(response.Result));
+                string? filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "ResetPassword.html");
+
+                string content = await System.IO.File.ReadAllTextAsync(filePath);
+
+                content = content
+                .Replace("{{reset_url}}", url)
+                .Replace("{{name}}", forgotPassword.Email)
+                .Replace("{{email}}", forgotPassword.Email);
+
+                EmailVM emailVM = new EmailVM
+                {
+                    Email = forgotPassword.Email,
+                    Subject = "Reset Password",
+                    Message = content
+                };
+                response = await _emailService.SendEmailAsync(emailVM);
+                if (response != null && response.IsSuccess)
+                {
+                    TempData["success"] = "Your reset password request has been sent to your email!";
+                }
+                else
+                {
+                    TempData["error"] = response?.Message;
+                }
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult ResetPassword(string email, string token)
+        {
+            ResetPasswordDTO resetPassword = new ResetPasswordDTO
+            {
+                Email = email,
+                Token = token,
+            };
+            return View(resetPassword);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDTO resetPassword)
+        {
+            ResponseDTO? response = await _userService.ResetPasswordAsync(resetPassword);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Reset password success!";
+                return RedirectToAction("Login", "Access");
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(resetPassword);
+        }
+
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDTO passwordDTO)
+        {
+            ResponseDTO? response = await _userService.ChangePasswordAsync(passwordDTO);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Change password success!";
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+                return View(passwordDTO);
+            }
+        }
+
         public IActionResult AccessDenied()
         {
             return View();
@@ -164,13 +253,29 @@ namespace CleanArchitecture.WebUI.Controllers
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub).Value));
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Name).Value));
 
+
             identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Name).Value));
-            identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(x => x.Type == "role").Value));
+            var roles = jwt.Claims.Where(x => x.Type == "role").Select(x => x.Value);
+            foreach (var role in roles)
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Role, role));
+            }
+            // identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(x => x.Type == "role").Value));
             identity.AddClaim(new Claim(ClaimTypes.Email, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Email).Value));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub).Value));
             identity.AddClaim(new Claim(ClaimTypes.MobilePhone, appUser.PhoneNumber));
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        }
+
+        private List<string> GetRolesFromToken(string token)
+        {
+            List<string> roleList = new();
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken jwt = handler.ReadJwtToken(token);
+            var roles = jwt.Claims.Where(x => x.Type == "role").Select(x => x.Value);
+            roleList.AddRange(roles);
+            return roleList;
         }
     }
 }

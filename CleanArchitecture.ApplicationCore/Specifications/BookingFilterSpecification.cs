@@ -10,11 +10,11 @@ namespace CleanArchitecture.ApplicationCore.Specifications
         {
             if (ownerId is not null)
             {
-                Query.Include(x => x.Villa).Where(x => (x.Status != firstStatus || x.Status != secondStatus) && x.Villa.UserId == ownerId);
+                Query.Include(x => x.Villa).Where(x => (x.Status == firstStatus || x.Status == secondStatus) && x.Villa.UserId == ownerId);
             }
             else
             {
-                Query.Where(x => x.Status != firstStatus || x.Status != secondStatus);
+                Query.Where(x => x.Status == firstStatus || x.Status == secondStatus);
             }
         }
         public BookingFilterSpecification(DateTime date, string firstStatus, string secondStatus, string? ownerId = null)

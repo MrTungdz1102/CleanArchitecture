@@ -31,7 +31,8 @@ namespace CleanArchitecture.Infrastructure.Payment
                         Currency = "usd",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
-                            Name = stripePaymentRequest.Name
+                            Name = stripePaymentRequest.Name,
+                            Images = new List<string> { stripePaymentRequest.ImageUrl }
                         },
                     },
                     Quantity = 1,

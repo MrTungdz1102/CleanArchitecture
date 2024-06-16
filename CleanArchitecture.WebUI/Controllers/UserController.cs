@@ -11,7 +11,7 @@ using System.Data;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
-    [Authorize(Roles = Constants.Role_Admin + "," + Constants.Role_Manager)]
+
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -22,12 +22,13 @@ namespace CleanArchitecture.WebUI.Controllers
             _userService = userService;
 
         }
-
+        [Authorize(Roles = Constants.Role_Manager)]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Authorize]
         public async Task<IActionResult> Managment(string userId)
         {
             ResponseDTO? response = await _userService.GetUserInfoAsync(userId);
@@ -63,9 +64,14 @@ namespace CleanArchitecture.WebUI.Controllers
             {
                 TempData["error"] = response?.Message;
             }
-            return View(nameof(Index));
+            if (User.IsInRole(Constants.Role_Manager))
+            {
+                return RedirectToAction("Index", "User");
+            }
+            return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles = Constants.Role_Manager)]
         public async Task<IActionResult> GetAll()
         {
             ResponseDTO? response = await _userService.GetAllUserAsync();
@@ -86,7 +92,7 @@ namespace CleanArchitecture.WebUI.Controllers
             }
             return Json(new { data = userList });
         }
-
+        [Authorize(Roles = Constants.Role_Manager)]
         public async Task<IActionResult> LockUnlock(string id)
         {
             ResponseDTO? response = await _userService.LockUnlockAsync(id);

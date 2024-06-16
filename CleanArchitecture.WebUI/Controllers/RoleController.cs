@@ -7,14 +7,13 @@ using Newtonsoft.Json;
 
 namespace CleanArchitecture.WebUI.Controllers
 {
-    [Authorize(Roles = Constants.Role_Admin + "," + Constants.Role_Manager)]
+    [Authorize(Roles = Constants.Role_Manager)]
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService;
-        public RoleController(IUserService userService, IRoleService roleService)
+        public RoleController(IRoleService roleService)
         {
             _roleService = roleService;
-
         }
 
         public async Task<IActionResult> Index()
