@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Tung Dao</title>
-     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> 
+    @*  <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />  *@
      <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> 
      <link rel="stylesheet" href="~/CleanArchitecture.WebUI.styles.css" asp-append-version="true" /> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -20,6 +20,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
     <header>
@@ -40,14 +41,18 @@
                         </li>
                         
                     </ul>
-                    <ul class ="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-action="OnGetSetCultureCookie" asp-controller="Home" asp-route-cltr="en" asp-route-returnUrl="@Context.Request.Path" localize-content><span class="fi fi-us" style="margin-right: 5px"></span>@_loc["English"]</a>
+                
+                       <ul class ="navbar-nav">
+                        
+                       <li class="nav-item">
+                            @await Html.PartialAsync("TranslatePartial")
                         </li>
+                            @* <a class="nav-link text-dark" asp-action="OnGetSetCultureCookie" asp-controller="Home" asp-route-cltr="en" asp-route-returnUrl="@Context.Request.Path" localize-content><span class="fi fi-us" style="margin-right: 5px"></span>@_loc["English"]</a>
+                            
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-action="OnGetSetCultureCookie" asp-controller="Home" asp-route-cltr="vi" asp-route-returnUrl="@Context.Request.Path" localize-content><span class="fi fi-vn" style="margin-right: 5px"></span>@_loc["Vietnamese"]</a>
-                        </li>
-                    </ul>
+                        </li>  *@
+                    </ul> 
                     @await Html.PartialAsync("_LoginPartial")
                 </div>
             </div>
@@ -72,7 +77,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js" asp-append-version="true"></script>  
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+   
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

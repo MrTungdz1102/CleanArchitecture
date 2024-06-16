@@ -111,3 +111,14 @@ btn-sm {
     background-color: transparent;
     text-decoration: none;
 }
+#gt_float_wrapper {
+    position: absolute !important;
+    top: 10px !important;
+    margin-right: 12% !important;
+    right: 40px !important;
+    z-index: 1 !important;
+}
+.gt_float_switcher .gt-selected{}
+.gt_float_switcher {
+    box-shadow: none !important;
+}

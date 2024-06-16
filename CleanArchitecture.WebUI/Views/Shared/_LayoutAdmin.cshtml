@@ -29,13 +29,19 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <ul class="navbar-nav">
+
+                    <li class="nav-item">
+                        @await Html.PartialAsync("TranslatePartial")
+                    </li>
+                    </ul>
+                @* <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-action="OnGetSetCultureCookie" asp-controller="Home" asp-route-cltr="en" asp-route-returnUrl="@Context.Request.Path" localize-content><span class="fi fi-us" style="margin-right: 5px"></span>@_loc["English"]</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-action="OnGetSetCultureCookie" asp-controller="Home" asp-route-cltr="vi" asp-route-returnUrl="@Context.Request.Path" localize-content><span class="fi fi-vn" style="margin-right: 5px"></span>@_loc["Vietnamese"]</a>
                     </li>
-                </ul>
+                </ul> *@
             </div>   
             @await Html.PartialAsync("_LoginPartialAdmin")
         </nav>
